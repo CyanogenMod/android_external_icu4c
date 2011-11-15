@@ -605,7 +605,11 @@ PropertyAliases::swap(const UDataSwapper *ds,
 
     /* read the input PropertyAliases - all 16-bit values */
     for(i=0; i<(int32_t)sizeof(PropertyAliases)/2; ++i) {
-        ((uint16_t *)&aliases)[i]=ds->readUInt16(((const uint16_t *)inBytes)[i]);
+        union u1 { PropertyAliases* src; uint16_t* dst; } u1_casting;
+        union u2 { const uint8_t* src; uint16_t* dst; } u2_casting;
+	u1_casting.src = &aliases;
+        u2_casting.src = inBytes;
+        u1_casting.dst[i] = ds->readUInt16(u2_casting.dst[i]);
     }
 
     if(length>=0) {
