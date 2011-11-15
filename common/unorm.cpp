@@ -58,9 +58,11 @@ unorm_quickCheckWithOptions(const UChar *src, int32_t srcLength,
                             UErrorCode *pErrorCode) {
     const Normalizer2 *n2=Normalizer2Factory::getInstance(mode, *pErrorCode);
     if(options&UNORM_UNICODE_3_2) {
+        union { FilteredNormalizer2* src; const UNormalizer2* dst; } u_casting;
         FilteredNormalizer2 fn2(*n2, *uniset_getUnicode32Instance(*pErrorCode));
+        u_casting.src = &fn2;
         return unorm2_quickCheck(
-            reinterpret_cast<const UNormalizer2 *>(static_cast<Normalizer2 *>(&fn2)),
+            u_casting.dst,
             src, srcLength, pErrorCode);
     } else {
         return unorm2_quickCheck((const UNormalizer2 *)n2, src, srcLength, pErrorCode);
@@ -81,9 +83,11 @@ unorm_isNormalizedWithOptions(const UChar *src, int32_t srcLength,
                               UErrorCode *pErrorCode) {
     const Normalizer2 *n2=Normalizer2Factory::getInstance(mode, *pErrorCode);
     if(options&UNORM_UNICODE_3_2) {
+        union { FilteredNormalizer2* src; const UNormalizer2* dst; } u_casting;
         FilteredNormalizer2 fn2(*n2, *uniset_getUnicode32Instance(*pErrorCode));
+        u_casting.src = &fn2;
         return unorm2_isNormalized(
-            reinterpret_cast<const UNormalizer2 *>(static_cast<Normalizer2 *>(&fn2)),
+            u_casting.dst,
             src, srcLength, pErrorCode);
     } else {
         return unorm2_isNormalized((const UNormalizer2 *)n2, src, srcLength, pErrorCode);
@@ -100,9 +104,11 @@ unorm_normalize(const UChar *src, int32_t srcLength,
                 UErrorCode *pErrorCode) {
     const Normalizer2 *n2=Normalizer2Factory::getInstance(mode, *pErrorCode);
     if(options&UNORM_UNICODE_3_2) {
+        union { FilteredNormalizer2* src; const UNormalizer2* dst; } u_casting;
         FilteredNormalizer2 fn2(*n2, *uniset_getUnicode32Instance(*pErrorCode));
+        u_casting.src = &fn2;
         return unorm2_normalize(
-            reinterpret_cast<const UNormalizer2 *>(static_cast<Normalizer2 *>(&fn2)),
+            u_casting.dst,
             src, srcLength, dest, destCapacity, pErrorCode);
     } else {
         return unorm2_normalize((const UNormalizer2 *)n2,
