@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2002-2008, International Business Machines
+*   Copyright (C) 2002-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -108,7 +108,14 @@ UObject::~UObject() {}
 //         c = * (UClassID*) c;
 //     }
 // }
+// Android patch: tiny part of ICU 51's r32776 (only the one next line)
+UClassID UObject::getDynamicClassID() const { return NULL; }
 
 U_NAMESPACE_END
 
+U_NAMESPACE_USE
 
+U_CAPI void U_EXPORT2
+uprv_deleteUObject(void *obj) {
+    delete static_cast<UObject *>(obj);
+}

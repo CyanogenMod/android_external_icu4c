@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1998-2011, International Business Machines Corporation and
+ * Copyright (c) 1998-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#ifdef U_WINDOWS
+#if U_PLATFORM_USES_ONLY_WIN32_API
 #include <io.h>
 #else
 #include <unistd.h>
@@ -66,16 +66,18 @@ unorm2_swap(const UDataSwapper *ds,
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
+#if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
 static void TestUDataOpen(void);
 static void TestUDataOpenChoiceDemo1(void);
 static void TestUDataOpenChoiceDemo2(void);
 static void TestUDataGetInfo(void);
 static void TestUDataGetMemory(void);
-static void TestUDataSetAppData(void);
 static void TestErrorConditions(void);
 static void TestAppData(void);
-static void TestICUDataName(void);
 static void TestSwapData(void);
+#endif
+static void TestUDataSetAppData(void);
+static void TestICUDataName(void);
 static void PointerTableOfContents(void);
 static void SetBadCommonData(void);
 static void TestUDataFileAccess(void);
@@ -116,6 +118,7 @@ static void lots_of_mallocs()
 }
 #endif
 
+#if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
 static void TestUDataOpen(){
     UDataMemory *result;
     UErrorCode status=U_ZERO_ERROR;
@@ -349,6 +352,7 @@ static void TestUDataOpen(){
 
     free(path);
 }
+#endif
 
 typedef struct {
     uint16_t headerSize;
@@ -597,6 +601,7 @@ isAcceptable3(void *context,
 
 }
 
+#if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
 static void TestUDataOpenChoiceDemo1() {
     UDataMemory *result;
     UErrorCode status=U_ZERO_ERROR;
@@ -743,7 +748,6 @@ static void TestUDataOpenChoiceDemo2() {
         }
     }
 }
-
 
 static void TestUDataGetInfo() {
 
@@ -1073,6 +1077,7 @@ static void TestAppData()
     ures_close(icu);
     ures_close(app);
 }
+#endif
 
 static void TestICUDataName()
 {
@@ -1109,10 +1114,10 @@ static void TestICUDataName()
         break;
     }
 
-    sprintf(expectDataName, "%s%d%d%c",
+    /* Only major number is needed. */
+    sprintf(expectDataName, "%s%d%c",
                 "icudt",
                 (int)icuVersion[0],
-                (int)icuVersion[1],
                 typeChar);
 
     log_verbose("Expected: %s\n", expectDataName);
@@ -1151,7 +1156,7 @@ static void TestICUDataName()
 
 /* test data swapping ------------------------------------------------------- */
 
-#ifdef OS400
+#if U_PLATFORM == U_PF_OS400
 /* See comments in genccode.c on when this special implementation can be removed. */
 static const struct {
     double bogus;
@@ -1236,11 +1241,9 @@ static const struct {
     }
 };
 
-/* Unfortunately, trie dictionaries are in a C++ header */
-int32_t
-triedict_swap(const UDataSwapper *ds,
-            const void *inData, int32_t length, void *outData,
-            UErrorCode *pErrorCode);
+/* Unfortunately, dictionaries are in a C++ header */
+U_CAPI int32_t U_EXPORT2
+udict_swap(const UDataSwapper *ds, const void *inData, int32_t length, void *outData, UErrorCode *pErrorCode);
 
 /* test cases for maximum data swapping code coverage */
 static const struct {
@@ -1305,7 +1308,7 @@ static const struct {
 
 #if !UCONFIG_NO_BREAK_ITERATION
     {"char",                     "brk", ubrk_swap},
-    {"thaidict",                 "ctd", triedict_swap},
+    {"thaidict",                 "dict",udict_swap},
 #endif
 
 #if 0
@@ -1335,7 +1338,7 @@ static const struct {
     {"ucase",                    "icu", ucase_swap},
     {"ubidi",                    "icu", ubidi_swap},
 #endif
-#if !UCONFIG_NO_NORMALIZATION
+#if !UCONFIG_NO_NORMALIZATION && !UCONFIG_ONLY_COLLATION
     {"nfc",                      "nrm", unorm2_swap},
     {"confusables",              "cfu", uspoof_swap},
 #endif
@@ -1576,6 +1579,7 @@ printErrorToString(void *context, const char *fmt, va_list args) {
     vsprintf((char *)context, fmt, args);
 }
 
+#if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
 static void
 TestSwapData() {
     char name[100];
@@ -1658,7 +1662,7 @@ TestSwapData() {
             nm=swapCases[i].name+1;
             uprv_strcpy(name, "testdata");
         } else if (uprv_strcmp(swapCases[i].type, "brk")==0
-            || uprv_strcmp(swapCases[i].type, "ctd")==0) {
+            || uprv_strcmp(swapCases[i].type, "dict")==0) {
             pkg=U_ICUDATA_BRKITR;
             nm=swapCases[i].name;
             uprv_strcpy(name, U_ICUDATA_BRKITR);
@@ -1690,7 +1694,7 @@ TestSwapData() {
 
     free(buffer);
 }
-
+#endif
 
 static void PointerTableOfContents() {
     UDataMemory      *dataItem;

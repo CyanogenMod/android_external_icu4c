@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/collation/zh.xml
@@ -10,9 +10,15 @@
  *  ICU <specials> source: <path>/xml/collation/zh.xml
  */
 zh{
-    Version{"2.0.58.69"}
+    Version{"2.0.75.85"}
     collations{
+        // BEGIN android-remove
+        // Omitted big5han
+        // END android-remove
         default{"pinyin"}
+        // BEGIN android-remove
+        // Omitted gb2312han
+        // END android-remove
         pinyin{
             Sequence{
                 " [reorder Hani]"
@@ -786,7 +792,7 @@ zh{
                 "&龟<<<⻳"
                 "&龠<<<⿕"
             }
-            Version{"2.0.1"}
+            Version{"22.1.1"}
         }
         standard{
             Sequence{
@@ -800,7 +806,7 @@ zh{
                 "&[before 2]u<<ū<<<Ū<<ú<<<Ú<<ǔ<<<Ǔ<<ù<<<Ù"
                 "&U<<ǖ<<<Ǖ<<ǘ<<<Ǘ<<ǚ<<<Ǚ<<ǜ<<<Ǜ<<ü<<<Ü"
             }
-            Version{"2.0.1"}
+            Version{"22.1.1"}
         }
         stroke{
             Sequence{
@@ -1454,7 +1460,10 @@ zh{
                 "&龟<<<⻳"
                 "&龠<<<⿕"
             }
-            Version{"2.0.1"}
+            Version{"22.1.1"}
         }
+        // BEGIN android-remove
+        // Omitted unihan
+        // END android-remove    
     }
 }

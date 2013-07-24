@@ -1,6 +1,6 @@
 /*****************************************************************************
 *
-*   Copyright (C) 1999-2011, International Business Machines
+*   Copyright (C) 1999-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************/
@@ -26,6 +26,7 @@
 #include <unicode/translit.h>
 #include <unicode/uset.h>
 #include <unicode/uclean.h>
+#include <unicode/utf16.h>
 
 #include <stdio.h>
 #include <errno.h>
@@ -40,10 +41,10 @@
 
 U_NAMESPACE_USE
 
-#if (defined(U_WINDOWS) || defined(U_CYGWIN) || defined(U_MINGW)) && !defined(__STRICT_ANSI__)
+#if U_PLATFORM_USES_ONLY_WIN32_API && !defined(__STRICT_ANSI__)
 #include <io.h>
 #include <fcntl.h>
-#if defined(U_WINDOWS)
+#if U_PLATFORM_USES_ONLY_WIN32_API
 #define USE_FILENO_BINARY_MODE 1
 /* Windows likes to rename Unix-like functions */
 #ifndef fileno
@@ -593,6 +594,7 @@ ConvertFile::convertFile(const char *pname,
     UConverter *convto = 0;
     UErrorCode err = U_ZERO_ERROR;
     UBool flush;
+    UBool closeFile = FALSE;
     const char *cbufp, *prevbufp;
     char *bufp;
 
@@ -628,6 +630,7 @@ ConvertFile::convertFile(const char *pname,
             u_wmsg(stderr, "cantOpenInputF", str1.getBuffer(), str2.getBuffer());
             return FALSE;
         }
+        closeFile = TRUE;
     } else {
         infilestr = "-";
         infile = stdin;
@@ -1051,7 +1054,7 @@ normal_exit:
     delete t;
 #endif
 
-    if (infile != stdin) {
+    if (closeFile) {
         fclose(infile);
     }
 
@@ -1134,7 +1137,7 @@ main(int argc, char **argv)
 
     // Get and prettify pname.
     pname = uprv_strrchr(*argv, U_FILE_SEP_CHAR);
-#ifdef U_WINDOWS
+#if U_PLATFORM_USES_ONLY_WIN32_API
     if (!pname) {
         pname = uprv_strrchr(*argv, '/');
     }
@@ -1377,6 +1380,8 @@ normal_exit:
     if (outfile != stdout) {
         fclose(outfile);
     }
+
+    u_cleanup();
 
     return ret;
 }

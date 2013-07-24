@@ -1,9 +1,9 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/bg.xml
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/bg.xml
 // *
 // ***************************************************************************
 /**
@@ -12,9 +12,20 @@
 bg{
     Keys{
         calendar{"Календар"}
+        colAlternate{"Пренебрегване на сортирането по символи"}
+        colBackwards{"Сортиране по диакритични знаци в обратен ред"}
+        colCaseFirst{"Подреждане по горен/долен регистър"}
+        colCaseLevel{"Сортиране с различаване на регистъра на буквите"}
+        colHiraganaQuaternary{"Сортиране на кана"}
+        colNormalization{"Нормализирано сортиране"}
+        colNumeric{"Сортиране на цифрите"}
+        colStrength{"Сила на сортиране"}
         collation{"Сортиране"}
         currency{"Валута"}
         numbers{"Цифри"}
+        timezone{"Часова зона"}
+        va{"Вариант на локала"}
+        variableTop{"Сортиране като символи"}
         x{"Собствена употреба"}
     }
     Languages{
@@ -101,6 +112,7 @@ bg{
         chp{"чиипувски"}
         chr{"чероки"}
         chy{"чейенски"}
+        ckb{"кюрдски [сорани]"}
         cmc{"чамски"}
         co{"корсикански"}
         cop{"коптски"}
@@ -302,6 +314,7 @@ bg{
         mdf{"мокша"}
         mdr{"мандар"}
         men{"менде"}
+        mfe{"морисиен"}
         mg{"малгашки"}
         mga{"средновековен ирландски"}
         mh{"маршалезе"}
@@ -651,6 +664,10 @@ bg{
         Zyyy{"Обща"}
         Zzzz{"Непозната или недействителна писменост"}
     }
+    Scripts%stand-alone{
+        Hans{"Опростен хан"}
+        Hant{"Традиционен хан"}
+    }
     Types{
         calendar{
             buddhist{"Будистки календар"}
@@ -670,13 +687,14 @@ bg{
         collation{
             big5han{"Традиционен китайски (Big5)"}
             dictionary{"Речников ред на сортиране"}
-            direct{"Директно"}
             ducet{"Стандартен ред на сортиране в Уникод"}
             gb2312han{"Опростен китайски (GB2312)"}
             phonebook{"Азбучен ред"}
+            phonetic{"Фонетичен ред на сортиране"}
             pinyin{"Сортиране Пинин"}
             reformed{"Следреформен ред на сортиране"}
             search{"Търсене с общо предназначение"}
+            searchjl{"Търсене по първоначални съгласни в хангул"}
             stroke{"Сортиране по щрих"}
             traditional{"Традиционно"}
             unihan{"Ред на сортиране по ключове и черти"}
@@ -689,6 +707,7 @@ bg{
             beng{"Бенгалски цифри"}
             deva{"Цифри в деванагари"}
             ethi{"Етиопски цифри"}
+            finance{"Финансови цифри"}
             fullwide{"Цифри с пълна ширина"}
             geor{"Грузински цифри"}
             grek{"Гръцки цифри"}
@@ -710,6 +729,7 @@ bg{
             mlym{"Цифри в малаялам"}
             mong{"Монголски цифри"}
             mymr{"Мианмарски цифри"}
+            native{"Местни цифри"}
             orya{"Цифри в ория"}
             roman{"Римски цифри"}
             romanlow{"Римски цифри в долен регистър"}
@@ -717,6 +737,8 @@ bg{
             telu{"Цифри в телугу"}
             thai{"Тайландски цифри"}
             tibt{"Тибетски цифри"}
+            traditional{"Традиционни цифри"}
+            vaii{"Цифри във ваи"}
         }
     }
     Variants{
@@ -750,7 +772,12 @@ bg{
         VALENCIA{"Валенсиански"}
         WADEGILE{"Уейд-Джайлс романизация"}
     }
-    Version{"2.0.59.68"}
+    Version{"2.0.78.39"}
+    codePatterns{
+        language{"{0}"}
+        script{"{0}"}
+        territory{"{0}"}
+    }
     localeDisplayPattern{
         pattern{"{0} ({1})"}
         separator{", "}

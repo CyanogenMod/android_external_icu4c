@@ -1,9 +1,9 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/my.xml
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/my.xml
 // *
 // ***************************************************************************
 /**
@@ -24,7 +24,7 @@ my{
             "အာဂျင်တီးနား ပီဆို",
         }
         AUD{
-            "AU$",
+            "A$",
             "ဩစတြေးလျှား ဒေါ်လာ",
         }
         AWG{
@@ -48,7 +48,7 @@ my{
             "ဘိုလီးဘီးယား ပီဆို",
         }
         BRL{
-            "BR$",
+            "R$",
             "ဘရာဇီး ရီးယဲ",
         }
         BUK{
@@ -328,5 +328,5 @@ my{
             "ဇင်ဘာဘွေ ဒေါ်လာ",
         }
     }
-    Version{"2.0.59.5"}
+    Version{"2.0.78.30"}
 }

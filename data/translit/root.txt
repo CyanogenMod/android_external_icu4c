@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// *  Copyright (C) 2004-2011, International Business Machines
+// *  Copyright (C) 2004-2012, International Business Machines
 // *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 // *
 // ***************************************************************************
@@ -14,6 +14,12 @@ root {
         }
         Digit-Tone {
             alias {"NumericPinyin-Pinyin"}
+        }
+        Hans-Hant {
+            alias {"Simplified-Traditional"}
+        }
+        Hant-Hans {
+            alias {"Traditional-Simplified"}
         }
         Amharic-Latin/BGN {
             file {

@@ -1,9 +1,9 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/naq.xml
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/naq.xml
 // *
 // ***************************************************************************
 /**
@@ -23,7 +23,7 @@ naq{
             }
         }
     }
-    Version{"2.0.57.99"}
+    Version{"2.0.77.46"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -61,12 +61,12 @@ naq{
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"M/y"}
-                yMEd{"EEE, M/d/y"}
+                yMEd{"E, M/d/y"}
                 yMMM{"MMM y"}
-                yMMMEd{"EEE, MMM d, y"}
+                yMMMEd{"E, MMM d, y"}
                 yMMMM{"MMMM y"}
-                yQ{"Q y"}
                 yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
             }
             dayNames{
                 format{
@@ -115,9 +115,7 @@ naq{
                 day{
                     dn{"Tsees"}
                     relative{
-                        "-1"{"ǁAri"}
                         "0"{"Neetsee"}
-                        "1"{"ǁAri"}
                     }
                 }
                 dayperiod{
@@ -205,7 +203,7 @@ naq{
                         "KW1",
                         "KW2",
                         "KW3",
-                        "KW3",
+                        "KW4",
                     }
                     wide{
                         "1ro kwartals",
@@ -218,9 +216,9 @@ naq{
         }
     }
     delimiters{
-        alternateQuotationEnd{"”"}
-        alternateQuotationStart{"“"}
-        quotationEnd{"'"}
-        quotationStart{"'"}
+        alternateQuotationEnd{"’"}
+        alternateQuotationStart{"‘"}
+        quotationEnd{"”"}
+        quotationStart{"“"}
     }
 }

@@ -1,9 +1,9 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
-// * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/fil.xml
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/fil.xml
 // *
 // ***************************************************************************
 /**
@@ -33,7 +33,6 @@ fil{
         054{"Melanesia"}
         057{"Rehiyong Micronesia"}
         061{"Polynesia"}
-        062{"Timog-Gitnang Asya"}
         142{"Asya"}
         143{"Gitnang Asya"}
         145{"Kanlurang Asya"}
@@ -73,6 +72,7 @@ fil{
         BM{"Bermuda"}
         BN{"Brunei"}
         BO{"Bolivia"}
+        BQ{"Caribbean Netherlands"}
         BR{"Brazil"}
         BS{"Bahamas"}
         BT{"Bhutan"}
@@ -96,10 +96,11 @@ fil{
         CR{"Costa Rica"}
         CU{"Cuba"}
         CV{"Cape Verde"}
+        CW{"Curacao"}
         CX{"Christmas Island"}
         CY{"Cyprus"}
         CZ{"Czech Republic"}
-        DE{"Germany"}
+        DE{"Alemanya"}
         DG{"Diego Garcia"}
         DJ{"Djibouti"}
         DK{"Denmark"}
@@ -140,7 +141,7 @@ fil{
         GU{"Guam"}
         GW{"Guinea-Bissau"}
         GY{"Guyana"}
-        HK{"Hong Kong SAR China"}
+        HK{"Hong Kong"}
         HM{"Heard Island and McDonald Islands"}
         HN{"Honduras"}
         HR{"Croatia"}
@@ -192,9 +193,9 @@ fil{
         MH{"Marshall Islands"}
         MK{"Macedonia"}
         ML{"Mali"}
-        MM{"Myanmar"}
+        MM{"Myanmar [Burma]"}
         MN{"Mongolia"}
-        MO{"Macau SAR China"}
+        MO{"Macau"}
         MP{"Northern Mariana Islands"}
         MQ{"Martinique"}
         MR{"Mauritania"}
@@ -229,7 +230,7 @@ fil{
         PM{"Saint Pierre and Miquelon"}
         PN{"Pitcairn"}
         PR{"Puerto Rico"}
-        PS{"Palestinian Territory"}
+        PS{"Palestine"}
         PT{"Portugal"}
         PW{"Palau"}
         PY{"Paraguay"}
@@ -255,8 +256,10 @@ fil{
         SN{"Senegal"}
         SO{"Somalia"}
         SR{"Suriname"}
+        SS{"South Sudan"}
         ST{"Sao Tome and Principe"}
         SV{"El Salvador"}
+        SX{"Sint Maarten"}
         SY{"Syria"}
         SZ{"Swaziland"}
         TA{"Tristan de Cunha"}
@@ -278,7 +281,7 @@ fil{
         TZ{"Tanzania"}
         UA{"Ukraine"}
         UG{"Uganda"}
-        UM{"Mga Minor Outlying Island ng Estados Unidos"}
+        UM{"U.S. Outlying Islands"}
         US{"Estados Unidos"}
         UY{"Uruguay"}
         UZ{"Uzbekistan"}
@@ -298,5 +301,5 @@ fil{
         ZW{"Zimbabwe"}
         ZZ{"Hindi kilala o Hindi wastong Rehiyon"}
     }
-    Version{"2.0.59.68"}
+    Version{"2.0.77.46"}
 }

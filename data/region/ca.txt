@@ -1,9 +1,9 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
-// * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/ca.xml
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/ca.xml
 // *
 // ***************************************************************************
 /**
@@ -33,7 +33,6 @@ ca{
         054{"Melanèsia"}
         057{"Regió de la Micronèsia"}
         061{"Polinèsia"}
-        062{"Àsia Sud-central"}
         142{"Àsia"}
         143{"Àsia Central"}
         145{"Àsia Occidental"}
@@ -41,7 +40,6 @@ ca{
         151{"Europa Oriental"}
         154{"Europa septentrional"}
         155{"Europa Occidental"}
-        172{"Comunitat d'Estats Independents"}
         419{"Amèrica Llatina"}
         AC{"Illa de l'Ascensió"}
         AD{"Andorra"}
@@ -74,6 +72,7 @@ ca{
         BM{"Bermudes"}
         BN{"Brunei"}
         BO{"Bolívia"}
+        BQ{"Carib Neerlandès"}
         BR{"Brasil"}
         BS{"Bahames"}
         BT{"Bhutan"}
@@ -95,9 +94,9 @@ ca{
         CO{"Colòmbia"}
         CP{"Illa Clipperton"}
         CR{"Costa Rica"}
-        CS{"Sèrbia i Montenegro"}
         CU{"Cuba"}
         CV{"Cap Verd"}
+        CW{"Curaçao"}
         CX{"Illa Christmas"}
         CY{"Xipre"}
         CZ{"República Txeca"}
@@ -142,7 +141,7 @@ ca{
         GU{"Guam"}
         GW{"Guinea Bissau"}
         GY{"Guyana"}
-        HK{"Regió administrativa especial xinesa de Hong Kong"}
+        HK{"Hong Kong"}
         HM{"Illa Heard i Illes McDonald"}
         HN{"Hondures"}
         HR{"Croàcia"}
@@ -196,7 +195,7 @@ ca{
         ML{"Mali"}
         MM{"Myanmar [Birmània]"}
         MN{"Mongòlia"}
-        MO{"Regió administrativa especial xinesa de Macau"}
+        MO{"Macau"}
         MP{"Illes Mariannes del Nord"}
         MQ{"Martinica"}
         MR{"Mauritània"}
@@ -228,7 +227,7 @@ ca{
         PH{"Filipines"}
         PK{"Pakistan"}
         PL{"Polònia"}
-        PM{"Saint Pierre i Miquelon"}
+        PM{"Saint-Pierre-et-Miquelon"}
         PN{"Illes Pitcairn"}
         PR{"Puerto Rico"}
         PS{"Palestina"}
@@ -257,8 +256,10 @@ ca{
         SN{"Senegal"}
         SO{"Somàlia"}
         SR{"Surinam"}
+        SS{"Sudan del Sud"}
         ST{"São Tomé i Príncipe"}
         SV{"El Salvador"}
+        SX{"Sint Maarten"}
         SY{"Síria"}
         SZ{"Swazilàndia"}
         TA{"Tristão da Cunha"}
@@ -298,7 +299,7 @@ ca{
         ZA{"República de Sud-àfrica"}
         ZM{"Zàmbia"}
         ZW{"Zimbabwe"}
-        ZZ{"Regió desconeguda o no vàlida"}
+        ZZ{"Regió desconeguda"}
     }
-    Version{"2.0.59.68"}
+    Version{"2.0.78.32"}
 }

@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2011, International Business Machines
+*   Copyright (C) 1998-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -27,6 +27,8 @@
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_err.h"
 #include "unicode/uset.h"
+#include "unicode/utf.h"
+#include "unicode/utf16.h"
 #include "putilimp.h"
 #include "cmemory.h"
 #include "cstring.h"
@@ -2849,14 +2851,12 @@ ucnv_fromUCountPending(const UConverter* cnv, UErrorCode* status)
         return -1;
     }
 
-    if(cnv->preFromULength > 0){
+    if(cnv->preFromUFirstCP >= 0){
         return U16_LENGTH(cnv->preFromUFirstCP)+cnv->preFromULength ;
     }else if(cnv->preFromULength < 0){
         return -cnv->preFromULength ;
     }else if(cnv->fromUChar32 > 0){
         return 1;
-    }else if(cnv->preFromUFirstCP >0){
-        return U16_LENGTH(cnv->preFromUFirstCP);
     }
     return 0; 
 
@@ -2883,7 +2883,7 @@ ucnv_toUCountPending(const UConverter* cnv, UErrorCode* status){
     return 0;
 }
 
-U_DRAFT UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 ucnv_isFixedWidth(UConverter *cnv, UErrorCode *status){
     if (U_FAILURE(*status)) {
         return FALSE;

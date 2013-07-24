@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2011, International Business Machines Corporation
+ * Copyright (c) 1997-2012, International Business Machines Corporation
  * and others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -196,7 +196,7 @@ static void TestExponential(void)
     char tempMsgBug[256];
     double a;
     UErrorCode status = U_ZERO_ERROR;
-#ifdef OS390
+#if U_PLATFORM == U_PF_OS390
     static const double val[] = { 0.01234, 123456789, 1.23e75, -3.141592653e-78 };
 #else
     static const double val[] = { 0.01234, 123456789, 1.23e300, -3.141592653e-271 };
@@ -220,7 +220,7 @@ static void TestExponential(void)
     };
     static const double valParse[] =
     {
-#ifdef OS390
+#if U_PLATFORM == U_PF_OS390
         0.01234, 123460000, 1.23E75, -3.1416E-78,
         0.01234, 123460000, 1.23E75, -3.1416E-78,
         0.01234, 123456800, 1.23E75, -3.141593E-78,
@@ -470,9 +470,9 @@ static void TestCurrencyPreEuro(void)
     };
 
     const char* result[]={
-        "2\\u00A0\\u20A7", "2\\u00A0F",            "IEP1.50",                      "1,50\\u00A0FIM",   "2\\u00A0F",         "ITL\\u00A02",
+        "\\u20A7\\u00A02", "2\\u00A0F",            "IEP1.50",                      "1,50\\u00A0FIM",   "2\\u00A0F",         "ITL\\u00A02",
         "1$50\\u00A0Esc.", "\\u00F6S\\u00A01,50",  "1,50\\u00A0\\u0394\\u03C1\\u03C7", "2\\u00A0\\u20A7", "1,50\\u00A0FB",     "IEP1.50",
-        "1,50\\u00A0BEF",   "1,50\\u00A0DEM",        "1,50\\u00A0BEF",                    "2\\u00A0\\u20A7", "1,50\\u00A0F",      "2\\u00A0\\u20A7",
+        "1,50\\u00A0BEF",   "1,50\\u00A0DEM",        "1,50\\u00A0BEF",                    "\\u20A7\\u00A02", "1,50\\u00A0F",      "2\\u00A0\\u20A7",
         "NLG\\u00A01,50"
     };
 

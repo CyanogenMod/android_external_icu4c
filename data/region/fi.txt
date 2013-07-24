@@ -1,9 +1,9 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
-// * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/fi.xml
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/fi.xml
 // *
 // ***************************************************************************
 /**
@@ -29,11 +29,10 @@ fi{
         034{"Etelä-Aasia"}
         035{"Kaakkois-Aasia"}
         039{"Etelä-Eurooppa"}
-        053{"Australia ja Uusi-Seelanti"}
+        053{"Australaasia"}
         054{"Melanesia"}
         057{"Mikronesia"}
         061{"Polynesia"}
-        062{"Etelä- ja Keski-Aasia"}
         142{"Aasia"}
         143{"Keski-Aasia"}
         145{"Länsi-Aasia"}
@@ -41,9 +40,7 @@ fi{
         151{"Itä-Eurooppa"}
         154{"Pohjois-Eurooppa"}
         155{"Länsi-Eurooppa"}
-        172{"Itsenäisten valtioiden yhteisö"}
         419{"Latinalainen Amerikka"}
-        830{"Kanaalisaaret"}
         AC{"Ascension-saari"}
         AD{"Andorra"}
         AE{"Arabiemiirikunnat"}
@@ -75,6 +72,7 @@ fi{
         BM{"Bermuda"}
         BN{"Brunei"}
         BO{"Bolivia"}
+        BQ{"Karibian Alankomaat"}
         BR{"Brasilia"}
         BS{"Bahama"}
         BT{"Bhutan"}
@@ -83,7 +81,7 @@ fi{
         BY{"Valko-Venäjä"}
         BZ{"Belize"}
         CA{"Kanada"}
-        CC{"Kookossaaret"}
+        CC{"Kookossaaret [Keelingsaaret]"}
         CD{"Kongon demokraattinen tasavalta"}
         CF{"Keski-Afrikan tasavalta"}
         CG{"Kongon tasavalta"}
@@ -96,9 +94,9 @@ fi{
         CO{"Kolumbia"}
         CP{"Clippertoninsaari"}
         CR{"Costa Rica"}
-        CS{"Serbia ja Montenegro"}
         CU{"Kuuba"}
         CV{"Kap Verde"}
+        CW{"Curaçao"}
         CX{"Joulusaari"}
         CY{"Kypros"}
         CZ{"Tšekki"}
@@ -117,6 +115,7 @@ fi{
         ER{"Eritrea"}
         ES{"Espanja"}
         ET{"Etiopia"}
+        EU{"Euroopan unioni"}
         FI{"Suomi"}
         FJ{"Fidži"}
         FK{"Falklandinsaaret"}
@@ -142,7 +141,7 @@ fi{
         GU{"Guam"}
         GW{"Guinea-Bissau"}
         GY{"Guyana"}
-        HK{"Hongkong – Kiinan e.h.a."}
+        HK{"Hongkong"}
         HM{"Heard- ja McDonaldinsaaret"}
         HN{"Honduras"}
         HR{"Kroatia"}
@@ -196,7 +195,7 @@ fi{
         ML{"Mali"}
         MM{"Myanmar [Burma]"}
         MN{"Mongolia"}
-        MO{"Macao – Kiinan e.h.a."}
+        MO{"Macao"}
         MP{"Pohjois-Mariaanit"}
         MQ{"Martinique"}
         MR{"Mauritania"}
@@ -257,8 +256,10 @@ fi{
         SN{"Senegal"}
         SO{"Somalia"}
         SR{"Surinam"}
+        SS{"Etelä-Sudan"}
         ST{"São Tomé ja Príncipe"}
         SV{"El Salvador"}
+        SX{"Sint Maarten"}
         SY{"Syyria"}
         SZ{"Swazimaa"}
         TA{"Tristan da Cunha"}
@@ -298,7 +299,7 @@ fi{
         ZA{"Etelä-Afrikka"}
         ZM{"Sambia"}
         ZW{"Zimbabwe"}
-        ZZ{"tuntematon tai virheellinen alue"}
+        ZZ{"tuntematon alue"}
     }
-    Version{"2.0.59.68"}
+    Version{"2.0.78.39"}
 }

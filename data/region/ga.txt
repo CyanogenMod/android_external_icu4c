@@ -1,9 +1,9 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
-// * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/ga.xml
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/ga.xml
 // *
 // ***************************************************************************
 /**
@@ -24,7 +24,6 @@ ga{
         142{"An Áise"}
         143{"An Áise Láir"}
         150{"An Eoraip"}
-        172{"Comhlathas na Stát Neamhspleácha"}
         419{"Meiriceá Laidineach agus an Mhuir Chairib"}
         AD{"Andóra"}
         AE{"Aontas na nÉimíríochtaí Arabacha"}
@@ -75,7 +74,6 @@ ga{
         CN{"An tSín"}
         CO{"An Cholóim"}
         CR{"Cósta Ríce"}
-        CS{"An tSeirbia agus Montainéagró"}
         CU{"Cúba"}
         CV{"An Rinn Ghlas"}
         CX{"Oileán na Nollag"}
@@ -120,7 +118,7 @@ ga{
         GU{"Guam"}
         GW{"An Ghuine-Bhissau"}
         GY{"An Ghuáin"}
-        HK{"R.R.S. na Síne Hong Cong"}
+        HK{"Hong Cong"}
         HM{"Oileán Heard agus Oileáin McDonald"}
         HN{"Hondúras"}
         HR{"An Chróit"}
@@ -172,7 +170,7 @@ ga{
         ML{"Mailí"}
         MM{"Maenmar"}
         MN{"An Mhongóil"}
-        MO{"R.R.S. na Síne Macáó"}
+        MO{"Macáó"}
         MP{"Oileáin Mariana Thuaidh"}
         MQ{"Martainíc"}
         MR{"An Mharatáin"}
@@ -275,5 +273,5 @@ ga{
         ZW{"An tSiombáib"}
         ZZ{"Réigiún Anaithnid nó Neamhbhailí"}
     }
-    Version{"2.0.59.32"}
+    Version{"2.0.77.27"}
 }

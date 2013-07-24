@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2011, International Business Machines Corporation and
+ * Copyright (c) 1997-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -68,6 +68,7 @@ isCurrencyPreEuro(const char* currencyKey){
     }
     return FALSE;
 }
+#if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
 static void
 TestKeyInRootRecursive(UResourceBundle *root, const char *rootName,
                        UResourceBundle *currentBundle, const char *locale) {
@@ -441,7 +442,7 @@ TestKeyInRootRecursive(UResourceBundle *root, const char *rootName,
         ures_close(subBundle);
     }
 }
-
+#endif
 
 static void
 testLCID(UResourceBundle *currentBundle,
@@ -482,6 +483,7 @@ testLCID(UResourceBundle *currentBundle,
     }
 }
 
+#if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
 static void
 TestLocaleStructure(void) {
     UResourceBundle *root, *currentLocale;
@@ -489,7 +491,6 @@ TestLocaleStructure(void) {
     int32_t locIndex;
     UErrorCode errorCode = U_ZERO_ERROR;
     const char *currLoc, *resolvedLoc;
-    static const UVersionInfo icu48 = { 4, 8, 0, 0 };
 
     /* TODO: Compare against parent's data too. This code can't handle fallbacks that some tools do already. */
 /*    char locName[ULOC_FULLNAME_CAPACITY];
@@ -549,9 +550,7 @@ TestLocaleStructure(void) {
                 currLoc);
         }
         resolvedLoc = ures_getLocaleByType(currentLocale, ULOC_ACTUAL_LOCALE, &errorCode);
-        if ( strcmp(resolvedLoc, currLoc) != 0 && 
-            ( strcmp(currLoc,"vai_LR") != 0 || isICUVersionAtLeast(icu48))) {
-            /* Time bomb for weird case with vai_LR - needs investigation */
+        if (strcmp(resolvedLoc, currLoc) != 0) {
             /* All locales have at least a Version resource.
                If it's absolutely empty, then the previous test will fail too.*/
             log_err("Locale resolves to different locale. Is %s an alias of %s?\n",
@@ -566,6 +565,7 @@ TestLocaleStructure(void) {
 
     ures_close(root);
 }
+#endif
 
 static void
 compareArrays(const char *keyName,
@@ -743,7 +743,7 @@ findStringSetMismatch(const char *currLoc, const UChar *string, int32_t langSize
 
     for (strIdx = 0; strIdx < langSize; strIdx++) {
         if (!uset_contains(exemplarSet, string[strIdx])
-            && string[strIdx] != 0x0020 && string[strIdx] != 0x00A0 && string[strIdx] != 0x002e && string[strIdx] != 0x002c && string[strIdx] != 0x002d && string[strIdx] != 0x0027 && string[strIdx] != 0x2019 && string[strIdx] != 0x0f0b
+            && string[strIdx] != 0x0020 && string[strIdx] != 0x00A0 && string[strIdx] != 0x002e && string[strIdx] != 0x002c && string[strIdx] != 0x002d && string[strIdx] != 0x0027 && string[strIdx] != 0x005B && string[strIdx] != 0x005D && string[strIdx] != 0x2019 && string[strIdx] != 0x0f0b
             && string[strIdx] != 0x200C && string[strIdx] != 0x200D) {
             if (!ignoreNumbers || (ignoreNumbers && (string[strIdx] < 0x30 || string[strIdx] > 0x39))) {
                 uset_close(exemplarSet);
@@ -867,7 +867,6 @@ findSetMatch( UScriptCode *scriptCodes, int32_t scriptsLen,
 }
 
 static void VerifyTranslation(void) {
-    static const UVersionInfo icu49 = { 4, 9, 0, 0 };
     UResourceBundle *root, *currentLocale;
     int32_t locCount = uloc_countAvailable();
     int32_t locIndex;
@@ -915,7 +914,7 @@ static void VerifyTranslation(void) {
         else if (getTestOption(QUICK_OPTION) && exemplarLen > 2048) {
             log_verbose("skipping test for %s\n", currLoc);
         }
-        else if (uprv_strncmp(currLoc,"bem",3) == 0) {
+        else if (uprv_strncmp(currLoc,"bem",3) == 0 || uprv_strncmp(currLoc,"mgo",3) == 0 || uprv_strncmp(currLoc,"nl",2) == 0) {
             log_verbose("skipping test for %s, some month and country names known to use aux exemplars\n", currLoc);
         }
         else {
@@ -938,7 +937,7 @@ static void VerifyTranslation(void) {
             if (U_FAILURE(errorCode)) {
                 log_err("error uloc_getDisplayCountry returned %s\n", u_errorName(errorCode));
             }
-            else if (uprv_strstr(currLoc, "ti_") != currLoc || isICUVersionAtLeast(icu49)) { /* TODO: restore DisplayCountry test for ti_* when cldrbug 3058 is fixed) */
+            else if (uprv_strstr(currLoc, "ti_") != currLoc || isICUVersionAtLeast(51, 0, 0)) { /* TODO: restore DisplayCountry test for ti_* when cldrbug 3058 is fixed) */
               strIdx = findStringSetMismatch(currLoc, langBuffer, langSize, exemplarCharacters, exemplarLen, FALSE, &badChar);
                 if (strIdx >= 0) {
                     log_err("getDisplayCountry(%s) at index %d returned characters not in the exemplar characters: %04X.\n",
@@ -1273,6 +1272,7 @@ static void TestIndexChars(void) {
 
 
 
+#if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
 static void TestCurrencyList(void){
 #if !UCONFIG_NO_FORMATTING
     UErrorCode errorCode = U_ZERO_ERROR;
@@ -1307,8 +1307,10 @@ static void TestCurrencyList(void){
     uenum_close(en);
 #endif
 }
+#endif
 
 static void TestAvailableIsoCodes(void){
+#if !UCONFIG_NO_FORMATTING
     UErrorCode errorCode = U_ZERO_ERROR;
     const char* eurCode = "EUR";
     const char* usdCode = "USD";
@@ -1404,6 +1406,7 @@ static void TestAvailableIsoCodes(void){
     }
 
     free(isoCode);
+#endif
 }
 
 #define TESTCASE(name) addTest(root, &name, "tsutil/cldrtest/" #name)

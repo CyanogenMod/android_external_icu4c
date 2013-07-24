@@ -1,9 +1,9 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
-// * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/cs.xml
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/cs.xml
 // *
 // ***************************************************************************
 /**
@@ -29,11 +29,10 @@ cs{
         034{"Jižní Asie"}
         035{"Jihovýchodní Asie"}
         039{"Jižní Evropa"}
-        053{"Austrálie a Nový Zéland"}
+        053{"Australasie"}
         054{"Melanésie"}
         057{"Mikronésie oblast"}
         061{"Polynésie"}
-        062{"Jižní a střední Asie"}
         142{"Asie"}
         143{"Střední Asie"}
         145{"Západní Asie"}
@@ -41,10 +40,7 @@ cs{
         151{"Východní Evropa"}
         154{"Severní Evropa"}
         155{"Západní Evropa"}
-        172{"Společenství nezávislých států"}
-        200{"Československo"}
         419{"Latinská Amerika"}
-        830{"Normanské ostrovy"}
         AC{"Ostrov Ascension"}
         AD{"Andorra"}
         AE{"Spojené arabské emiráty"}
@@ -76,6 +72,7 @@ cs{
         BM{"Bermudy"}
         BN{"Brunej"}
         BO{"Bolívie"}
+        BQ{"Karibské Nizozemsko"}
         BR{"Brazílie"}
         BS{"Bahamy"}
         BT{"Bhútán"}
@@ -97,14 +94,14 @@ cs{
         CO{"Kolumbie"}
         CP{"Clippertonův ostrov"}
         CR{"Kostarika"}
-        CS{"Srbsko a Černá Hora"}
         CU{"Kuba"}
         CV{"Kapverdy"}
+        CW{"Curaçao"}
         CX{"Vánoční ostrovy"}
         CY{"Kypr"}
         CZ{"Česká republika"}
         DE{"Německo"}
-        DG{"Diego Garcia"}
+        DG{"Diego García"}
         DJ{"Džibutsko"}
         DK{"Dánsko"}
         DM{"Dominika"}
@@ -144,7 +141,7 @@ cs{
         GU{"Guam"}
         GW{"Guinea-Bissau"}
         GY{"Guyana"}
-        HK{"Hongkong - zvláštní administrativní oblast Číny"}
+        HK{"Hongkong"}
         HM{"Heardův ostrov a McDonaldovy ostrovy"}
         HN{"Honduras"}
         HR{"Chorvatsko"}
@@ -198,7 +195,7 @@ cs{
         ML{"Mali"}
         MM{"Myanmar"}
         MN{"Mongolsko"}
-        MO{"Macao - zvláštní administrativní oblast Číny"}
+        MO{"Macao"}
         MP{"Severní Mariany"}
         MQ{"Martinik"}
         MR{"Mauritánie"}
@@ -233,7 +230,7 @@ cs{
         PM{"Svatý Pierre a Miquelon"}
         PN{"Pitcairnovy ostrovy"}
         PR{"Portoriko"}
-        PS{"Palestinská území"}
+        PS{"Palestina"}
         PT{"Portugalsko"}
         PW{"Palau"}
         PY{"Paraguay"}
@@ -259,8 +256,10 @@ cs{
         SN{"Senegal"}
         SO{"Somálsko"}
         SR{"Surinam"}
-        ST{"Svatý Tomáš"}
+        SS{"Jižní Súdán"}
+        ST{"Svatý Tomáš a Princův ostrov"}
         SV{"Salvador"}
+        SX{"Sint Maarten"}
         SY{"Sýrie"}
         SZ{"Svazijsko"}
         TA{"Tristan da Cunha"}
@@ -300,7 +299,7 @@ cs{
         ZA{"Jihoafrická republika"}
         ZM{"Zambie"}
         ZW{"Zimbabwe"}
-        ZZ{"Neznámá nebo neplatná oblast"}
+        ZZ{"Neznámá oblast"}
     }
-    Version{"2.0.59.84"}
+    Version{"2.0.78.38"}
 }

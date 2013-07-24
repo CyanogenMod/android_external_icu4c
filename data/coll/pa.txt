@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/collation/pa.xml
@@ -13,8 +13,13 @@ pa{
     Version{"2.0.42.63"}
     collations{
         standard{
-            Sequence{" [normalization on ]&ੱ<<ੰ<<ਂ<<ਁ<<਼&ੜ<੍"}
-            Version{"2.0.1"}
+            Sequence{
+                " [normalization on] [reorder Guru Deva Beng Gujr Orya Taml Telu Knda"
+                " Mlym Sinh Arab]"
+                "&ੱ<<ੰ<<ਂ<<ਁ<<਼"
+                "&ੜ<੍"
+            }
+            Version{"22.1.1"}
         }
     }
 }

@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1996-2011, International Business Machines
+ *   Copyright (C) 1996-2012, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  *
@@ -30,7 +30,15 @@
 #include "cstring.h"
 #include "cmemory.h"
 
-#if defined(U_WINDOWS) && defined(_MSC_VER) && (_MSC_VER >= 1500)
+#if U_PLATFORM == U_PF_WINDOWS && defined(_MSC_VER) && (_MSC_VER >= 1500)
+/*
+ * TODO: It seems like we should widen this to
+ * either U_PLATFORM_USES_ONLY_WIN32_API (includes MinGW)
+ * or U_PLATFORM_HAS_WIN32_API (includes MinGW and Cygwin)
+ * but those use gcc and won't have defined(_MSC_VER).
+ * We might need to #include some Windows header and test for some version macro from there.
+ * Or call some Windows function and see what it returns.
+ */
 #define USE_WINDOWS_LOCALE_API
 #endif
 
@@ -163,13 +171,13 @@ ILCID_POSIX_SUBTABLE(az) {
 ILCID_POSIX_ELEMENT_ARRAY(0x046d, ba, ba_RU)
 ILCID_POSIX_ELEMENT_ARRAY(0x0423, be, be_BY)
 
-ILCID_POSIX_SUBTABLE(ber) {
+/*ILCID_POSIX_SUBTABLE(ber) {
     {0x5f,   "ber"},
     {0x045f, "ber_Arab_DZ"},
     {0x045f, "ber_Arab"},
     {0x085f, "ber_Latn_DZ"},
     {0x085f, "ber_Latn"}
-};
+};*/
 
 ILCID_POSIX_ELEMENT_ARRAY(0x0402, bg, bg_BG)
 
@@ -995,7 +1003,7 @@ uprv_convertToLCID(const char *langID, const char* posixID, UErrorCode* status)
 
     uint32_t   low    = 0;
     uint32_t   high   = gLocaleCount;
-    uint32_t   mid    = high;
+    uint32_t   mid;
     uint32_t   oldmid = 0;
     int32_t    compVal;
 

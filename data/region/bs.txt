@@ -1,9 +1,9 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
-// * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/bs.xml
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/bs.xml
 // *
 // ***************************************************************************
 /**
@@ -33,7 +33,6 @@ bs{
         054{"Melanezija"}
         057{"Micronezija"}
         061{"Polinezija"}
-        062{"Južno-centralna Azija"}
         142{"Azija"}
         143{"Centralna Azija"}
         145{"Zapadna Azija"}
@@ -41,9 +40,7 @@ bs{
         151{"Istočna Evropa"}
         154{"Severna Evropa"}
         155{"Zapadna Evropa"}
-        172{"Komonvelt nezavisnih država"}
         419{"Latinska Amerika"}
-        830{"Kanalska ostrva"}
         AD{"Andora"}
         AE{"Ujedinjeni Arapski Emirati"}
         AF{"Avganistan"}
@@ -94,7 +91,6 @@ bs{
         CN{"Kina"}
         CO{"Kolumbija"}
         CR{"Kostarika"}
-        CS{"Srbija i Crna Gora"}
         CU{"Kuba"}
         CV{"Kape Verde"}
         CX{"Božićna Ostrva"}
@@ -139,7 +135,7 @@ bs{
         GU{"Guam"}
         GW{"Gvineja-Bisao"}
         GY{"Gvajana"}
-        HK{"Hong Kong (S. A. R. Kina)"}
+        HK{"Hong Kong"}
         HM{"Herd i Mekdonald Ostrva"}
         HN{"Honduras"}
         HR{"Hrvatska"}
@@ -192,7 +188,7 @@ bs{
         ML{"Mali"}
         MM{"Mijanmar"}
         MN{"Mongolija"}
-        MO{"Makao (S. A. R. Kina)"}
+        MO{"Makao"}
         MP{"Severna Marijanska Ostrva"}
         MQ{"Martinik"}
         MR{"Mauritanija"}
@@ -295,5 +291,5 @@ bs{
         ZW{"Zimbabve"}
         ZZ{"Nepoznata ili nevažeća oblast"}
     }
-    Version{"2.0.59.84"}
+    Version{"2.0.78.38"}
 }

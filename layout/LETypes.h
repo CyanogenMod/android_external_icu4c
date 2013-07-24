@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2009 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2012 - All Rights Reserved
  *
  */
 
@@ -13,7 +13,7 @@
 
 #include "unicode/utypes.h"
 
-#ifdef XP_CPLUSPLUS
+#ifdef __cplusplus
 #include "unicode/uobject.h"
 #endif
 
@@ -229,12 +229,14 @@ typedef UChar LEUnicode16;
  */
 typedef UChar32 LEUnicode32;
 
+#ifndef U_HIDE_DEPRECATED_API
 /**
  * Used to represent 16-bit Unicode code points.
  *
  * @deprecated since ICU 2.4. Use LEUnicode16 instead
  */
 typedef UChar LEUnicode;
+#endif  /* U_HIDE_DEPRECATED_API */
 
 /**
  * Used to hold a pair of (x, y) values which represent a point.
@@ -258,7 +260,7 @@ struct LEPoint
     float fY;
 };
 
-#ifndef XP_CPLUSPLUS
+#ifndef __cplusplus
 /**
  * Used to hold a pair of (x, y) values which represent a point.
  *
@@ -268,6 +270,7 @@ typedef struct LEPoint LEPoint;
 #endif
 
 
+#ifndef U_HIDE_INTERNAL_API
 /**
  * A convenience macro to get the length of an array.
  *
@@ -306,7 +309,53 @@ typedef struct LEPoint LEPoint;
  * @internal
  */
 #define LE_DELETE_ARRAY(array) uprv_free((void *) (array))
+#else
+
+/* Not using ICU memory - use C std lib versions */
+
+#include <stdlib.h>
+#include <string.h>
+
+/**
+ * A convenience macro to get the length of an array.
+ *
+ * @internal
+ */
+#define LE_ARRAY_SIZE(array) (sizeof array / sizeof array[0])
+
+/**
+ * A convenience macro for copying an array.
+ *
+ * @internal
+ */
+#define LE_ARRAY_COPY(dst, src, count) memcpy((void *) (dst), (void *) (src), (count) * sizeof (src)[0])
+
+/**
+ * Allocate an array of basic types. This is used to isolate the rest of
+ * the LayoutEngine code from cmemory.h.
+ *
+ * @internal
+ */
+#define LE_NEW_ARRAY(type, count) (type *) malloc((count) * sizeof(type))
+
+/**
+ * Re-allocate an array of basic types. This is used to isolate the rest of
+ * the LayoutEngine code from cmemory.h.
+ *
+ * @internal
+ */
+#define LE_GROW_ARRAY(array, newSize) realloc((void *) (array), (newSize) * sizeof (array)[0])
+
+ /**
+ * Free an array of basic types. This is used to isolate the rest of
+ * the LayoutEngine code from cmemory.h.
+ *
+ * @internal
+ */
+#define LE_DELETE_ARRAY(array) free((void *) (array))
+
 #endif
+#endif  /* U_HIDE_INTERNAL_API */
 
 /**
  * A macro to construct the four-letter tags used to
@@ -542,7 +591,7 @@ enum LEErrorCode {
     LE_MISSING_FONT_TABLE_ERROR     = U_MISSING_RESOURCE_ERROR   /**< The requested font table does not exist. */
 };
 
-#ifndef XP_CPLUSPLUS
+#ifndef __cplusplus
 /**
  * Error codes returned by the LayoutEngine.
  *

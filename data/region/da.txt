@@ -1,9 +1,9 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
-// * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/da.xml
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/da.xml
 // *
 // ***************************************************************************
 /**
@@ -29,11 +29,10 @@ da{
         034{"Sydasien"}
         035{"Sydøstasien"}
         039{"Sydeuropa"}
-        053{"Australien og New Zealand"}
+        053{"Australasien"}
         054{"Melanesien"}
         057{"Mikronesien"}
         061{"Polynesien"}
-        062{"Sydcentralasien"}
         142{"Asien"}
         143{"Centralasien"}
         145{"Vestasien"}
@@ -41,7 +40,6 @@ da{
         151{"Østeuropa"}
         154{"Nordeuropa"}
         155{"Vesteuropa"}
-        172{"Sammenslutningen af uafhængige stater"}
         419{"Latinamerika"}
         AC{"Ascensionøen"}
         AD{"Andorra"}
@@ -59,7 +57,7 @@ da{
         AT{"Østrig"}
         AU{"Australien"}
         AW{"Aruba"}
-        AX{"Åland"}
+        AX{"Ålandsøerne"}
         AZ{"Aserbajdsjan"}
         BA{"Bosnien-Hercegovina"}
         BB{"Barbados"}
@@ -74,6 +72,7 @@ da{
         BM{"Bermuda"}
         BN{"Brunei Darussalam"}
         BO{"Bolivia"}
+        BQ{"Nederlandske antiller"}
         BR{"Brasilien"}
         BS{"Bahamas"}
         BT{"Bhutan"}
@@ -87,17 +86,17 @@ da{
         CF{"Centralafrikanske Republik"}
         CG{"Congo – Brazzaville"}
         CH{"Schweiz"}
-        CI{"Elfenbenskysten"}
-        CK{"Cook-øerne"}
+        CI{"Côte d’Ivoire"}
+        CK{"Cookøerne"}
         CL{"Chile"}
         CM{"Cameroun"}
         CN{"Kina"}
         CO{"Colombia"}
         CP{"Clippertonøen"}
         CR{"Costa Rica"}
-        CS{"Serbien og Montenegro"}
         CU{"Cuba"}
         CV{"Kap Verde"}
+        CW{"Curacao"}
         CX{"Juleøen"}
         CY{"Cypern"}
         CZ{"Tjekkiet"}
@@ -116,8 +115,9 @@ da{
         ER{"Eritrea"}
         ES{"Spanien"}
         ET{"Etiopien"}
+        EU{"Den Europæiske Union"}
         FI{"Finland"}
-        FJ{"Fiji-øerne"}
+        FJ{"Fiji"}
         FK{"Falklandsøerne"}
         FM{"Mikronesiens Forenede Stater"}
         FO{"Færøerne"}
@@ -141,7 +141,7 @@ da{
         GU{"Guam"}
         GW{"Guinea-Bissau"}
         GY{"Guyana"}
-        HK{"SAR Hongkong"}
+        HK{"Hongkong"}
         HM{"Heard- og McDonald-øerne"}
         HN{"Honduras"}
         HR{"Kroatien"}
@@ -186,16 +186,16 @@ da{
         LY{"Libyen"}
         MA{"Marokko"}
         MC{"Monaco"}
-        MD{"Republikken Moldova"}
+        MD{"Moldova"}
         ME{"Montenegro"}
         MF{"Saint Martin"}
         MG{"Madagaskar"}
         MH{"Marshalløerne"}
         MK{"Makedonien"}
         ML{"Mali"}
-        MM{"Myanmar"}
+        MM{"Myanmar [Burma]"}
         MN{"Mongoliet"}
-        MO{"SAR Macao"}
+        MO{"Macao"}
         MP{"Nordmarianerne"}
         MQ{"Martinique"}
         MR{"Mauretanien"}
@@ -210,7 +210,7 @@ da{
         NA{"Namibia"}
         NC{"Ny Caledonien"}
         NE{"Niger"}
-        NF{"Norfolk Island"}
+        NF{"Norfolkøen"}
         NG{"Nigeria"}
         NI{"Nicaragua"}
         NL{"Holland"}
@@ -230,7 +230,7 @@ da{
         PM{"Saint Pierre og Miquelon"}
         PN{"Pitcairn"}
         PR{"Puerto Rico"}
-        PS{"De palæstinensiske områder"}
+        PS{"Palæstina"}
         PT{"Portugal"}
         PW{"Palau"}
         PY{"Paraguay"}
@@ -256,8 +256,10 @@ da{
         SN{"Senegal"}
         SO{"Somalia"}
         SR{"Surinam"}
+        SS{"Sydsudan"}
         ST{"Sao Tome og Principe"}
         SV{"El Salvador"}
+        SX{"Sint Maarten"}
         SY{"Syrien"}
         SZ{"Swaziland"}
         TA{"Tristan da Cunha"}
@@ -279,7 +281,7 @@ da{
         TZ{"Tanzania"}
         UA{"Ukraine"}
         UG{"Uganda"}
-        UM{"Mindre amerikanske oversøiske øer"}
+        UM{"Amerikanske oversøiske øer"}
         US{"USA"}
         UY{"Uruguay"}
         UZ{"Usbekistan"}
@@ -290,7 +292,7 @@ da{
         VI{"De amerikanske jomfruøer"}
         VN{"Vietnam"}
         VU{"Vanuatu"}
-        WF{"Wallis og Futunaøerne"}
+        WF{"Wallis og Futuna"}
         WS{"Samoa"}
         YE{"Yemen"}
         YT{"Mayotte"}
@@ -299,5 +301,5 @@ da{
         ZW{"Zimbabwe"}
         ZZ{"Ukendt område"}
     }
-    Version{"2.0.59.68"}
+    Version{"2.0.78.39"}
 }

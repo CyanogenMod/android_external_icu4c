@@ -1,9 +1,9 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/ak.xml
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/ak.xml
 // *
 // ***************************************************************************
 /**
@@ -22,11 +22,12 @@ ak{
                 currencyFormat{"¤#,##0.00"}
             }
             symbols{
-                group{" "}
+                decimal{"."}
+                group{","}
             }
         }
     }
-    Version{"2.0.58.6"}
+    Version{"2.0.78.30"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -64,14 +65,13 @@ ak{
                 ms{"mm:ss"}
                 y{"yyyy"}
                 yM{"M/yyyy"}
-                yMEd{"EEE, M/d/yyyy"}
+                yMEd{"E, M/d/yyyy"}
                 yMMM{"MMM yyyy"}
-                yMMMEd{"EEE, MMM d, yyyy"}
+                yMMMEd{"E, MMM d, yyyy"}
                 yMMMM{"MMMM yyyy"}
                 yMd{"y/M/d"}
-                yQ{"Q yyyy"}
-                yQQQ{"QQQ yyyy"}
-                yyQ{"Q yy"}
+                yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
             }
             dayNames{
                 format{
@@ -191,9 +191,9 @@ ak{
         }
     }
     delimiters{
-        alternateQuotationEnd{"”"}
-        alternateQuotationStart{"“"}
-        quotationEnd{"’"}
-        quotationStart{"‘"}
+        alternateQuotationEnd{"’"}
+        alternateQuotationStart{"‘"}
+        quotationEnd{"”"}
+        quotationStart{"“"}
     }
 }

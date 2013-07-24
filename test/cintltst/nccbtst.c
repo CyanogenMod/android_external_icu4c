@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
@@ -25,6 +25,8 @@
 #include "unicode/ustring.h"
 #include "nccbtst.h"
 #include "unicode/ucnv_cb.h"
+#include "unicode/utf16.h"
+
 #define NEW_MAX_BUFFER 999
 
 #define nct_min(x,y)  ((x<y) ? x : y)
@@ -772,8 +774,8 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
                 /*iso-2022-jp*/
         static const uint8_t sampleTxt_iso_2022_jp[]={ 
             0x41,
-            0x1b,   0x24,   0x42,   0x2A, 0x44, /*unassigned*/
-             0x1b,   0x28,   0x42,   0x42,
+            0x1b,   0x24,   0x42,   0x3a, 0x1a, /*unassigned*/
+            0x1b,   0x28,   0x42,   0x42,
             
         };
         static const UChar iso_2022_jptoUnicode[]={    0x41,0x42 };
@@ -1289,6 +1291,7 @@ static void TestStop(int32_t inputsize, int32_t outputsize)
         static const UChar EBCIDIC_STATEFUL_toUnicode[] ={  0x6d63 };
         static const int32_t from_EBCIDIC_STATEFULOffsets []={ 1};
 
+
          /*EUC-JP*/
         static const uint8_t sampleTxt_euc_jp[]={ 0x61, 0xa1, 0xb8, 0x8f, 0xf4, 0xae,
             /* BEGIN android-changed */
@@ -1754,10 +1757,10 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
             in4[]={ 0x00, 0x01, 0x02, 0x03,   0x00, 0x11, 0x12, 0x00,   0x00, 0x00, 0x4e, 0x00 };
 
         static const UChar
-            out1[]={ UTF16_LEAD(0x100f00), UTF16_TRAIL(0x100f00), 0xfeff },
-            out2[]={ UTF16_LEAD(0x0f1000), UTF16_TRAIL(0x0f1000), 0xfffe },
-            out3[]={ 0xfefe, UTF16_LEAD(0x100f00), UTF16_TRAIL(0x100f00), 0xfffd, 0xfffd },
-            out4[]={ UTF16_LEAD(0x10203), UTF16_TRAIL(0x10203), 0xfffd, 0x4e00 };
+            out1[]={ U16_LEAD(0x100f00), U16_TRAIL(0x100f00), 0xfeff },
+            out2[]={ U16_LEAD(0x0f1000), U16_TRAIL(0x0f1000), 0xfffe },
+            out3[]={ 0xfefe, U16_LEAD(0x100f00), U16_TRAIL(0x100f00), 0xfffd, 0xfffd },
+            out4[]={ U16_LEAD(0x10203), U16_TRAIL(0x10203), 0xfffd, 0x4e00 };
 
         static const int32_t
             offsets1[]={ 4, 4, 8 },
@@ -2340,13 +2343,14 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
         /*iso-2022-jp*/
         static const uint8_t sampleTxt_iso_2022_jp[]={ 
             0x1b,   0x28,   0x42,   0x41,
-            0x1b,   0x24,   0x42,   0x2A, 0x44, /*unassigned*/
+            0x1b,   0x24,   0x42,   0x3a, 0x1a, /*unassigned*/
             0x1b,   0x28,   0x42,   0x42,
             
         };
-        static const UChar iso_2022_jptoUnicode[]={    0x41,0x25,0x58,0x32,0x41,0x25,0x58,0x34,0x34, 0x42 };
+                                                   /*     A    %    X    3    A    %    X    1    A     B    */
+        static const UChar iso_2022_jptoUnicode[]={    0x41,0x25,0x58,0x33,0x41,0x25,0x58,0x31,0x41, 0x42 };
         static const int32_t from_iso_2022_jpOffs [] ={  3,   7,   7,   7,   7,   7,   7,   7,   7,    12   };
-        
+
         /*iso-2022-cn*/
         static const uint8_t sampleTxt_iso_2022_cn[]={ 
             0x0f,   0x41,   0x44,
@@ -2483,8 +2487,9 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
             {
                 static const UChar iso_2022_jptoUnicodeDec[]={
                                                   0x0041,   
-                                                  0x0026,   0x0023,   0x0034,   0x0032,   0x003b,   
-                                                  0x0026,   0x0023,   0x0036,   0x0038,   0x003b,   
+                                                  /*   &         #         5         8         ;   */
+                                                  0x0026,   0x0023,   0x0035,   0x0038,   0x003b,   
+                                                  0x0026,   0x0023,   0x0032,   0x0036,   0x003b,   
                                                   0x0042 };
                 static const int32_t from_iso_2022_jpOffsDec [] ={ 3,7,7,7,7,7,7,7,7,7,7,12,  };
                 if(!testConvertToUnicodeWithContext(sampleTxt_iso_2022_jp, sizeof(sampleTxt_iso_2022_jp),
@@ -2495,8 +2500,9 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
             {
                 static const UChar iso_2022_jptoUnicodeHex[]={
                                                   0x0041, 
-                                                  0x0026, 0x0023, 0x0078, 0x0032, 0x0041, 0x003b, 
-                                                  0x0026, 0x0023, 0x0078, 0x0034, 0x0034, 0x003b, 
+                                                  /*   &       #       x       3       A       ;  */
+                                                  0x0026, 0x0023, 0x0078, 0x0033, 0x0041, 0x003b, 
+                                                  0x0026, 0x0023, 0x0078, 0x0031, 0x0041, 0x003b, 
                                                   0x0042 };
                 static const int32_t from_iso_2022_jpOffsHex [] ={  3,7,7,7,7,7,7,7,7,7,7,7,7,12   };
                 if(!testConvertToUnicodeWithContext(sampleTxt_iso_2022_jp, sizeof(sampleTxt_iso_2022_jp),
@@ -2507,8 +2513,8 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
             {
                 static const UChar iso_2022_jptoUnicodeC[]={
                                                 0x0041, 
-                                                0x005C, 0x0078, 0x0032, 0x0041,
-                                                0x005C, 0x0078, 0x0034, 0x0034, 
+                                                0x005C, 0x0078, 0x0033, 0x0041,   /*  \x3A */
+                                                0x005C, 0x0078, 0x0031, 0x0041,   /*  \x1A */
                                                 0x0042 };
                 int32_t from_iso_2022_jpOffsC [] ={  3,7,7,7,7,7,7,7,7,12   };
                 if(!testConvertToUnicodeWithContext(sampleTxt_iso_2022_jp, sizeof(sampleTxt_iso_2022_jp),

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2011, International Business Machines
+*   Copyright (C) 1999-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -30,7 +30,7 @@
 #include <stdio.h>
 #include <ctype.h>
 
-#if defined(U_WINDOWS) || defined(U_CYGWIN) || defined(U_MINGW)
+#if U_PLATFORM_HAS_WIN32_API
 #include <io.h>
 #include <fcntl.h>
 #define USE_FILENO_BINARY_MODE 1
@@ -54,7 +54,7 @@ static UConverter *defaultConverter = 0;
 
 static const int32_t indentsize = 4;
 static int32_t truncsize = DERB_DEFAULT_TRUNC;
-static UBool trunc = FALSE;
+static UBool truncate = FALSE;
 
 static const char *getEncodingName(const char *encoding);
 static void reportError(const char *pname, UErrorCode *status, const char *when);
@@ -152,14 +152,14 @@ main(int argc, char* argv[]) {
     }
 
     if(options[4].doesOccur) {
-        trunc = TRUE;
+        truncate = TRUE;
         if(options[4].value != NULL) {
             truncsize = atoi(options[4].value); /* user defined printable size */
         } else {
             truncsize = DERB_DEFAULT_TRUNC; /* we'll use default omitting size */
         }
     } else {
-        trunc = FALSE;
+        truncate = FALSE;
     }
 
     if(options[5].doesOccur) {
@@ -237,7 +237,7 @@ main(int argc, char* argv[]) {
 
         if (!(fromICUData = !uprv_strcmp(inputDir, "-"))) {
             UBool absfilename = *arg == U_FILE_SEP_CHAR;
-#ifdef U_WINDOWS
+#if U_PLATFORM_HAS_WIN32_API
             if (!absfilename) {
                 absfilename = (uprv_strlen(arg) > 2 && isalpha(arg[0])
                     && arg[1] == ':' && arg[2] == U_FILE_SEP_CHAR);
@@ -293,7 +293,7 @@ main(int argc, char* argv[]) {
 
             if (tostdout) {
                 out = stdout;
-#if defined(U_WINDOWS) || defined(U_CYGWIN) || defined(U_MINGW)
+#if U_PLATFORM_HAS_WIN32_API
                 if (setmode(fileno(out), O_BINARY) == -1) {
                     fprintf(stderr, "%s: couldn't set standard output to binary mode\n", pname);
                     return 4;
@@ -473,7 +473,7 @@ static void printOutAlias(FILE *out,  UConverter *converter, UResourceBundle *pa
     int32_t len = 0;
     const UChar* thestr = res_getAlias(&(parent->fResData), r, &len);
     UChar *string = quotedString(thestr);
-    if(trunc && len > truncsize) {
+    if(truncate && len > truncsize) {
         char msg[128];
         printIndent(out, converter, indent);
         sprintf(msg, "// WARNING: this resource, size %li is truncated to %li\n",
@@ -517,7 +517,7 @@ static void printOutBundle(FILE *out, UConverter *converter, UResourceBundle *re
             UChar *string = quotedString(thestr);
 
             /* TODO: String truncation */
-            if(trunc && len > truncsize) {
+            if(truncate && len > truncsize) {
                 char msg[128];
                 printIndent(out, converter, indent);
                 sprintf(msg, "// WARNING: this resource, size %li is truncated to %li\n",
@@ -576,7 +576,7 @@ static void printOutBundle(FILE *out, UConverter *converter, UResourceBundle *re
         {
             int32_t len = 0;
             const int8_t *data = (const int8_t *)ures_getBinary(resource, &len, status);
-            if(trunc && len > truncsize) {
+            if(truncate && len > truncsize) {
                 char msg[128];
                 printIndent(out, converter, indent);
                 sprintf(msg, "// WARNING: this resource, size %li is truncated to %li\n",

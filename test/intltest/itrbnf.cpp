@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2011, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -66,6 +66,7 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
         TESTCASE(16, TestHebrewFraction);
         TESTCASE(17, TestPortugueseSpellout);
         TESTCASE(18, TestMultiplierSubstitution);
+        TESTCASE(19, TestSetDecimalFormatSymbols);
 #else
         TESTCASE(0, TestRBNFDisabled);
 #endif
@@ -1395,7 +1396,7 @@ IntlTestRBNF::TestItalianSpellout()
             { "73", "settanta\\u00ADtr\\u00E9" },
             { "88", "ottant\\u00ADotto" },
             { "100", "cento" },
-            { "101", "cent\\u00ADuno" },
+            { "101", "cento\\u00ADuno" },
             { "103", "cento\\u00ADtr\\u00E9" },
             { "106", "cento\\u00ADsei" },
             { "108", "cent\\u00ADotto" },
@@ -1440,7 +1441,7 @@ IntlTestRBNF::TestPortugueseSpellout()
             { "108", "cento e oito" },
             { "127", "cento e vinte e sete" },
             { "181", "cento e oitenta e um" },
-            { "200", "duzcentos" },
+            { "200", "duzentos" },
             { "579", "quinhentos e setenta e nove" },
             { "1,000", "mil" },
             { "2,000", "dois mil" },
@@ -1448,7 +1449,7 @@ IntlTestRBNF::TestPortugueseSpellout()
             { "4,567", "quatro mil e quinhentos e sessenta e sete" },
             { "15,943", "quinze mil e novecentos e quarenta e tr\\u00EAs" },
             { "-36", "menos trinta e seis" },
-            { "234.567", "duzcentos e trinta e quatro v\\u00EDrgula cinco seis sete" },
+            { "234.567", "duzentos e trinta e quatro v\\u00EDrgula cinco seis sete" },
             { NULL, NULL}
         };
         
@@ -1562,21 +1563,21 @@ IntlTestRBNF::TestSwedishSpellout()
         doTest(formatter, testDataDefault, TRUE);
 
           static const char* testDataNeutrum[][2] = {
-              { "101", "ett\\u00adhundra\\u00aden" },
-              { "1,001", "ettusen en" },
-              { "1,101", "ettusen ett\\u00adhundra\\u00aden" },
-              { "10,001", "tio\\u00adtusen en" },
-              { "21,001", "tjugo\\u00aden\\u00adtusen en" },
+              { "101", "ett\\u00adhundra\\u00adett" },
+              { "1,001", "et\\u00adtusen ett" },
+              { "1,101", "et\\u00adtusen ett\\u00adhundra\\u00adett" },
+              { "10,001", "tio\\u00adtusen ett" },
+              { "21,001", "tjugo\\u00adet\\u00adtusen ett" },
               { NULL, NULL }
           };
   
-          formatter->setDefaultRuleSet("%spellout-cardinal-neutre", status);
+          formatter->setDefaultRuleSet("%spellout-cardinal-neuter", status);
           if (U_SUCCESS(status)) {
-          logln("        testing spellout-cardinal-neutre rules");
+          logln("        testing spellout-cardinal-neuter rules");
           doTest(formatter, testDataNeutrum, TRUE);
           }
           else {
-          errln("Can't test spellout-cardinal-neutre rules");
+          errln("Can't test spellout-cardinal-neuter rules");
           }
 
         static const char* testDataYear[][2] = {
@@ -1591,6 +1592,7 @@ IntlTestRBNF::TestSwedishSpellout()
             { NULL, NULL }
         };
 
+        status = U_ZERO_ERROR;
         formatter->setDefaultRuleSet("%spellout-numbering-year", status);
         if (U_SUCCESS(status)) {
             logln("testing year rules");
@@ -1904,6 +1906,49 @@ IntlTestRBNF::TestMultiplierSubstitution(void) {
     }
   }
 }
+
+void
+IntlTestRBNF::TestSetDecimalFormatSymbols() {
+    UErrorCode status = U_ZERO_ERROR;
+
+    RuleBasedNumberFormat rbnf(URBNF_ORDINAL, Locale::getEnglish(), status);
+    if (U_FAILURE(status)) {
+        dataerrln("Unable to create RuleBasedNumberFormat - " + UnicodeString(u_errorName(status)));
+        return;
+    }
+
+    DecimalFormatSymbols dfs(Locale::getEnglish(), status);
+    if (U_FAILURE(status)) {
+        errln("Unable to create DecimalFormatSymbols - " + UnicodeString(u_errorName(status)));
+        return;
+    }
+
+    UnicodeString expected[] = {
+            UnicodeString("1,001st"),
+            UnicodeString("1&001st")
+    };
+
+    double number = 1001;
+
+    UnicodeString result;
+
+    rbnf.format(number, result);
+    if (result != expected[0]) {
+        errln("Format Error - Got: " + result + " Expected: " + expected[0]);
+    }
+
+    result.remove();
+
+    /* Set new symbol for testing */
+    dfs.setSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol, UnicodeString("&"), TRUE);
+    rbnf.setDecimalFormatSymbols(dfs);
+
+    rbnf.format(number, result);
+    if (result != expected[1]) {
+        errln("Format Error - Got: " + result + " Expected: " + expected[1]);
+    }
+}
+
 
 void 
 IntlTestRBNF::doTest(RuleBasedNumberFormat* formatter, const char* const testData[][2], UBool testParsing) 

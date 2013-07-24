@@ -1,13 +1,13 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2011, International Business Machines Corporation and
+ * Copyright (c) 1997-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  * Copyright (C) 2010 , Yahoo! Inc. 
  ********************************************************************/
 
 #include <stdio.h>
 #include <string.h>
-#include <typeinfo>  // for 'typeid' to work
+#include "utypeinfo.h"  // for 'typeid' to work
 
 #include "uobjtest.h"
 #include "cmemory.h" // UAlignedMemory
@@ -380,9 +380,11 @@ void UObjectTest::testIDs()
     TESTCLASSID_FACTORY(IndianCalendar, Calendar::createInstance(Locale("@calendar=indian"), status));
     TESTCLASSID_FACTORY(ChineseCalendar, Calendar::createInstance(Locale("@calendar=chinese"), status));
     TESTCLASSID_FACTORY(TaiwanCalendar, Calendar::createInstance(Locale("@calendar=roc"), status));
-#ifdef U_WINDOWS
+#if U_PLATFORM_HAS_WIN32_API
     TESTCLASSID_FACTORY(Win32DateFormat, DateFormat::createDateInstance(DateFormat::kFull, Locale("@compat=host")));
+#if U_PLATFORM_USES_ONLY_WIN32_API
     TESTCLASSID_FACTORY(Win32NumberFormat, NumberFormat::createInstance(Locale("@compat=host"), status));
+#endif
 #endif
 #endif
 
@@ -480,7 +482,10 @@ void UObjectTest::testIDs()
 //    TESTCLASSID_CTOR(LocaleKeyFactory, (42));
 //#endif
 #endif
+
+#if !UCONFIG_NO_COLLATION && !UCONFIG_NO_NORMALIZATION
     TESTCLASSID_NONE_CTOR(AlphabeticIndex, (Locale::getEnglish(), status));
+#endif
 
 #if UOBJTEST_DUMP_IDS
     int i;

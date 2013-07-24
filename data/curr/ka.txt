@@ -1,9 +1,9 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/ka.xml
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/ka.xml
 // *
 // ***************************************************************************
 /**
@@ -72,7 +72,7 @@ ka{
             "ავსტრიული შილინგი",
         }
         AUD{
-            "AU$",
+            "A$",
             "ავსტრალიური დოლარი",
         }
         AWG{
@@ -160,7 +160,7 @@ ka{
             "ბრაზილიური კრუზეირო (1990-1993)",
         }
         BRL{
-            "BR$",
+            "R$",
             "ბრაზილიური რეალი",
         }
         BRN{
@@ -713,6 +713,10 @@ ka{
         }
         VEB{
             "VEB",
+            "ვენესუელის ბოლივარი (1871-2008)",
+        }
+        VEF{
+            "VEF",
             "ვენესუელის ბოლივარი",
         }
         VND{
@@ -795,5 +799,5 @@ ka{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.0.59.53"}
+    Version{"2.0.78.32"}
 }

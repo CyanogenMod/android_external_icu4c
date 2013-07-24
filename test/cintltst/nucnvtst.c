@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2011, International Business Machines Corporation and
+ * Copyright (c) 1997-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -22,6 +22,7 @@
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
 #include "unicode/ucol.h"
+#include "unicode/utf16.h"
 #include "cmemory.h"
 #include "nucnvtst.h"
 
@@ -32,7 +33,9 @@ static void TestNextUCharError(UConverter* cnv, const char* source, const char* 
 #if !UCONFIG_NO_COLLATION
 static void TestJitterbug981(void);
 #endif
+#if !UCONFIG_NO_LEGACY_CONVERSION
 static void TestJitterbug1293(void);
+#endif
 static void TestNewConvertWithBufferSizes(int32_t osize, int32_t isize) ;
 static void TestConverterTypesAndStarters(void);
 static void TestAmbiguous(void);
@@ -286,7 +289,7 @@ void addTestNewConvert(TestNode** root)
    /* BEGIN android-changed
       To save space, Android does not build full ISO2022 CJK tables.
       We turn off the tests here.
-   addTest(root, &TestISO_2022_JP, "tsconv/nucnvtst/TestISO_2022_JP"); 
+   addTest(root, &TestISO_2022_JP, "tsconv/nucnvtst/TestISO_2022_JP");
    END android-changed */
    addTest(root, &TestJIS, "tsconv/nucnvtst/TestJIS");
    /* BEGIN android-changed
@@ -1541,7 +1544,7 @@ static void TestAmbiguous()
             const char* cnvName = ucnv_getName(cnv, &status);
             if (strlen(cnvName) < 8 ||
                 strncmp(cnvName, "ISO_2022", 8) != 0) {
-                TestAmbiguousConverter(cnv);
+            TestAmbiguousConverter(cnv);
             }
             /* END android-changed */
         } else {
@@ -2992,9 +2995,9 @@ TestGetNextUChar2022(UConverter* cnv, const char* source, const char* limit,
             log_err("%s ucnv_getNextUChar() failed: %s\n", message, u_errorName(errorCode));
             break;
         } else {
-            if(UTF_IS_FIRST_SURROGATE(*r)){
+            if(U16_IS_LEAD(*r)){
                 int i =0, len = 2;
-                UTF_NEXT_CHAR_SAFE(r, i, len, exC, FALSE);
+                U16_NEXT(r, i, len, exC);
                 r++;
             }else{
                 exC = *r;
@@ -3496,9 +3499,9 @@ unescape(UChar* dst, int32_t dstLen,const char* src,int32_t srcLen,UErrorCode *s
         }
         if(dstIndex < dstLen){
             if(c>0xFFFF){
-               dst[dstIndex++] = UTF16_LEAD(c);
+               dst[dstIndex++] = U16_LEAD(c);
                if(dstIndex<dstLen){
-                    dst[dstIndex]=UTF16_TRAIL(c);
+                    dst[dstIndex]=U16_TRAIL(c);
                }else{
                    *status=U_BUFFER_OVERFLOW_ERROR;
                }
@@ -3536,8 +3539,8 @@ TestFullRoundtrip(const char* cp){
             usource[0] =(UChar) i;
             len=1;
         }else{
-            usource[0]=UTF16_LEAD(i);
-            usource[1]=UTF16_TRAIL(i);
+            usource[0]=U16_LEAD(i);
+            usource[1]=U16_TRAIL(i);
             len=2;
         }
         ulen=len;
@@ -5441,6 +5444,7 @@ static void TestJitterbug981(){
 
 #endif
 
+#if !UCONFIG_NO_LEGACY_CONVERSION
 static void TestJitterbug1293(){
     static const UChar src[] = {0x30DE, 0x30A4, 0x5E83, 0x544A, 0x30BF, 0x30A4, 0x30D7,0x000};
     char target[256];
@@ -5468,6 +5472,8 @@ static void TestJitterbug1293(){
     }
     ucnv_close(conv);
 }
+#endif
+
 static void TestJB5275_1(){
 
     static const char* data = "\x3B\xB3\x0A" /* Easy characters */

@@ -1,9 +1,9 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/en_ZA.xml
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/en_ZA.xml
 // *
 // ***************************************************************************
 en_ZA{
@@ -19,7 +19,7 @@ en_ZA{
             }
         }
     }
-    Version{"2.0.57.19"}
+    Version{"2.0.75.60"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -31,19 +31,19 @@ en_ZA{
                 "dd MMMM y",
                 "dd MMM y",
                 "yyyy/MM/dd",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
+                "{1}, {0}",
+                "{1} 'at' {0}",
+                "{1} 'at' {0}",
+                "{1}, {0}",
+                "{1}, {0}",
             }
             availableFormats{
                 MEd{"E MM/dd"}
                 MMMEd{"E dd MMM"}
                 MMMd{"dd MMM"}
                 Md{"MM/dd"}
-                yMEd{"EEE, yyyy/MM/dd"}
-                yMMMEd{"EEE, dd MMM y"}
+                yMEd{"E, yyyy/MM/dd"}
+                yMMMEd{"E, dd MMM y"}
                 yMMMd{"dd MMM y"}
                 yMd{"yyyy/MM/dd"}
             }

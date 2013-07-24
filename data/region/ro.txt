@@ -1,9 +1,9 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
-// * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/ro.xml
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/ro.xml
 // *
 // ***************************************************************************
 /**
@@ -29,11 +29,10 @@ ro{
         034{"Asia Meridională"}
         035{"Asia de Sud-Est"}
         039{"Europa Meridională"}
-        053{"Australia și Noua Zeelandă"}
+        053{"Australasia"}
         054{"Melanezia"}
         057{"Regiunea Micronezia"}
         061{"Polinezia"}
-        062{"Asia Centrală de Sud"}
         142{"Asia"}
         143{"Asia Centrală"}
         145{"Asia Occidentală"}
@@ -41,9 +40,7 @@ ro{
         151{"Europa Orientală"}
         154{"Europa Septentrională"}
         155{"Europa Occidentală"}
-        172{"Comunitatea Statelor Independente"}
         419{"America Latină"}
-        830{"Insulele Anglo-Normande"}
         AC{"Insula Ascension"}
         AD{"Andorra"}
         AE{"Emiratele Arabe Unite"}
@@ -75,6 +72,7 @@ ro{
         BM{"Bermuda"}
         BN{"Brunei"}
         BO{"Bolivia"}
+        BQ{"Insulele Caraibe Olandeze"}
         BR{"Brazilia"}
         BS{"Bahamas"}
         BT{"Bhutan"}
@@ -96,9 +94,9 @@ ro{
         CO{"Columbia"}
         CP{"Insula Clipperton"}
         CR{"Costa Rica"}
-        CS{"Serbia și Muntenegru"}
         CU{"Cuba"}
         CV{"Capul Verde"}
+        CW{"Curaçao"}
         CX{"Insula Christmas"}
         CY{"Cipru"}
         CZ{"Republica Cehă"}
@@ -143,7 +141,7 @@ ro{
         GU{"Guam"}
         GW{"Guineea-Bissau"}
         GY{"Guyana"}
-        HK{"R.A.S. Hong Kong a Chinei"}
+        HK{"Hong Kong"}
         HM{"Insula Heard și Insulele McDonald"}
         HN{"Honduras"}
         HR{"Croația"}
@@ -197,7 +195,7 @@ ro{
         ML{"Mali"}
         MM{"Myanmar"}
         MN{"Mongolia"}
-        MO{"R.A.S. Macao a Chinei"}
+        MO{"Macao"}
         MP{"Insulele Mariane de Nord"}
         MQ{"Martinica"}
         MR{"Mauritania"}
@@ -232,7 +230,7 @@ ro{
         PM{"Sfântul Pierre și Miquelon"}
         PN{"Pitcairn"}
         PR{"Porto Rico"}
-        PS{"Teritoriul Palestinian"}
+        PS{"Palestina"}
         PT{"Portugalia"}
         PW{"Palau"}
         PY{"Paraguay"}
@@ -258,8 +256,10 @@ ro{
         SN{"Senegal"}
         SO{"Somalia"}
         SR{"Surinam"}
+        SS{"Sudanul de Sud"}
         ST{"Sao Tome și Principe"}
         SV{"El Salvador"}
+        SX{"Sint Maarten"}
         SY{"Siria"}
         SZ{"Swaziland"}
         TA{"Tristan da Cunha"}
@@ -301,5 +301,5 @@ ro{
         ZW{"Zimbabwe"}
         ZZ{"Regiune necunoscută"}
     }
-    Version{"2.0.59.53"}
+    Version{"2.0.78.38"}
 }

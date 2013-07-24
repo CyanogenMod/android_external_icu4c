@@ -1,6 +1,6 @@
 /*  
 ********************************************************************************
-*   Copyright (C) 1997-2011, International Business Machines
+*   Copyright (C) 1997-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -25,6 +25,7 @@
 #include "unicode/calendar.h"
 #include "unicode/uobject.h"
 #include "unicode/locid.h"
+#include "unicode/udat.h"
 #include "unicode/ures.h"
 
 /**
@@ -105,6 +106,7 @@ public:
     DateFormatSymbols(const Locale& locale,
                       UErrorCode& status);
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * Construct a DateFormatSymbols object by loading format data from
      * resources for the default locale, in the default calendar (Gregorian).
@@ -139,6 +141,7 @@ public:
     DateFormatSymbols(const Locale& locale,
                       const char *type,
                       UErrorCode& status);
+#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      * Copy constructor.
@@ -396,6 +399,44 @@ public:
      */
     void setAmPmStrings(const UnicodeString* ampms, int32_t count);
 
+#ifndef U_HIDE_INTERNAL_API
+    /**
+     * Somewhat temporary constants for leap month pattern types, adequate for supporting
+     * just leap month patterns as needed for Chinese lunar calendar.
+     * Eventually we will add full support for different month pattern types (needed for
+     * other calendars such as Hindu) at which point this approach will be replaced by a
+     * more complete approach.
+     * @internal
+     */
+    enum EMonthPatternType
+    {
+        kLeapMonthPatternFormatWide,
+        kLeapMonthPatternFormatAbbrev,
+        kLeapMonthPatternFormatNarrow,
+        kLeapMonthPatternStandaloneWide,
+        kLeapMonthPatternStandaloneAbbrev,
+        kLeapMonthPatternStandaloneNarrow,
+        kLeapMonthPatternNumeric,
+        kMonthPatternsCount
+    };
+
+    /**
+     * Somewhat temporary function for getting complete set of leap month patterns for all
+     * contexts & widths, indexed by EMonthPatternType values. Returns NULL if calendar
+     * does not have leap month patterns. Note, there is currently no setter for this.
+     * Eventually we will add full support for different month pattern types (needed for
+     * other calendars such as Hindu) at which point this approach will be replaced by a
+     * more complete approach.
+     * @param count        Filled in with length of the array (may be 0).
+     * @return             The leap month patterns (DateFormatSymbols retains ownership).
+     *                     May be NULL if there are no leap month patterns for this calendar.
+     * @internal
+     */
+    const UnicodeString* getLeapMonthPatterns(int32_t& count) const;
+
+#endif  /* U_HIDE_INTERNAL_API */
+
+#ifndef U_HIDE_DEPRECATED_API
     /**
      * Gets timezone strings. These strings are stored in a 2-dimensional array.
      * @param rowCount      Output param to receive number of rows.
@@ -404,6 +445,7 @@ public:
      * @deprecated ICU 3.6
      */
     const UnicodeString** getZoneStrings(int32_t& rowCount, int32_t& columnCount) const;
+#endif  /* U_HIDE_DEPRECATED_API */
 
     /**
      * Sets timezone strings. These strings are stored in a 2-dimensional array.
@@ -451,6 +493,31 @@ public:
      * @stable ICU 2.8
      */
     Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const;
+
+#ifndef U_HIDE_INTERNAL_API
+    /**
+     * Constants for capitalization context usage types.
+     * @internal
+     */
+    enum ECapitalizationContextUsageType
+    {
+        kCapContextUsageOther,
+        kCapContextUsageMonthFormat,     /* except narrow */
+        kCapContextUsageMonthStandalone, /* except narrow */
+        kCapContextUsageMonthNarrow,
+        kCapContextUsageDayFormat,     /* except narrow */
+        kCapContextUsageDayStandalone, /* except narrow */
+        kCapContextUsageDayNarrow,
+        kCapContextUsageEraWide,
+        kCapContextUsageEraAbbrev,
+        kCapContextUsageEraNarrow,
+        kCapContextUsageZoneLong,
+        kCapContextUsageZoneShort,
+        kCapContextUsageMetazoneLong,
+        kCapContextUsageMetazoneShort,
+        kCapContextUsageTypeCount
+    };
+#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
@@ -592,6 +659,18 @@ private:
     int32_t         fStandaloneShortQuartersCount;
 
     /**
+     * All leap month patterns, for example "{0}bis".
+     */
+    UnicodeString  *fLeapMonthPatterns;
+    int32_t         fLeapMonthPatternsCount;
+
+    /**
+     * (Format) Short cyclic year names, for example: "jia-zi", "yi-chou", ... "gui-hai"
+     */
+    UnicodeString*  fShortYearNames;
+    int32_t         fShortYearNamesCount;
+
+    /**
      * Localized names of time zones in this locale.  This is a
      * two-dimensional array of strings of size n by m,
      * where m is at least 5 and up to 7.  Each of the n rows is an
@@ -636,33 +715,19 @@ private:
     Locale                  fZSFLocale;         // Locale used for getting ZoneStringFormat
 
     /**
-     * String used for localized GMT. For example, "GMT"
-     */
-    UnicodeString fGmtZero;
-
-    /**
-     * Pattern string used for localized time zone GMT format.  For example, "GMT{0}"
-     */
-    UnicodeString   fGmtFormat;
-
-    /**
-     * Pattern strings used for formatting zone offset in a localized time zone GMT string.
-     */
-    UnicodeString  *fGmtHourFormats;
-    int32_t         fGmtHourFormatsCount; 
-
-    enum GMTHourType {
-        GMT_NEGATIVE_HMS = 0,
-        GMT_NEGATIVE_HM,
-        GMT_POSITIVE_HMS,
-        GMT_POSITIVE_HM,
-        GMT_HOUR_COUNT
-    };
-
-    /**
      * Localized date-time pattern characters. For example: use 'u' as 'y'.
      */
     UnicodeString   fLocalPatternChars;
+
+#ifndef U_HIDE_INTERNAL_API
+    /**
+     * Capitalization transforms. For each usage type, the first array element indicates
+     * whether to titlecase for uiListOrMenu context, the second indicates whether to
+     * titlecase for stand-alone context.
+     */
+     UBool fCapitalization[kCapContextUsageTypeCount][2];
+#endif
+
 
 private:
     /** valid/actual locale information 
@@ -738,6 +803,22 @@ private:
      * Delete just the zone strings.
      */
     void disposeZoneStrings(void);
+
+    /**
+     * Returns the date format field index of the pattern character c,
+     * or UDAT_FIELD_COUNT if c is not a pattern character.
+     */
+    static UDateFormatField U_EXPORT2 getPatternCharIndex(UChar c);
+
+    /**
+     * Returns TRUE if f (with its pattern character repeated count times) is a numeric field.
+     */
+    static UBool U_EXPORT2 isNumericField(UDateFormatField f, int32_t count);
+
+    /**
+     * Returns TRUE if c (repeated count times) is the pattern character for a numeric field.
+     */
+    static UBool U_EXPORT2 isNumericPatternChar(UChar c, int32_t count);
 };
 
 U_NAMESPACE_END

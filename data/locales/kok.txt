@@ -1,9 +1,9 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/kok.xml
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/kok.xml
 // *
 // ***************************************************************************
 /**
@@ -21,7 +21,7 @@ kok{
         "Deva",
     }
     NumberElements{
-        default{"deva"}
+        default{"latn"}
         latn{
             patterns{
                 currencyFormat{"¤ #,##,##0.00"}
@@ -29,8 +29,9 @@ kok{
                 percentFormat{"#,##,##0%"}
             }
         }
+        native{"deva"}
     }
-    Version{"2.0.59.63"}
+    Version{"2.0.74.65"}
     calendar{
         gregorian{
             AmPmMarkers{

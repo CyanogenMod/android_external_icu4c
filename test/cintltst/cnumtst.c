@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2011, International Business Machines Corporation and
+ * Copyright (c) 1997-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -32,14 +32,25 @@
 #include "cnumtst.h"
 #include "cmemory.h"
 #include "putilimp.h"
+#include <stdio.h>
 
 #define LENGTH(arr) (sizeof(arr)/sizeof(arr[0]))
+
+static const char *tagAssert(const char *f, int32_t l, const char *msg) {
+    static char _fileline[1000];
+    sprintf(_fileline, "%s:%d: ASSERT_TRUE(%s)", f, l, msg);
+    return _fileline;
+}
+
+#define ASSERT_TRUE(x)   assertTrue(tagAssert(__FILE__, __LINE__, #x), (x))
 
 void addNumForTest(TestNode** root);
 static void TestTextAttributeCrash(void);
 static void TestNBSPInPattern(void);
 static void TestInt64Parse(void);
 static void TestParseCurrency(void);
+static void TestMaxInt(void);
+static void TestNoExponent(void);
 
 #define TESTCASE(x) addTest(root, &x, "tsformat/cnumtst/" #x)
 
@@ -59,40 +70,9 @@ void addNumForTest(TestNode** root)
     TESTCASE(TestInt64Parse);
     TESTCASE(TestParseZero);
     TESTCASE(TestParseCurrency);
-}
-
-/** copy src to dst with unicode-escapes for values < 0x20 and > 0x7e, null terminate if possible */
-static int32_t ustrToAstr(const UChar* src, int32_t srcLength, char* dst, int32_t dstLength) {
-    static const char hex[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
-
-    char *p = dst;
-    const char *e = p + dstLength;
-    if (srcLength < 0) {
-        const UChar* s = src;
-        while (*s) {
-            ++s;
-        }
-        srcLength = (int32_t)(s - src);
-    }
-    while (p < e && --srcLength >= 0) {
-        UChar c = *src++;
-        if (c == 0xd || c == 0xa || c == 0x9 || (c>= 0x20 && c <= 0x7e)) {
-            *p++ = (char) c & 0x7f;
-        } else if (e - p >= 6) {
-            *p++ = '\\';
-            *p++ = 'u';
-            *p++ = hex[(c >> 12) & 0xf];
-            *p++ = hex[(c >> 8) & 0xf];
-            *p++ = hex[(c >> 4) & 0xf];
-            *p++ = hex[c & 0xf];
-        } else {
-            break;
-        }
-    }
-    if (p < e) {
-        *p = 0;
-    }
-    return (int32_t)(p - dst);
+    TESTCASE(TestCloneWithRBNF);
+    TESTCASE(TestMaxInt);
+    TESTCASE(TestNoExponent);
 }
 
 /* test Parse int 64 */
@@ -256,7 +236,7 @@ static void TestNumberFormat()
 
     log_verbose("\nTesting unum_format() \n");
     resultlength=0;
-    pos1.field = 0; /* Integer Section */
+    pos1.field = UNUM_INTEGER_FIELD;
     resultlengthneeded=unum_format(cur_def, l, NULL, resultlength, &pos1, &status);
     if(status==U_BUFFER_OVERFLOW_ERROR)
     {
@@ -283,13 +263,13 @@ static void TestNumberFormat()
         log_err("Fail: Error in complete number Formatting using unum_format()\nGot: b=%d end=%d\nExpected: b=1 end=12\n",
                 pos1.beginIndex, pos1.endIndex);
 
-free(result);
+    free(result);
     result = 0;
 
     log_verbose("\nTesting unum_formatDouble()\n");
     u_uastrcpy(temp1, "($10,456.37)");
     resultlength=0;
-    pos2.field = 1; /* Fractional Section */
+    pos2.field = UNUM_FRACTION_FIELD;
     resultlengthneeded=unum_formatDouble(cur_def, d, NULL, resultlength, &pos2, &status);
     if(status==U_BUFFER_OVERFLOW_ERROR)
     {
@@ -319,17 +299,14 @@ free(result);
     /* Testing unum_parse() and unum_parseDouble() */
     log_verbose("\nTesting unum_parseDouble()\n");
 /*    for (i = 0; i < 100000; i++)*/
-    if (result != NULL)
-    {
-        parsepos=0;
-        d1=unum_parseDouble(cur_def, result, u_strlen(result), &parsepos, &status);
+    parsepos=0;
+    if (result != NULL) {
+      d1=unum_parseDouble(cur_def, result, u_strlen(result), &parsepos, &status);
+    } else {
+      log_err("result is NULL\n");
     }
-    else {
-        log_err("result is NULL\n");
-    }
-    if(U_FAILURE(status))
-    {
-        log_err("parse failed. The error is  : %s\n", myErrorName(status));
+    if(U_FAILURE(status)) {
+      log_err("parse of '%s' failed. Parsepos=%d. The error is  : %s\n", aescstrdup(result,u_strlen(result)),parsepos, myErrorName(status));
     }
 
     if(d1!=d)
@@ -340,14 +317,14 @@ free(result);
         free(result);
     result = 0;
 
-
+    status = U_ZERO_ERROR;
     /* Testing unum_formatDoubleCurrency / unum_parseDoubleCurrency */
     log_verbose("\nTesting unum_formatDoubleCurrency\n");
     u_uastrcpy(temp1, "Y1,235");
     temp1[0] = 0xA5; /* Yen sign */
     u_uastrcpy(temp, "JPY");
     resultlength=0;
-    pos2.field = 0; /* integer part */
+    pos2.field = UNUM_INTEGER_FIELD;
     resultlengthneeded=unum_formatDoubleCurrency(cur_def, a, temp, NULL, resultlength, &pos2, &status);
     if (status==U_BUFFER_OVERFLOW_ERROR) {
         status=U_ZERO_ERROR;
@@ -378,7 +355,7 @@ free(result);
     else {
         d1=unum_parseDoubleCurrency(cur_def, result, u_strlen(result), &parsepos, temp2, &status);
         if (U_FAILURE(status)) {
-            log_err("parse failed. The error is  : %s\n", myErrorName(status));
+          log_err("parseDoubleCurrency '%s' failed. The error is  : %s\n", aescstrdup(result, u_strlen(result)), myErrorName(status));
         }
         /* Note: a==1234.56, but on parse expect a1=1235.0 */
         if (d1!=a1) {
@@ -392,8 +369,9 @@ free(result);
             log_err("Fail: parsed incorrect currency\n");
         }
     }
+    status = U_ZERO_ERROR; /* reset */
 
-free(result);
+    free(result);
     result = 0;
 
 
@@ -407,7 +385,7 @@ free(result);
     }
     if(U_FAILURE(status))
     {
-        log_err("parse failed. The error is  : %s\n", myErrorName(status));
+        log_err("parseDouble('%s') failed. The error is  : %s\n", aescstrdup(temp1, resultlength), myErrorName(status));
     }
 
     /*
@@ -791,9 +769,8 @@ free(result);
             } else {
                 int32_t pp = 0;
                 int32_t parseResult;
-                char logbuf[256];
-                ustrToAstr(buffer, len, logbuf, LENGTH(logbuf));
-                log_verbose("formatted %d as '%s', length: %d\n", value, logbuf, len);
+                /*ustrToAstr(buffer, len, logbuf, LENGTH(logbuf));*/
+                log_verbose("formatted %d as '%s', length: %d\n", value, aescstrdup(buffer, len), len);
 
                 parseResult = unum_parse(spellout_def, buffer, len, &pp, &status);
                 if (U_FAILURE(status)) {
@@ -866,8 +843,7 @@ free(result);
 
         /* Format with a FieldPosition parameter */
 
-        fieldPos.field = 2;   /* Ticket 8034 - need enum constants for the field values. */
-                              /*  2 =  kDecimalSeparatorField   */
+        fieldPos.field = UNUM_DECIMAL_SEPARATOR_FIELD;
         resultSize = unum_formatDecimal(fmt, numInitial, -1, dest, DESTCAPACITY, &fieldPos, &status);
         if (U_FAILURE(status)) {
             log_err("File %s, Line %d, status = %s\n", __FILE__, __LINE__, u_errorName(status));
@@ -1325,7 +1301,7 @@ free(result);
 /*        u_uastrcpy(temp1, "(xxxxxxx10,456.37)"); */
         u_uastrcpy(temp1, "xxxxx(10,456.37)");
         resultlength=0;
-        pos1.field = 1; /* Fraction field */
+        pos1.field = UNUM_FRACTION_FIELD;
         resultlengthneeded=unum_formatDouble(pattern, d, NULL, resultlength, &pos1, &status);
         if(status==U_BUFFER_OVERFLOW_ERROR)
         {
@@ -1888,32 +1864,32 @@ static void TestTextAttributeCrash(void) {
     unum_close(nf);
 }
 
-static void TestNBSPPatternRtNum(const char *testcase, UNumberFormat *nf, double myNumber) {
+static void TestNBSPPatternRtNum(const char *testcase, int line, UNumberFormat *nf, double myNumber) {
     UErrorCode status = U_ZERO_ERROR;
     UChar myString[20];
     char tmpbuf[200];
     double aNumber = -1.0;
     unum_formatDouble(nf, myNumber, myString, 20, NULL, &status);
-    log_verbose("%s: formatted %.2f into %s\n", testcase, myNumber, u_austrcpy(tmpbuf, myString));
+    log_verbose("%s:%d: formatted %.2f into %s\n", testcase, line, myNumber, u_austrcpy(tmpbuf, myString));
     if(U_FAILURE(status)) {
-        log_err("%s: failed format of %.2g with %s\n", testcase, myNumber, u_errorName(status));
+      log_err("%s:%d: failed format of %.2g with %s\n", testcase, line, myNumber, u_errorName(status));
         return;
     }
     aNumber = unum_parse(nf, myString, -1, NULL, &status);
     if(U_FAILURE(status)) {
-        log_err("%s: failed parse with %s\n", testcase, u_errorName(status));
+      log_err("%s:%d: failed parse with %s\n", testcase, line, u_errorName(status));
         return;
     }
     if(uprv_fabs(aNumber-myNumber)>.001) {
-        log_err("FAIL: %s: formatted %.2f, parsed into %.2f\n", testcase, myNumber, aNumber);
+      log_err("FAIL: %s:%d formatted %.2f, parsed into %.2f\n", testcase, line, myNumber, aNumber);
     } else {
-        log_verbose("PASS: %s: formatted %.2f, parsed into %.2f\n", testcase, myNumber, aNumber);
+      log_verbose("PASS: %s:%d formatted %.2f, parsed into %.2f\n", testcase, line, myNumber, aNumber);
     }
 }
 
 static void TestNBSPPatternRT(const char *testcase, UNumberFormat *nf) {
-    TestNBSPPatternRtNum(testcase, nf, 12345.);
-    TestNBSPPatternRtNum(testcase, nf, -12345.);
+  TestNBSPPatternRtNum(testcase, __LINE__, nf, 12345.);
+  TestNBSPPatternRtNum(testcase, __LINE__, nf, -12345.);
 }
 
 static void TestNBSPInPattern(void) {
@@ -1925,7 +1901,7 @@ static void TestNBSPInPattern(void) {
     testcase="ar_AE UNUM_CURRENCY";
     nf  = unum_open(UNUM_CURRENCY, NULL, -1, "ar_AE", NULL, &status);
     if(U_FAILURE(status) || nf == NULL) {
-        log_data_err("%s: unum_open failed with %s (Are you missing data?)\n", testcase, u_errorName(status));
+      log_data_err("%s:%d: %s: unum_open failed with %s (Are you missing data?)\n", __FILE__, __LINE__, testcase, u_errorName(status));
         return;
     }
     TestNBSPPatternRT(testcase, nf);
@@ -1964,6 +1940,236 @@ static void TestNBSPInPattern(void) {
 
 
 
+}
+static void TestCloneWithRBNF(void) {   
+    UChar pattern[1024];
+    UChar pat2[512];
+    UErrorCode status = U_ZERO_ERROR;
+    UChar buffer[256];
+    UChar buffer_cloned[256];
+    char temp1[256];
+    char temp2[256];
+    UNumberFormat *pform_cloned;
+    UNumberFormat *pform;
+
+    u_uastrcpy(pattern,
+        "%main:\n"
+        "0.x: >%%millis-only>;\n"
+        "x.0: <%%duration<;\n"
+        "x.x: <%%durationwithmillis<>%%millis-added>;\n"
+        "-x: ->>;%%millis-only:\n"
+        "1000: 00:00.<%%millis<;\n"
+        "%%millis-added:\n"
+        "1000: .<%%millis<;\n"
+        "%%millis:\n"
+        "0: =000=;\n"
+        "%%duration:\n"
+        "0: =%%seconds-only=;\n"
+        "60: =%%min-sec=;\n"
+        "3600: =%%hr-min-sec=;\n"
+        "86400/86400: <%%ddaayyss<[, >>];\n"
+        "%%durationwithmillis:\n"
+        "0: =%%seconds-only=;\n"
+        "60: =%%min-sec=;\n"
+        "3600: =%%hr-min-sec=;\n"
+        "86400/86400: <%%ddaayyss<, >>;\n");
+    u_uastrcpy(pat2,
+        "%%seconds-only:\n"
+        "0: 0:00:=00=;\n"
+        "%%min-sec:\n"
+        "0: :=00=;\n"
+        "0/60: 0:<00<>>;\n"
+        "%%hr-min-sec:\n"
+        "0: :=00=;\n"
+        "60/60: <00<>>;\n"
+        "3600/60: <0<:>>>;\n"
+        "%%ddaayyss:\n"
+        "0 days;\n"
+        "1 day;\n"
+        "=0= days;");
+
+    /* This is to get around some compiler warnings about char * string length. */
+    u_strcat(pattern, pat2);
+
+    pform = unum_open(UNUM_PATTERN_RULEBASED, pattern, -1, "en_US", NULL, &status);
+    unum_formatDouble(pform, 3600, buffer, 256, NULL, &status);
+
+    pform_cloned = unum_clone(pform,&status);
+    unum_formatDouble(pform_cloned, 3600, buffer_cloned, 256, NULL, &status);
+
+    unum_close(pform);
+    unum_close(pform_cloned);
+
+    if (u_strcmp(buffer,buffer_cloned)) {
+        log_data_err("Result from cloned formatter not identical to the original. Original: %s Cloned: %s - (Are you missing data?)",u_austrcpy(temp1, buffer),u_austrcpy(temp2,buffer_cloned));
+    }
+}
+
+
+static void TestNoExponent(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    UChar str[100];
+    const char *cstr;
+    UNumberFormat *fmt;
+    int32_t pos;
+    int32_t expect = 0;
+    int32_t num;
+
+    fmt = unum_open(UNUM_DECIMAL, NULL, -1, "en_US", NULL, &status);
+
+    if(U_FAILURE(status) || fmt == NULL) {
+        log_data_err("%s:%d: unum_open failed with %s (Are you missing data?)\n", __FILE__, __LINE__, u_errorName(status));
+        return;
+    }
+
+    cstr = "10E6";
+    u_uastrcpy(str, cstr);
+    expect = 10000000;
+    pos = 0;
+    num = unum_parse(fmt, str, -1, &pos, &status);
+    ASSERT_TRUE(pos==4);
+    if(U_FAILURE(status)) {
+        log_data_err("%s:%d: unum_parse failed with %s for %s (Are you missing data?)\n", __FILE__, __LINE__, u_errorName(status), cstr);
+    } else if(expect!=num) {
+        log_data_err("%s:%d: unum_parse failed, got %d expected %d for '%s'(Are you missing data?)\n", __FILE__, __LINE__, num, expect, cstr);
+    } else {
+        log_verbose("%s:%d: unum_parse returned %d for '%s'\n", __FILE__, __LINE__, num, cstr);
+    }
+
+    ASSERT_TRUE(unum_getAttribute(fmt, UNUM_PARSE_NO_EXPONENT)==0);
+
+    unum_setAttribute(fmt, UNUM_PARSE_NO_EXPONENT, 1); /* no error code */
+    log_verbose("set UNUM_PARSE_NO_EXPONENT\n");
+
+    ASSERT_TRUE(unum_getAttribute(fmt, UNUM_PARSE_NO_EXPONENT)==1);
+
+    pos = 0;
+    expect=10;
+    num = unum_parse(fmt, str, -1, &pos, &status);
+    if(num==10000000) {
+        log_err("%s:%d: FAIL: unum_parse should have returned 10, not 10000000 on %s after UNUM_PARSE_NO_EXPONENT\n", __FILE__, __LINE__, cstr);
+    } else if(num==expect) {
+        log_verbose("%s:%d: unum_parse gave %d for %s - good.\n", __FILE__, __LINE__, num, cstr);
+    }
+    ASSERT_TRUE(pos==2);
+
+    status = U_ZERO_ERROR;
+
+    unum_close(fmt);
+
+    /* ok, now try scientific */
+    fmt = unum_open(UNUM_SCIENTIFIC, NULL, -1, "en_US", NULL, &status);
+    assertSuccess("unum_open(UNUM_SCIENTIFIC, ...)", &status);
+
+    ASSERT_TRUE(unum_getAttribute(fmt, UNUM_PARSE_NO_EXPONENT)==0);
+
+    cstr = "10E6";
+    u_uastrcpy(str, cstr);
+    expect = 10000000;
+    pos = 0;
+    num = unum_parse(fmt, str, -1, &pos, &status);
+    ASSERT_TRUE(pos==4);
+    if(U_FAILURE(status)) {
+        log_data_err("%s:%d: unum_parse failed with %s for %s (Are you missing data?)\n", __FILE__, __LINE__, u_errorName(status), cstr);
+    } else if(expect!=num) {
+        log_data_err("%s:%d: unum_parse failed, got %d expected %d for '%s'(Are you missing data?)\n", __FILE__, __LINE__, num, expect, cstr);
+    } else {
+        log_verbose("%s:%d: unum_parse returned %d for '%s'\n", __FILE__, __LINE__, num, cstr);
+    }
+
+    unum_setAttribute(fmt, UNUM_PARSE_NO_EXPONENT, 1); /* no error code */
+    log_verbose("set UNUM_PARSE_NO_EXPONENT\n");
+
+    ASSERT_TRUE(unum_getAttribute(fmt, UNUM_PARSE_NO_EXPONENT)==1);
+
+
+    cstr = "10E6";
+    u_uastrcpy(str, cstr);
+    expect = 10000000;
+    pos = 0;
+    num = unum_parse(fmt, str, -1, &pos, &status);
+    ASSERT_TRUE(pos==4);
+    if(U_FAILURE(status)) {
+        log_data_err("%s:%d: unum_parse failed with %s for %s (Are you missing data?)\n", __FILE__, __LINE__, u_errorName(status), cstr);
+    } else if(expect!=num) {
+        log_data_err("%s:%d: unum_parse failed, got %d expected %d for '%s'(Are you missing data?)\n", __FILE__, __LINE__, num, expect, cstr);
+    } else {
+        log_verbose("%s:%d: unum_parse returned %d for '%s'\n", __FILE__, __LINE__, num, cstr);
+    }
+
+    unum_close(fmt);
+}
+
+static void TestMaxInt(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    UChar pattern_hash[] = { 0x23, 0x00 }; /* "#" */
+    UChar result1[1024] = { 0 }, result2[1024] = { 0 };
+    int32_t len1, len2;
+    UChar expect[] = { 0x0039, 0x0037, 0 };
+    UNumberFormat *fmt = unum_open(
+                  UNUM_PATTERN_DECIMAL,      /* style         */
+                  &pattern_hash[0],          /* pattern       */
+                  u_strlen(pattern_hash),    /* patternLength */
+                  0,
+                  0,                         /* parseErr      */
+                  &status);
+    if(U_FAILURE(status) || fmt == NULL) {
+        log_data_err("%s:%d: %s: unum_open failed with %s (Are you missing data?)\n", __FILE__, __LINE__, "TestMaxInt", u_errorName(status));
+        return;
+    }
+
+    unum_setAttribute(fmt, UNUM_MAX_INTEGER_DIGITS, 2);
+
+    status = U_ZERO_ERROR;
+    /* #1 */
+    len1 = unum_formatInt64(fmt, 1997, result1, 1024, NULL, &status);
+    result1[len1]=0;
+    if(U_FAILURE(status) || u_strcmp(expect, result1)) {
+        log_err("unum_formatInt64 Expected %s but got %s status %s\n", austrdup(expect), austrdup(result1), u_errorName(status));
+    }
+
+    status = U_ZERO_ERROR;
+    /* #2 */
+    len2 = unum_formatDouble(fmt, 1997.0, result2, 1024, NULL, &status);
+    result2[len2]=0;
+    if(U_FAILURE(status) || u_strcmp(expect, result2)) {
+        log_err("unum_formatDouble Expected %s but got %s status %s\n", austrdup(expect), austrdup(result2), u_errorName(status));
+    }
+
+
+
+    /* test UNUM_FORMAT_FAIL_IF_MORE_THAN_MAX_DIGITS */
+    ASSERT_TRUE(unum_getAttribute(fmt, UNUM_FORMAT_FAIL_IF_MORE_THAN_MAX_DIGITS)==0);
+
+    unum_setAttribute(fmt, UNUM_FORMAT_FAIL_IF_MORE_THAN_MAX_DIGITS, 1);
+    /* test UNUM_FORMAT_FAIL_IF_MORE_THAN_MAX_DIGITS */
+    ASSERT_TRUE(unum_getAttribute(fmt, UNUM_FORMAT_FAIL_IF_MORE_THAN_MAX_DIGITS)==1);
+
+    status = U_ZERO_ERROR;
+    /* max int digits still '2' */
+    len1 = unum_formatInt64(fmt, 1997, result1, 1024, NULL, &status);
+    ASSERT_TRUE(status==U_ILLEGAL_ARGUMENT_ERROR);
+    status = U_ZERO_ERROR;
+
+    /* But, formatting 97->'97' works fine. */
+
+    /* #1 */
+    len1 = unum_formatInt64(fmt, 97, result1, 1024, NULL, &status);
+    result1[len1]=0;
+    if(U_FAILURE(status) || u_strcmp(expect, result1)) {
+        log_err("unum_formatInt64 Expected %s but got %s status %s\n", austrdup(expect), austrdup(result1), u_errorName(status));
+    }
+
+    status = U_ZERO_ERROR;
+    /* #2 */
+    len2 = unum_formatDouble(fmt, 97.0, result2, 1024, NULL, &status);
+    result2[len2]=0;
+    if(U_FAILURE(status) || u_strcmp(expect, result2)) {
+        log_err("unum_formatDouble Expected %s but got %s status %s\n", austrdup(expect), austrdup(result2), u_errorName(status));
+    }
+
+
+    unum_close(fmt);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

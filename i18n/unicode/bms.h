@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1996-2010, International Business Machines Corporation and Others.
+ * Copyright (C) 1996-2012, International Business Machines Corporation and Others.
  * All rights reserved.
  */
 
@@ -18,6 +18,8 @@
 
 #include "unicode/ucol.h"
 
+#ifndef U_HIDE_INTERNAL_API
+
 /**
  * A <code>UCD</code> object holds the Collator-specific data needed to
  * compute the length of the shortest string that can
@@ -31,6 +33,8 @@
  * If you do not need to reuse any unreferenced objects in the cache, you can call
  * <code>ucd_flushCCache</code>. If you no longer need any <code>UCD</code>
  * objects, you can call <code>ucd_freeCache</code>
+ *
+ * @internal ICU 4.0.1 technology preview
  */
 typedef void UCD;
 
@@ -48,7 +52,7 @@ typedef void UCD;
  *
  * @internal ICU 4.0.1 technology preview
  */
-U_CAPI UCD * U_EXPORT2
+U_INTERNAL UCD * U_EXPORT2
 ucd_open(UCollator *coll, UErrorCode *status);
 
 /**
@@ -58,7 +62,7 @@ ucd_open(UCollator *coll, UErrorCode *status);
  *
  * @internal ICU 4.0.1 technology preview
  */
-U_CAPI void U_EXPORT2
+U_INTERNAL void U_EXPORT2
 ucd_close(UCD *ucd);
 
 /**
@@ -74,7 +78,7 @@ ucd_close(UCD *ucd);
  *
  * @internal ICU 4.0.1 technology preview
  */
-U_CAPI UCollator * U_EXPORT2
+U_INTERNAL UCollator * U_EXPORT2
 ucd_getCollator(UCD *ucd);
 
 /**
@@ -89,7 +93,7 @@ ucd_getCollator(UCD *ucd);
  *
  * @internal ICU 4.0.1 technology preview
  */
-U_CAPI void U_EXPORT2
+U_INTERNAL void U_EXPORT2
 ucd_freeCache();
 
 /**
@@ -99,7 +103,7 @@ ucd_freeCache();
  *
  * @internal 4.0.1 technology preview
  */
-U_CAPI void U_EXPORT2
+U_INTERNAL void U_EXPORT2
 ucd_flushCache();
 
 /**
@@ -200,7 +204,7 @@ typedef struct BMS BMS; /**< @see BMS */
  *
  * @internal ICU 4.0.1 technology preview
  */
-U_CAPI BMS * U_EXPORT2
+U_INTERNAL BMS * U_EXPORT2
 bms_open(UCD *ucd,
          const UChar *pattern, int32_t patternLength,
          const UChar *target,  int32_t targetLength,
@@ -213,7 +217,7 @@ bms_open(UCD *ucd,
  * @param bms - the <code>BMS</code> object to close.
  * @internal ICU 4.0.1 technology preview
  */
-U_CAPI void U_EXPORT2
+U_INTERNAL void U_EXPORT2
 bms_close(BMS *bms);
 
 /**
@@ -224,7 +228,7 @@ bms_close(BMS *bms);
  *
  * @internal ICU 4.0.1 technology preview
  */
-U_CAPI UBool U_EXPORT2
+U_INTERNAL UBool U_EXPORT2
 bms_empty(BMS *bms);
 
 /**
@@ -238,7 +242,7 @@ bms_empty(BMS *bms);
  *
  * @internal ICU 4.0.1 technology preview
  */
-U_CAPI UCD * U_EXPORT2
+U_INTERNAL UCD * U_EXPORT2
 bms_getData(BMS *bms);
 
 /**
@@ -253,7 +257,7 @@ bms_getData(BMS *bms);
  *
  * @internal ICU 4.0.1 technology preview
  */
-U_CAPI UBool U_EXPORT2
+U_INTERNAL UBool U_EXPORT2
 bms_search(BMS *bms, int32_t offset, int32_t *start, int32_t *end);
 
 /**
@@ -266,8 +270,10 @@ bms_search(BMS *bms, int32_t offset, int32_t *start, int32_t *end);
  *
  * @internal ICU 4.0.1 technology preview
  */
-U_CAPI void U_EXPORT2
+U_INTERNAL void U_EXPORT2
 bms_setTargetString(BMS *bms, const UChar *target, int32_t targetLength, UErrorCode *status);
+
+#endif  /* U_HIDE_INTERNAL_API */
 
 #endif
 

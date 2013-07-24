@@ -1,9 +1,9 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/metaZones.xml
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/metaZones.xml
 // *
 // ***************************************************************************
 metaZones:table(nofallback){
@@ -139,6 +139,7 @@ metaZones:table(nofallback){
             AW{"America/Aruba"}
             BB{"America/Barbados"}
             BM{"Atlantic/Bermuda"}
+            BQ{"America/Kralendijk"}
             DM{"America/Dominica"}
             GD{"America/Grenada"}
             GL{"America/Thule"}
@@ -149,6 +150,7 @@ metaZones:table(nofallback){
             MQ{"America/Martinique"}
             MS{"America/Montserrat"}
             PR{"America/Puerto_Rico"}
+            SX{"America/Lower_Princes"}
             TT{"America/Port_of_Spain"}
             VC{"America/St_Vincent"}
             VG{"America/Tortola"}
@@ -341,7 +343,6 @@ metaZones:table(nofallback){
             GM{"Africa/Banjul"}
             GN{"Africa/Conakry"}
             IE{"Europe/Dublin"}
-            LR{"Africa/Monrovia"}
             ML{"Africa/Bamako"}
             MR{"Africa/Nouakchott"}
             SH{"Atlantic/St_Helena"}
@@ -1053,6 +1054,11 @@ metaZones:table(nofallback){
             {
                 "Europe_Eastern",
                 "1997-10-03 22:00",
+                "2012-11-10 00:00",
+            }
+            {
+                "Europe_Central",
+                "2012-11-10 00:00",
                 "9999-12-31 23:59",
             }
         }
@@ -1478,6 +1484,11 @@ metaZones:table(nofallback){
                 "America_Central",
             }
         }
+        "America:Creston"{
+            {
+                "America_Mountain",
+            }
+        }
         "America:Cuiaba"{
             {
                 "Amazon",
@@ -1842,6 +1853,11 @@ metaZones:table(nofallback){
                 "9999-12-31 23:59",
             }
         }
+        "America:Kralendijk"{
+            {
+                "Atlantic",
+            }
+        }
         "America:La_Paz"{
             {
                 "Bolivia",
@@ -1872,6 +1888,11 @@ metaZones:table(nofallback){
                 "America_Eastern",
                 "1974-10-27 07:00",
                 "9999-12-31 23:59",
+            }
+        }
+        "America:Lower_Princes"{
+            {
+                "Atlantic",
             }
         }
         "America:Maceio"{
@@ -2462,6 +2483,16 @@ metaZones:table(nofallback){
             {
                 "Australia_Western",
                 "2010-03-04 15:00",
+                "2011-10-27 18:00",
+            }
+            {
+                "Casey",
+                "2011-10-27 18:00",
+                "2012-02-21 17:00",
+            }
+            {
+                "Australia_Western",
+                "2012-02-21 17:00",
                 "9999-12-31 23:59",
             }
         }
@@ -3496,7 +3527,7 @@ metaZones:table(nofallback){
             {
                 "Europe_Eastern",
                 "1990-06-30 23:00",
-                "2011-03-27 00:00",
+                "9999-12-31 23:59",
             }
         }
         "Europe:Lisbon"{
@@ -3675,7 +3706,7 @@ metaZones:table(nofallback){
             {
                 "Europe_Eastern",
                 "1997-03-30 01:00",
-                "2011-03-27 01:00",
+                "9999-12-31 23:59",
             }
         }
         "Europe:Skopje"{
@@ -3724,7 +3755,7 @@ metaZones:table(nofallback){
             {
                 "Europe_Eastern",
                 "1991-03-31 02:00",
-                "2011-03-27 01:00",
+                "9999-12-31 23:59",
             }
         }
         "Europe:Vaduz"{
@@ -3788,7 +3819,7 @@ metaZones:table(nofallback){
             {
                 "Europe_Eastern",
                 "1991-03-30 23:00",
-                "2011-03-27 01:00",
+                "9999-12-31 23:59",
             }
         }
         "Europe:Zurich"{

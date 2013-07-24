@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 1997-2011, International Business Machines Corporation and
+* Copyright (C) 1997-2012, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -34,6 +34,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/datefmt.h"
+#include "unicode/udisplaycontext.h"
 
 U_NAMESPACE_BEGIN
 
@@ -72,6 +73,7 @@ class TimeZoneFormat;
  * y        year                    (Number)            1996
  * Y        year (week of year)     (Number)            1997
  * u        extended year           (Number)            4601
+ * U        cyclic year name        (Text,NumFallback)  ren-chen (29)
  * Q        Quarter                 (Text & Number)     Q2 & 02
  * M        month in year           (Text & Number)     July & 07
  * d        day in month            (Number)            10
@@ -80,6 +82,7 @@ class TimeZoneFormat;
  * m        minute in hour          (Number)            30
  * s        second in minute        (Number)            55
  * S        fractional second       (Number)            978
+ *          (maximum resolution of SSS; truncated if shorter, zero-padded if longer)
  * E        day of week             (Text)              Tuesday
  * e        day of week (local 1~7) (Text & Number)     Tues & 2
  * D        day in year             (Number)            189
@@ -89,11 +92,15 @@ class TimeZoneFormat;
  * a        am/pm marker            (Text)              PM
  * k        hour in day (1~24)      (Number)            24
  * K        hour in am/pm (0~11)    (Number)            0
- * z        time zone               (Time)              Pacific Standard Time
+ * z        time zone               (Text)              PST
+ * zzzz     time zone               (Text)              Pacific Standard Time
  * Z        time zone (RFC 822)     (Number)            -0800
- * v        time zone (generic)     (Text)              Pacific Time
- * V        time zone (abreviation) (Text)              PT
- * VVVV     time zone (location)    (Text)              United States (Los Angeles)
+ * ZZZZ     time zone (RFC 822)     (Text & Number)     GMT-08:00
+ * ZZZZZ    time zone (ISO 8601)    (Text & Number)     -08:00 & Z
+ * v        time zone (generic)     (Text)              PT
+ * vvvv     time zone (generic)     (Text)              Pacific Time
+ * V        time zone (abreviation) (Text)              PST
+ * VVVV     time zone (location)    (Text)              United States Time (Los Angeles)
  * g        Julian day              (Number)            2451334
  * A        milliseconds in day     (Number)            69540000
  * q        stand alone quarter     (Text & Number)     Q2 & 02
@@ -116,6 +123,9 @@ class TimeZoneFormat;
  * <P>
  * (Text & Number): 3 or over, use text, otherwise use number.  (e.g., "M" produces "1",
  * "MM" produces "01", "MMM" produces "Jan", and "MMMM" produces "January".)
+ * <P>
+ * (Text,NumFallback): Behaves like Text if there is supporting data, like
+ * Number otherwise.
  * <P>
  * Any characters in the pattern that are not in the ranges of ['a'..'z'] and
  * ['A'..'Z'] will be treated as quoted text. For instance, characters
@@ -180,8 +190,9 @@ class TimeZoneFormat;
  * <code>Unicode::isDigit()</code>, will be parsed into the default century.
  * Any other numeric string, such as a one digit string, a three or more digit
  * string, or a two digit string that isn't all digits (for example, "-1"), is
- * interpreted literally.  So "01/02/3" or "01/02/003" are parsed, using the
- * same pattern, as Jan 2, 3 AD.  Likewise, "01/02/-3" is parsed as Jan 2, 4 BC.
+ * interpreted literally.  So "01/02/3" or "01/02/003" are parsed (for the
+ * Gregorian calendar), using the same pattern, as Jan 2, 3 AD.  Likewise (but
+ * only in lenient parse mode, the default) "01/02/-3" is parsed as Jan 2, 4 BC.
  *
  * <p>
  * If the year pattern has more than two 'y' characters, the year is
@@ -526,14 +537,21 @@ public:
      * this object's format method but can still be parsed as a date, then the
      * parse succeeds. Clients may insist on strict adherence to the format by
      * calling setLenient(false).
+     * @see DateFormat::setLenient(boolean)
      *
      * @param text  The date/time string to be parsed
-     * @param cal   a Calendar set to the date and time to be formatted
-     *              into a date/time string.
+     * @param cal   A Calendar set on input to the date and time to be used for
+     *              missing values in the date/time string being parsed, and set
+     *              on output to the parsed date/time. When the calendar type is
+     *              different from the internal calendar held by this SimpleDateFormat
+     *              instance, the internal calendar will be cloned to a work
+     *              calendar set to the same milliseconds and time zone as the
+     *              cal parameter, field values will be parsed based on the work
+     *              calendar, then the result (milliseconds and time zone) will
+     *              be set in this calendar.
      * @param pos   On input, the position at which to start parsing; on
      *              output, the position at which parsing terminated, or the
      *              start position if the parse failed.
-     * @return      A valid UDate if the input could be parsed.
      * @stable ICU 2.1
      */
     virtual void parse( const UnicodeString& text,
@@ -549,8 +567,19 @@ public:
      * this object's format method but can still be parsed as a date, then the
      * parse succeeds. Clients may insist on strict adherence to the format by
      * calling setLenient(false).
-     *
      * @see DateFormat::setLenient(boolean)
+     * <P>
+     * Note that the normal date formats associated with some calendars - such
+     * as the Chinese lunar calendar - do not specify enough fields to enable
+     * dates to be parsed unambiguously. In the case of the Chinese lunar
+     * calendar, while the year within the current 60-year cycle is specified,
+     * the number of such cycles since the start date of the calendar (in the
+     * ERA field of the Calendar object) is not normally part of the format,
+     * and parsing may assume the wrong era. For cases such as this it is
+     * recommended that clients parse using the method
+     * parse(const UnicodeString&, Calendar& cal, ParsePosition&)
+     * with the Calendar passed in set to the current date, or to a date
+     * within the era/cycle that should be assumed if absent in the format.
      *
      * @param text  The date/time string to be parsed
      * @param pos   On input, the position at which to start parsing; on
@@ -571,8 +600,26 @@ public:
      * doesn't return any information about how much of the string was consumed
      * by the parsing.  If you need that information, use the version of
      * parse() that takes a ParsePosition.
+     * <P>
+     * By default, parsing is lenient: If the input is not in the form used by
+     * this object's format method but can still be parsed as a date, then the
+     * parse succeeds. Clients may insist on strict adherence to the format by
+     * calling setLenient(false).
+     * @see DateFormat::setLenient(boolean)
+     * <P>
+     * Note that the normal date formats associated with some calendars - such
+     * as the Chinese lunar calendar - do not specify enough fields to enable
+     * dates to be parsed unambiguously. In the case of the Chinese lunar
+     * calendar, while the year within the current 60-year cycle is specified,
+     * the number of such cycles since the start date of the calendar (in the
+     * ERA field of the Calendar object) is not normally part of the format,
+     * and parsing may assume the wrong era. For cases such as this it is
+     * recommended that clients parse using the method
+     * parse(const UnicodeString&, Calendar& cal, ParsePosition&)
+     * with the Calendar passed in set to the current date, or to a date
+     * within the era/cycle that should be assumed if absent in the format.
      *
-     * @param text  The date/time string to be parsed
+     * @param text  The date/time string to be parsed into a UDate value.
      * @param status Filled in with U_ZERO_ERROR if the parse was successful, and with
      *              an error value if there was a parse error.
      * @return      A valid UDate if the input could be parsed.
@@ -728,6 +775,56 @@ public:
      */
     virtual void adoptCalendar(Calendar* calendarToAdopt);
 
+    /* Cannot use #ifndef U_HIDE_INTERNAL_API for the following draft method since it is virtual */
+    /**
+     * Set a particular UDisplayContext value in the formatter, such as
+     * UDISPCTX_CAPITALIZATION_FOR_STANDALONE.
+     * @param value The UDisplayContext value to set.
+     * @param status Input/output status. If at entry this indicates a failure
+     *               status, the function will do nothing; otherwise this will be
+     *               updated with any new status from the function. 
+     * @internal ICU 50 technology preview
+     */
+    virtual void setContext(UDisplayContext value, UErrorCode& status);
+
+    /* Cannot use #ifndef U_HIDE_INTERNAL_API for the following draft method since it is virtual */
+    /**
+     * Get the formatter's UDisplayContext value for the specified UDisplayContextType,
+     * such as UDISPCTX_TYPE_CAPITALIZATION.
+     * @param type The UDisplayContextType whose value to return
+     * @param status Input/output status. If at entry this indicates a failure
+     *               status, the function will do nothing; otherwise this will be
+     *               updated with any new status from the function. 
+     * @return The UDisplayContextValue for the specified type.
+     * @internal ICU 50 technology preview
+     */
+    virtual UDisplayContext getContext(UDisplayContextType type, UErrorCode& status) const;
+
+    /* Cannot use #ifndef U_HIDE_INTERNAL_API for the following methods since they are virtual */
+    /**
+     * Sets the TimeZoneFormat to be used by this date/time formatter.
+     * The caller should not delete the TimeZoneFormat object after
+     * it is adopted by this call.
+     * @param timeZoneFormatToAdopt The TimeZoneFormat object to be adopted.
+     * @internal ICU 49 technology preview
+     */
+    virtual void adoptTimeZoneFormat(TimeZoneFormat* timeZoneFormatToAdopt);
+
+    /**
+     * Sets the TimeZoneFormat to be used by this date/time formatter.
+     * @param newTimeZoneFormat The TimeZoneFormat object to copy.
+     * @internal ICU 49 technology preview
+     */
+    virtual void setTimeZoneFormat(const TimeZoneFormat& newTimeZoneFormat);
+
+    /**
+     * Gets the time zone format object associated with this date/time formatter.
+     * @return the time zone format associated with this date/time formatter.
+     * @internal ICU 49 technology preview
+     */
+    virtual const TimeZoneFormat* getTimeZoneFormat(void) const;
+
+#ifndef U_HIDE_INTERNAL_API
     /**
      * This is for ICU internal use only. Please do not use.
      * Check whether the 'field' is smaller than all the fields covered in
@@ -755,8 +852,6 @@ public:
     static UBool isFieldUnitIgnored(const UnicodeString& pattern,
                                     UCalendarDateFields field);
 
-
-
     /**
      * This is for ICU internal use only. Please do not use.
      * Get the locale of this simple date formatter.
@@ -766,7 +861,7 @@ public:
      * @internal ICU 4.0
      */
     const Locale& getSmpFmtLocale(void) const;
-
+#endif  /* U_HIDE_INTERNAL_API */
 
 private:
     friend class DateFormat;
@@ -798,8 +893,7 @@ private:
     /**
      * Hook called by format(... FieldPosition& ...) and format(...FieldPositionIterator&...)
      */
-    UnicodeString& _format(Calendar& cal, UnicodeString& appendTo, FieldPositionHandler& handler,
-           UErrorCode& status) const;
+    UnicodeString& _format(Calendar& cal, UnicodeString& appendTo, FieldPositionHandler& handler, UErrorCode& status) const;
 
     /**
      * Called by format() to format a single field.
@@ -810,6 +904,8 @@ private:
      * @param count     Number of characters in the current pattern symbol (e.g.,
      *                  "yyyy" in the pattern would result in a call to this function
      *                  with ch equal to 'y' and count equal to 4)
+     * @param capitalizationContext Capitalization context for this date format.
+     * @param fieldNum  Zero-based numbering of current field within the overall format.
      * @param handler   Records information about field positions.
      * @param cal       Calendar to use
      * @param status    Receives a status code, which will be U_ZERO_ERROR if the operation
@@ -818,6 +914,8 @@ private:
     void subFormat(UnicodeString &appendTo,
                    UChar ch,
                    int32_t count,
+                   UDisplayContext capitalizationContext,
+                   int32_t fieldNum,
                    FieldPositionHandler& handler,
                    Calendar& cal,
                    UErrorCode& status) const; // in case of illegal argument
@@ -846,6 +944,16 @@ private:
      * times, represents a numeric field.
      */
     static UBool isNumeric(UChar formatChar, int32_t count);
+
+    /**
+     * Returns TRUE if the patternOffset is at the start of a numeric field.
+     */
+    static UBool isAtNumericField(const UnicodeString &pattern, int32_t patternOffset);
+
+    /**
+     * Returns TRUE if the patternOffset is right after a non-numeric field.
+     */
+    static UBool isAfterNonNumericField(const UnicodeString &pattern, int32_t patternOffset);
 
     /**
      * initializes fCalendar from parameters.  Returns fCalendar as a convenience.
@@ -890,13 +998,15 @@ private:
      * @param field the date field being parsed.
      * @param stringArray the string array to parsed.
      * @param stringArrayCount the size of the array.
+     * @param monthPattern pointer to leap month pattern, or NULL if none.
      * @param cal a Calendar set to the date and time to be formatted
      *            into a date/time string.
      * @return the new start position if matching succeeded; a negative number
      * indicating matching failure, otherwise.
      */
     int32_t matchString(const UnicodeString& text, int32_t start, UCalendarDateFields field,
-                        const UnicodeString* stringArray, int32_t stringArrayCount, Calendar& cal) const;
+                        const UnicodeString* stringArray, int32_t stringArrayCount,
+                        const UnicodeString* monthPattern, Calendar& cal) const;
 
     /**
      * Private code-size reduction function used by subParse.
@@ -943,12 +1053,13 @@ private:
      * @param cal a Calendar set to the date and time to be formatted
      *            into a date/time string.
      * @param patLoc
+     * @param numericLeapMonthFormatter If non-null, used to parse numeric leap months.
      * @return the new start position if matching succeeded; a negative number
      * indicating matching failure, otherwise.
      */
     int32_t subParse(const UnicodeString& text, int32_t& start, UChar ch, int32_t count,
                      UBool obeyCount, UBool allowNegative, UBool ambiguousYear[], int32_t& saveHebrewMonth, Calendar& cal,
-                     int32_t patLoc) const;
+                     int32_t patLoc, MessageFormat * numericLeapMonthFormatter) const;
 
     void parseInt(const UnicodeString& text,
                   Formattable& number,
@@ -1017,22 +1128,6 @@ private:
      * in text.
      */
     int32_t skipUWhiteSpace(const UnicodeString& text, int32_t pos) const;
-
-    /**
-     * Private methods for formatting/parsing GMT string
-     */
-    void appendGMT(NumberFormat *currentNumberFormat,UnicodeString &appendTo, Calendar& cal, UErrorCode& status) const;
-    void formatGMTDefault(NumberFormat *currentNumberFormat,UnicodeString &appendTo, int32_t offset) const;
-    int32_t parseGMT(const UnicodeString &text, ParsePosition &pos) const;
-    int32_t parseGMTDefault(const UnicodeString &text, ParsePosition &pos) const;
-    UBool isDefaultGMTFormat() const;
-
-    void formatRFC822TZ(UnicodeString &appendTo, int32_t offset) const;
-
-    /**
-     * Initialize MessageFormat instances used for GMT formatting/parsing
-     */
-    void initGMTFormatters(UErrorCode &status);
 
     /**
      * Initialize NumberFormat instances used for numbering system overrides.
@@ -1120,13 +1215,7 @@ private:
      */
     /*transient*/ int32_t   fDefaultCenturyStartYear;
 
-    enum ParsedTZType {
-        TZTYPE_UNK,
-        TZTYPE_STD,
-        TZTYPE_DST
-    };
-
-    ParsedTZType tztype; // here to avoid api change
+    int32_t tztype; // here to avoid api change
 
     typedef struct NSOverride {
         NumberFormat *nf;
@@ -1134,39 +1223,13 @@ private:
         NSOverride *next;
     } NSOverride;
 
-    /*
-     * MessageFormat instances used for localized GMT format
-     */
-    enum {
-        kGMTNegativeHMS = 0,
-        kGMTNegativeHM,
-        kGMTPositiveHMS,
-        kGMTPositiveHM,
-
-        kNumGMTFormatters
-    };
-    enum {
-        kGMTNegativeHMSMinLenIdx = 0,
-        kGMTPositiveHMSMinLenIdx,
-
-        kNumGMTFormatMinLengths
-    };
-
-    MessageFormat   **fGMTFormatters;
-    // If a GMT hour format has a second field, we need to make sure
-    // the length of input localized GMT string must match the expected
-    // length.  Otherwise, sub DateForamt handling offset format may
-    // unexpectedly success parsing input GMT string without second field.
-    // See #6880 about this issue.
-    // TODO: SimpleDateFormat should provide an option to invalidate
-    //
-    int32_t         fGMTFormatHmsMinLen[kNumGMTFormatMinLengths];
-
     NumberFormat    **fNumberFormatters;
 
     NSOverride      *fOverrideList;
 
     UBool fHaveDefaultCentury;
+
+    UDisplayContext fCapitalizationContext;
 };
 
 inline UDate

@@ -1,9 +1,9 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
-// * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/ee.xml
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/ee.xml
 // *
 // ***************************************************************************
 /**
@@ -93,7 +93,6 @@ ee{
         CO{"Kolombia nutome"}
         CP{"Klipaton ƒudomekpo nutome"}
         CR{"Kosta Rika nutome"}
-        CS{"Serbia kple Montenegro nutome"}
         CU{"Kuba nutome"}
         CV{"Kape Verde nutome"}
         CX{"Kristmas ƒudomekpo nutome"}
@@ -140,7 +139,7 @@ ee{
         GU{"Guam nutome"}
         GW{"Gini-Bisao nutome"}
         GY{"Guyanadu"}
-        HK{"Hɔng Kɔng SAR Tsaina nutome"}
+        HK{"Hɔng Kɔng nutome"}
         HM{"Heard kple Mcdonald ƒudomekpowo nutome"}
         HN{"Hondurasdu"}
         HR{"Kroatsia nutome"}
@@ -194,7 +193,7 @@ ee{
         ML{"Mali nutome"}
         MM{"Myanmar [Burma] nutome"}
         MN{"Mongolia nutome"}
-        MO{"Macau SAR Tsaina nutome"}
+        MO{"Macau nutome"}
         MP{"Dziehe Marina ƒudomekpowo nutome"}
         MQ{"Martiniki nutome"}
         MR{"Mauritania nutome"}
@@ -297,5 +296,5 @@ ee{
         ZW{"Zimbabwe nutome"}
         ZZ{"nutome manya"}
     }
-    Version{"2.0.59.81"}
+    Version{"2.0.78.39"}
 }

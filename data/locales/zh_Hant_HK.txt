@@ -1,9 +1,9 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/zh_Hant_HK.xml
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/zh_Hant_HK.xml
 // *
 // ***************************************************************************
 zh_Hant_HK{
@@ -14,17 +14,12 @@ zh_Hant_HK{
             }
         }
     }
-    Version{"2.0.59.66"}
+    Version{"2.0.78.47"}
     calendar{
         buddhist{
             availableFormats{
                 MEd{"M-d（E）"}
                 Md{"M-d"}
-            }
-        }
-        chinese{
-            availableFormats{
-                yMEd{"y年M月d日，E"}
             }
         }
         gregorian{
@@ -44,7 +39,7 @@ zh_Hant_HK{
                 "{1}{0}",
             }
             availableFormats{
-                EEEd{"d EEE"}
+                Ed{"d E"}
                 MEd{"E, M-d"}
                 Md{"M-d"}
             }
@@ -78,21 +73,15 @@ zh_Hant_HK{
     }
     units{
         day-future{
-            0{"0 日後"}
-            1{"1 日後"}
             other{"{0} 日後"}
         }
         day-past{
-            0{"0 日前"}
-            1{"1 日前"}
             other{"{0} 日前"}
         }
         hour{
             other{"{0}時"}
         }
         month-past{
-            0{"0 月前"}
-            1{"1 月前"}
             other{"{0} 月前"}
         }
         week{

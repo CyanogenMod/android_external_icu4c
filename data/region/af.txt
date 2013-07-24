@@ -1,9 +1,9 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
-// * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/af.xml
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/af.xml
 // *
 // ***************************************************************************
 /**
@@ -29,7 +29,7 @@ af{
         034{"Suid-Asië"}
         035{"Suidoos-Asië"}
         039{"Suid-Europa"}
-        053{"Australië en Nieu-Seeland"}
+        053{"Australasië"}
         054{"Melanesië"}
         057{"Mikronesiese streek"}
         061{"Polinesië"}
@@ -40,7 +40,6 @@ af{
         151{"Oos-Europa"}
         154{"Noord-Europa"}
         155{"Wes-Europa"}
-        172{"Gemenebes van Onafhanklike State"}
         419{"Latyns Amerika"}
         AC{"Ascension-eiland"}
         AD{"Andorra"}
@@ -73,6 +72,7 @@ af{
         BM{"Bermuda"}
         BN{"Broenei"}
         BO{"Bolivië"}
+        BQ{"Karibiese Nederland"}
         BR{"Brasilië"}
         BS{"Bahamas"}
         BT{"Bhoetan"}
@@ -94,9 +94,9 @@ af{
         CO{"Kolombië"}
         CP{"Clipperton-eiland"}
         CR{"Costa Rica"}
-        CS{"Serwië en Montenegro"}
         CU{"Kuba"}
         CV{"Kaap Verde"}
+        CW{"Curaçao"}
         CX{"Kerseiland"}
         CY{"Ciprus"}
         CZ{"Tjeggiese Republiek"}
@@ -195,7 +195,7 @@ af{
         ML{"Mali"}
         MM{"Mianmar"}
         MN{"Mongolië"}
-        MO{"Macau SAR China"}
+        MO{"Macau"}
         MP{"Noordelike Marianaeilande"}
         MQ{"Martinique"}
         MR{"Mouritanië"}
@@ -256,8 +256,10 @@ af{
         SN{"Senegal"}
         SO{"Somalië"}
         SR{"Suriname"}
+        SS{"Suid-Soedan"}
         ST{"Sao Tome en Principe"}
         SV{"Salvador"}
+        SX{"Sint Maarten"}
         SY{"Sirië"}
         SZ{"Swaziland"}
         TA{"Tristan da Cunha"}
@@ -299,5 +301,5 @@ af{
         ZW{"Zimbabwe"}
         ZZ{"Onbekend gebied"}
     }
-    Version{"2.0.59.53"}
+    Version{"2.0.78.32"}
 }

@@ -1,5 +1,5 @@
 /***********************************************************************
- * Copyright (c) 1997-2011, International Business Machines Corporation
+ * Copyright (c) 1997-2012, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
  
@@ -29,10 +29,10 @@ public:
   
     virtual UnicodeString& format(    double            number, 
                     UnicodeString&        toAppendTo, 
-                    FieldPosition&        pos,
+                    FieldPositionIterator* posIter,
                     UErrorCode& status) const
     {
-        return NumberFormat::format(number, toAppendTo, pos, status);
+        return NumberFormat::format(number, toAppendTo, posIter, status);
     }
 
     /* Just keep this here to make some of the compilers happy */
@@ -169,6 +169,9 @@ NumberFormatRegressionTest::runIndexedTest( int32_t index, UBool exec, const cha
         CASE(59,Test4243108);
         CASE(60,TestJ691);
         CASE(61,Test8199);
+        CASE(62,Test9109);
+        CASE(63,Test9780);
+        CASE(64,Test9677);
 
         default: name = ""; break;
     }
@@ -1451,7 +1454,7 @@ void NumberFormatRegressionTest::Test4106658(void)
     UnicodeString temp;
     FieldPosition pos(FieldPosition::DONT_CARE);
 
-#if defined(U_HPUX)
+#if U_PLATFORM == U_PF_HPUX
     d1 = 0.0 * -1.0;    // old HPUX compiler ignores volatile keyword
 #else
     d1 *= -1.0; // Some compilers have a problem with defining -0.0
@@ -1582,7 +1585,7 @@ void NumberFormatRegressionTest::Test4106667(void)
     FieldPosition pos(FieldPosition::DONT_CARE);
 
     logln("pattern: \"" + df->toPattern(temp) + "\"");
-#if defined(U_HPUX)
+#if U_PLATFORM == U_PF_HPUX
     d = 0.0 * -1.0;    // old HPUX compiler ignores volatile keyword
 #else
     d *= -1.0; // Some compilers have a problem with defining -0.0
@@ -1598,7 +1601,7 @@ void NumberFormatRegressionTest::Test4106667(void)
 /* @bug 4110936
  * DecimalFormat.setMaximumIntegerDigits() works incorrectly.
  */
-#ifdef OS390
+#if U_PLATFORM == U_PF_OS390
 #   define MAX_INT_DIGITS 70
 #else
 #   define MAX_INT_DIGITS 128
@@ -2023,7 +2026,7 @@ void NumberFormatRegressionTest::Test4147706(void)
         volatile double d1 = 0.0;   // volatile to prevent code optimization
         double d2 = -0.0001;
 
-#if defined(U_HPUX)
+#if U_PLATFORM == U_PF_HPUX
         d1 = 0.0 * -1.0;    // old HPUX compiler ignores volatile keyword
 #else
         d1 *= -1.0; // Some compilers have a problem with defining -0.0
@@ -2129,7 +2132,7 @@ NumberFormatRegressionTest::Test4162852(void)
         logln(UnicodeString("") +
               d + " -> " +
               '"' + s + '"' + " -> " + e);
-#if (defined(OS390) && !defined(IEEE_754)) || defined(OS400)
+#if (U_PLATFORM == U_PF_OS390 && !defined(IEEE_754)) || U_PLATFORM == U_PF_OS400
         if (e != 0.0) {
 #else
         if (e != 0.0 || 1.0/e > 0.0) {
@@ -2824,6 +2827,162 @@ void NumberFormatRegressionTest::Test8199(void) {
     TEST_CHECK_STATUS(status);
 
     delete nf;
+}
+
+void NumberFormatRegressionTest::Test9109(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    Formattable val;
+    ParsePosition pos;
+    DecimalFormat fmt("+##", status);
+    fmt.setLenient(TRUE);
+
+    if (U_FAILURE(status)) {
+        dataerrln("Failed to create DecimalFormat with pattern '+##' - %s", u_errorName(status));
+    }
+
+    UnicodeString text("123");
+    int32_t expected = 123;
+    int32_t expos = 3;
+
+    fmt.parse(text, val, pos);
+    if (pos.getErrorIndex() >= 0) {
+        errln(UnicodeString("Parse failure at ") + pos.getErrorIndex());
+    } else if (val.getLong() != 123) {
+        errln(UnicodeString("Incorrect parse result: ") + val.getLong() + " expected: " + expected);
+    } else if (pos.getIndex() != 3) {
+        errln(UnicodeString("Incorrect parse position: ") + pos.getIndex() + " expected: " + expos);
+    }
+}
+
+
+void NumberFormatRegressionTest::Test9780(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    NumberFormat *nf = NumberFormat::createInstance(Locale::getUS(), status);
+    if (failure(status, "NumberFormat::createInstance", TRUE)){
+        delete nf;
+        return;
+    };
+    DecimalFormat *df = dynamic_cast<DecimalFormat *>(nf);
+    if(df == NULL) {
+        errln("DecimalFormat needed to continue");
+        return;
+    }
+    df->setParseIntegerOnly(TRUE);
+
+    {
+      Formattable n;
+      ParsePosition pos(0);
+      UnicodeString toParse("1,234","");
+      df->parse(toParse, n, pos);
+      if (n.getType() != Formattable::kLong
+          || n.getLong() != 1234) {
+        errln(UnicodeString("FAIL: parse(\"") + toParse + UnicodeString("\") returns ") + toString(n));
+      }
+    }
+    // should still work in lenient mode, just won't get fastpath
+    df->setLenient(TRUE);
+    {
+      Formattable n;
+      ParsePosition pos(0);
+      UnicodeString toParse("1,234","");
+      df->parse(toParse, n, pos);
+      if (n.getType() != Formattable::kLong
+          || n.getLong() != 1234) {
+        errln(UnicodeString("FAIL: parse(\"") + toParse + UnicodeString("\") returns ") + toString(n));
+      }
+    }
+    delete nf;
+}
+
+
+void NumberFormatRegressionTest::Test9677(void) {
+  static const UChar pattern[] = { 0x23,0x23,0x23,0x23,0x2E,0x23,0x23,0x23,0x23,0 }; // "####.####"
+  static const UChar positivePrefix[] = { 0x40,0 }; // "@"
+  static const UChar negativePrefix[] = { 0x6E,0 }; // "n"
+  static const UChar text[] = { 0x31,0x32,0x33,0x34,0x35,0x36,0x37,0x38,0x39,0 }; // 123456789
+  static const UChar text2[] = { 0x6E, 0x31,0x32,0x33,0x34,0x35,0x36,0x37,0x38,0x39,0 }; // n123456789
+  
+  UErrorCode status = U_ZERO_ERROR;
+  LocalUNumberFormatPointer f(unum_open(UNUM_DEFAULT, NULL, 0, "en_US", NULL, &status));
+  if (U_FAILURE(status)) {
+      dataerrln("Failure opening unum_open");
+      return;
+  }
+
+  if (U_SUCCESS(status)) {
+    unum_applyPattern(f.getAlias(), FALSE, pattern, -1, NULL, &status);
+    unum_setTextAttribute(f.getAlias(), UNUM_POSITIVE_PREFIX, positivePrefix, -1, &status);
+    assertSuccess("setting attributes", status);
+  }
+
+  if(U_SUCCESS(status)) {
+    int32_t n = unum_parse(f.getAlias(), text, -1, NULL, &status);
+    logln("unum_parse status %s, result %d\n", u_errorName(status), n);
+
+    if(U_FAILURE(status)) {
+        logln("Got expected parse error %s\n", u_errorName(status));
+        status = U_ZERO_ERROR;
+    } else {
+        errln("FAIL: unum_parse status %s, result %d - expected failure\n", u_errorName(status), n);
+    }
+  }
+
+  if (U_SUCCESS(status)) {
+    unum_setTextAttribute(f.getAlias(), UNUM_POSITIVE_PREFIX, NULL, 0, &status);
+    assertSuccess("setting attributes", status);
+    logln("removed positive prefix");
+  }
+
+  if(U_SUCCESS(status)) {
+    int32_t n = unum_parse(f.getAlias(), text, -1, NULL, &status);
+    logln("unum_parse status %s, result %d\n", u_errorName(status), n);
+
+    if(U_FAILURE(status)) {
+        errln("FAIL: with pos prefix removed, parse error %s\n", u_errorName(status));
+        status = U_ZERO_ERROR;
+    } else {
+        if(n!=123456789) {
+          errln("FAIL: with pos prefix removed , unum_parse status %s, result %d expected 123456789\n", u_errorName(status), n);
+        } else {
+          logln("PASS: with pos prefix removed , unum_parse status %s, result %d expected 123456789\n", u_errorName(status),n);
+        }
+    }
+  }
+
+  if(U_SUCCESS(status)) {
+    int32_t n = unum_parse(f.getAlias(), text2, -1, NULL, &status);
+    logln("unum_parse status %s, result %d\n", u_errorName(status), n);
+
+    if(U_FAILURE(status)) {
+        logln("text2: Got expected parse error %s\n", u_errorName(status));
+        status = U_ZERO_ERROR;
+    } else {
+        errln("FAIL: text2: unum_parse status %s, result %d - expected failure\n", u_errorName(status), n);
+    }
+  }
+
+  if (U_SUCCESS(status)) {
+    unum_setTextAttribute(f.getAlias(), UNUM_NEGATIVE_PREFIX, negativePrefix, -1, &status);
+    assertSuccess("setting attributes", status);
+    logln("Set a different neg prefix prefix");
+  }
+
+  if(U_SUCCESS(status)) {
+    int32_t n = unum_parse(f.getAlias(), text2, -1, NULL, &status);
+    logln("unum_parse status %s, result %d\n", u_errorName(status), n);
+
+    if(U_FAILURE(status)) {
+        errln("FAIL: with different neg prefix , parse error %s\n", u_errorName(status));
+        status = U_ZERO_ERROR;
+    } else {
+;
+        if(n!=-123456789) {
+          errln("FAIL: with different neg prefix , unum_parse status %s, result %d expected -123456789\n", u_errorName(status), n);
+        } else {
+          logln("PASS: with different neg prefix , unum_parse status %s, result %d expected -123456789\n", u_errorName(status), n);
+        }
+    }
+  }
 }
 
 

@@ -1,30 +1,112 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/tr.xml
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/tr.xml
 // *
 // ***************************************************************************
 /**
  *  ICU <specials> source: <path>/xml/main/tr.xml
  */
 tr{
-    AuxExemplarCharacters{"[á à ă â å ä ā æ é è ĕ ê ë ē í ì ĭ î ï ī ñ ó ò ŏ ô ø ō œ q ú ù ŭ û ū w x ÿ]"}
+    AuxExemplarCharacters{
+        "[á à ă â å ä ã ā æ ç é è ĕ ê ë ē í ì ĭ î ï ī ñ ó ò ŏ ô ø ō œ ö q ß ú ù ŭ û ū"
+        " ü w x ÿ]"
+    }
     ExemplarCharacters{"[a b c ç d e f g ğ h ı i {i\u0307} j k l m n o ö p r s ş t u ü v y z]"}
-    ExemplarCharactersCurrency{"[a b c č d e f g h i j k l ł m n o º p q r s t u v w x y z]"}
     ExemplarCharactersIndex{"[A B C Ç D E F G H I İ J K L M N O Ö P Q R S Ş T U Ü V W X Y Z]"}
-    ExemplarCharactersPunctuation{"[\- ‐ – — , ; \: ! ? . … ' ‘ ’ \" “ ” ( ) \[ \] @ * / \& # † ‡ ′ ″ §]"}
+    ExemplarCharactersPunctuation{"[\- ‐ – — , ; \: ! ? . … ' ‘ ’ \" “ ” ( ) \[ \] § @ * / \& # † ‡ ′ ″]"}
     LocaleScript{
         "Latn",
     }
     NumberElements{
         latn{
             patterns{
-                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"%#,##0"}
                 scientificFormat{"#E0"}
+            }
+            patternsLong{
+                decimalFormat{
+                    1000{
+                        other{"0 bin"}
+                    }
+                    10000{
+                        other{"00 bin"}
+                    }
+                    100000{
+                        other{"000 bin"}
+                    }
+                    1000000{
+                        other{"0 milyon"}
+                    }
+                    10000000{
+                        other{"00 milyon"}
+                    }
+                    100000000{
+                        other{"000 milyon"}
+                    }
+                    1000000000{
+                        other{"0 milyar"}
+                    }
+                    10000000000{
+                        other{"00 milyar"}
+                    }
+                    100000000000{
+                        other{"000 milyar"}
+                    }
+                    1000000000000{
+                        other{"0 trilyon"}
+                    }
+                    10000000000000{
+                        other{"00 trilyon"}
+                    }
+                    100000000000000{
+                        other{"000 trilyon"}
+                    }
+                }
+            }
+            patternsShort{
+                decimalFormat{
+                    1000{
+                        other{"0"}
+                    }
+                    10000{
+                        other{"00 B"}
+                    }
+                    100000{
+                        other{"000 B"}
+                    }
+                    1000000{
+                        other{"0 Mn"}
+                    }
+                    10000000{
+                        other{"00 Mn"}
+                    }
+                    100000000{
+                        other{"000 Mn"}
+                    }
+                    1000000000{
+                        other{"0 Mr"}
+                    }
+                    10000000000{
+                        other{"00 Mr"}
+                    }
+                    100000000000{
+                        other{"000 Mr"}
+                    }
+                    1000000000000{
+                        other{"0 Tn"}
+                    }
+                    10000000000000{
+                        other{"00 Tn"}
+                    }
+                    100000000000000{
+                        other{"000 Tn"}
+                    }
+                }
             }
             symbols{
                 decimal{","}
@@ -40,7 +122,7 @@ tr{
             }
         }
     }
-    Version{"2.0.59.53"}
+    Version{"2.0.79.79"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -51,7 +133,7 @@ tr{
                 "dd MMMM y G EEEE",
                 "dd MMMM y G",
                 "dd MMM y G",
-                "dd.MM.yyyy G",
+                "d.MM.yyyy G",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -65,30 +147,28 @@ tr{
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
-                MEd{"dd/MM E"}
+                MEd{"dd.MM E"}
                 MMM{"LLL"}
                 MMMEd{"dd MMM E"}
                 MMMd{"dd MMM"}
-                Md{"dd/MM"}
+                Md{"dd.MM"}
                 d{"d"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 mmss{"mm:ss"}
                 ms{"mm:ss"}
                 y{"y G"}
-                yM{"M/y G"}
-                yMEd{"dd.MM.y G EEE"}
+                yM{"MM.y G"}
+                yMEd{"dd.MM.y G E"}
                 yMMM{"MMM y G"}
-                yMMMEd{"dd MMM y G EEE"}
+                yMMMEd{"dd MMM y G E"}
                 yMMMM{"MMMM y G"}
                 yMMMd{"dd MMM y G"}
                 yMd{"dd.MM.y G"}
-                yQ{"Q y G"}
                 yQQQ{"QQQ y G"}
-                yyMM{"MM/yy G"}
+                yQQQQ{"QQQQ y G"}
+                yyMM{"MM.yy G"}
                 yyMMM{"MMM yy G"}
-                yyQ{"Q yy G"}
-                yyQQQQ{"QQQQ yy G"}
                 yyyy{"y G"}
             }
         }
@@ -136,8 +216,8 @@ tr{
         }
         gregorian{
             AmPmMarkers{
-                "AM",
-                "PM",
+                "ÖÖ",
+                "ÖS",
             }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -147,7 +227,7 @@ tr{
                 "d MMMM y EEEE",
                 "d MMMM y",
                 "d MMM y",
-                "dd.MM.yyyy",
+                "d.MM.yyyy",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -155,7 +235,6 @@ tr{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"d EEE"}
                 Ed{"d E"}
                 H{"HH"}
                 Hm{"HH:mm"}
@@ -169,23 +248,24 @@ tr{
                 MMMd{"d MMMM"}
                 Md{"dd/MM"}
                 d{"d"}
+                h{"h a"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 mmss{"mm:ss"}
                 ms{"mm:ss"}
                 y{"y"}
-                yM{"MM/yy"}
-                yMEd{"dd.MM.yyyy EEE"}
+                yM{"MM/y"}
+                yMEd{"dd.MM.yyyy E"}
                 yMMM{"MMM y"}
-                yMMMEd{"d MMM y EEE"}
+                yMMMEd{"d MMM y E"}
                 yMMMM{"MMMM y"}
                 yMMMd{"dd MMM y"}
                 yMd{"dd.MM.yyyy"}
-                yQ{"y-Q"}
-                yQQQ{"y-QQQ"}
-                yyMM{"MM/yy"}
+                yQQQ{"y/QQQ"}
+                yQQQQ{"y/QQQQ"}
+                yyMM{"MM.yy"}
                 yyMMM{"MMM yy"}
-                yyQ{"Q yy"}
+                yyQQQ{"QQQ yy"}
                 yyQQQQ{"QQQQ yy"}
                 yyyy{"y"}
             }
@@ -208,6 +288,15 @@ tr{
                         "P",
                         "C",
                         "C",
+                    }
+                    short{
+                        "Pa",
+                        "Pt",
+                        "Sa",
+                        "Ça",
+                        "Pe",
+                        "Cu",
+                        "Ct",
                     }
                     wide{
                         "Pazar",
@@ -238,6 +327,15 @@ tr{
                         "C",
                         "C",
                     }
+                    short{
+                        "Pa",
+                        "Pt",
+                        "Sa",
+                        "Ça",
+                        "Pe",
+                        "Cu",
+                        "Ct",
+                    }
                     wide{
                         "Pazar",
                         "Pazartesi",
@@ -267,11 +365,11 @@ tr{
                         "-2"{"Evvelsi gün"}
                         "0"{"Bugün"}
                         "1"{"Yarın"}
-                        "2"{"Yarından sonraki gün"}
+                        "2"{"Öbür gün"}
                     }
                 }
                 dayperiod{
-                    dn{"AM/PM"}
+                    dn{"ÖÖ/ÖS"}
                 }
                 era{
                     dn{"Miladi Dönem"}
@@ -319,21 +417,17 @@ tr{
             intervalFormats{
                 H{
                     H{"HH-HH"}
-                    a{"HH-HH"}
                 }
                 Hm{
                     H{"HH:mm-HH:mm"}
-                    a{"HH:mm-HH:mm"}
                     m{"HH:mm-HH:mm"}
                 }
                 Hmv{
                     H{"HH:mm-HH:mm v"}
-                    a{"HH:mm-HH:mm v"}
                     m{"HH:mm-HH:mm v"}
                 }
                 Hv{
                     H{"HH-HH v"}
-                    a{"HH-HH v"}
                 }
                 M{
                     M{"MM - MM"}
@@ -387,9 +481,9 @@ tr{
                     y{"MM/yy - MM/yy"}
                 }
                 yMEd{
-                    M{"dd/MM/yy E - dd/MM/yy E"}
-                    d{"dd/MM/yy E - dd/MM/yy E"}
-                    y{"dd/MM/yy E - dd/MM/yy E"}
+                    M{"dd.MM.yy E - dd.MM.yy E"}
+                    d{"dd.MM.yy E - dd.MM.yy E"}
+                    y{"dd.MM.yy E - dd.MM.yy E"}
                 }
                 yMMM{
                     M{"MMM-MMM y"}
@@ -410,9 +504,9 @@ tr{
                     y{"d MMM y - d MMM y"}
                 }
                 yMd{
-                    M{"dd/MM/yy - dd/MM/yy"}
-                    d{"dd/MM/yy - dd/MM/yy"}
-                    y{"dd/MM/yy - dd/MM/yy"}
+                    M{"dd.MM.yy - dd.MM.yy"}
+                    d{"dd.MM.yy - dd.MM.yy"}
+                    y{"dd.MM.yy - dd.MM.yy"}
                 }
             }
             monthNames{
@@ -514,10 +608,10 @@ tr{
                         "Ç4",
                     }
                     narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
+                        "1.",
+                        "2.",
+                        "3.",
+                        "4.",
                     }
                     wide{
                         "1. çeyrek",
@@ -532,6 +626,12 @@ tr{
                         "Ç2",
                         "Ç3",
                         "Ç4",
+                    }
+                    narrow{
+                        "1.",
+                        "2.",
+                        "3.",
+                        "4.",
                     }
                     wide{
                         "1. çeyrek",
@@ -573,7 +673,7 @@ tr{
                 "dd MMMM y G EEEE",
                 "dd MMMM y G",
                 "dd MMM y G",
-                "dd.MM.yyyy G",
+                "d.MM.yyyy G",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -582,37 +682,53 @@ tr{
             }
             availableFormats{
                 Ed{"d E"}
+                Gy{"y G"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
-                MEd{"dd/MM E"}
+                MEd{"dd.MM E"}
                 MMM{"LLL"}
                 MMMEd{"dd MMM E"}
                 MMMd{"dd MMM"}
-                Md{"dd/MM"}
+                Md{"dd.MM"}
                 d{"d"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 mmss{"mm:ss"}
                 ms{"mm:ss"}
-                yyMM{"MM/yy G"}
+                y{"y G"}
+                yyMM{"MM.yy G"}
                 yyMMM{"MMM yy G"}
-                yyQ{"Q yy G"}
+                yyQQQ{"QQQ yy G"}
                 yyQQQQ{"QQQQ yy G"}
                 yyyy{"y G"}
-                yyyyM{"M/y G"}
-                yyyyMEd{"dd.MM.y G EEE"}
+                yyyyM{"MM.y G"}
+                yyyyMEd{"dd.MM.y G E"}
                 yyyyMMM{"MMM y G"}
-                yyyyMMMEd{"dd MMM y G EEE"}
+                yyyyMMMEd{"dd MMM y G E"}
                 yyyyMMMM{"MMMM y G"}
                 yyyyMMMd{"dd MMM y G"}
                 yyyyMd{"dd.MM.y G"}
-                yyyyQ{"Q y G"}
                 yyyyQQQ{"QQQ y G"}
+                yyyyQQQQ{"QQQQ y G"}
             }
             monthNames{
                 format{
+                    abbreviated{
+                        "Muharrem",
+                        "Safer",
+                        "Rebiülevvel",
+                        "Rebiülahir",
+                        "Cemaziyelevvel",
+                        "Cemaziyelahir",
+                        "Recep",
+                        "Şaban",
+                        "Ramazan",
+                        "Şevval",
+                        "Zilkade",
+                        "Zilhicce",
+                    }
                     wide{
                         "Muharrem",
                         "Safer",
@@ -628,6 +744,22 @@ tr{
                         "Zilhicce",
                     }
                 }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                }
             }
         }
         japanese{
@@ -639,7 +771,7 @@ tr{
                 "dd MMMM y G EEEE",
                 "dd MMMM y G",
                 "dd MMM y G",
-                "dd.MM.yyyy G",
+                "d.MM.yyyy G",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -653,31 +785,31 @@ tr{
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
-                MEd{"dd/MM E"}
+                MEd{"dd.MM E"}
                 MMM{"LLL"}
                 MMMEd{"dd MMM E"}
                 MMMd{"dd MMM"}
-                Md{"dd/MM"}
+                Md{"dd.MM"}
                 d{"d"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 mmss{"mm:ss"}
                 ms{"mm:ss"}
                 y{"y G"}
-                yyMM{"MM/yy G"}
+                yyMM{"MM.yy G"}
                 yyMMM{"MMM yy G"}
-                yyQ{"Q yy G"}
+                yyQQQ{"QQQ yy G"}
                 yyQQQQ{"QQQQ yy G"}
                 yyyy{"y G"}
-                yyyyM{"M/y G"}
-                yyyyMEd{"dd.MM.y G EEE"}
+                yyyyM{"MM.y G"}
+                yyyyMEd{"dd.MM.y G E"}
                 yyyyMMM{"MMM y G"}
-                yyyyMMMEd{"dd MMM y G EEE"}
+                yyyyMMMEd{"dd MMM y G E"}
                 yyyyMMMM{"MMMM y G"}
                 yyyyMMMd{"dd MMM y G"}
                 yyyyMd{"dd.MM.y G"}
-                yyyyQ{"Q y G"}
                 yyyyQQQ{"QQQ y G"}
+                yyyyQQQQ{"QQQQ y G"}
             }
         }
         persian{
@@ -709,7 +841,7 @@ tr{
                 "dd MMMM y G EEEE",
                 "dd MMMM y G",
                 "dd MMM y G",
-                "dd.MM.yyyy G",
+                "d.MM.yyyy G",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -723,31 +855,31 @@ tr{
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
-                MEd{"dd/MM E"}
+                MEd{"dd.MM E"}
                 MMM{"LLL"}
                 MMMEd{"dd MMM E"}
                 MMMd{"dd MMM"}
-                Md{"dd/MM"}
+                Md{"dd.MM"}
                 d{"d"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 mmss{"mm:ss"}
                 ms{"mm:ss"}
                 y{"y G"}
-                yyMM{"MM/yy G"}
+                yyMM{"MM.yy G"}
                 yyMMM{"MMM yy G"}
-                yyQ{"Q yy G"}
+                yyQQQ{"QQQ yy G"}
                 yyQQQQ{"QQQQ yy G"}
                 yyyy{"y G"}
-                yyyyM{"M/y G"}
-                yyyyMEd{"dd.MM.y G EEE"}
+                yyyyM{"MM.y G"}
+                yyyyMEd{"dd.MM.y G E"}
                 yyyyMMM{"MMM y G"}
-                yyyyMMMEd{"dd MMM y G EEE"}
+                yyyyMMMEd{"dd MMM y G E"}
                 yyyyMMMM{"MMMM y G"}
                 yyyyMMMd{"dd MMM y G"}
                 yyyyMd{"dd.MM.y G"}
-                yyyyQ{"Q y G"}
                 yyyyQQQ{"QQQ y G"}
+                yyyyQQQQ{"QQQQ y G"}
             }
         }
     }
@@ -761,6 +893,8 @@ tr{
         standard{
             2{"{0} ve {1}"}
             end{"{0} ve {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
     }
     measurementSystemNames{
@@ -773,91 +907,63 @@ tr{
             other{"{0} gün"}
         }
         day-future{
-            0{"0 gün sonra"}
-            1{"1 gün sonra"}
             other{"{0} gün sonra"}
         }
         day-past{
-            0{"0 gün önce"}
-            1{"1 gün önce"}
             other{"{0} gün önce"}
         }
         hour{
             other{"{0} saat"}
         }
         hour-future{
-            0{"0 saat sonra"}
-            1{"1 saat sonra"}
             other{"{0} saat sonra"}
         }
         hour-past{
-            0{"0 saat önce"}
-            1{"1 saat önce"}
             other{"{0} saat önce"}
         }
         minute{
             other{"{0} dakika"}
         }
         minute-future{
-            0{"0 dakika sonra"}
-            1{"1 dakika sonra"}
             other{"{0} dakika sonra"}
         }
         minute-past{
-            0{"0 dakika önce"}
-            1{"1 dakika önce"}
             other{"{0} dakika önce"}
         }
         month{
             other{"{0} ay"}
         }
         month-future{
-            0{"0 ay sonra"}
-            1{"1 ay sonra"}
             other{"{0} ay sonra"}
         }
         month-past{
-            0{"0 ay önce"}
-            1{"1 ay önce"}
             other{"{0} ay önce"}
         }
         second{
             other{"{0} saniye"}
         }
         second-future{
-            0{"0 saniye sonra"}
-            1{"1 saniye sonra"}
             other{"{0} saniye sonra"}
         }
         second-past{
-            0{"0 saniye önce"}
-            1{"1 saniye önce"}
             other{"{0} saniye önce"}
         }
         week{
             other{"{0} hafta"}
         }
         week-future{
-            0{"0 hafta sonra"}
-            1{"1 hafta sonra"}
             other{"{0} hafta sonra"}
         }
         week-past{
-            0{"0 hafta önce"}
-            1{"1 hafta önce"}
             other{"{0} hafta önce"}
         }
         year{
             other{"{0} yıl"}
         }
         year-future{
-            0{"0 yıl sonra"}
-            1{"1 yıl sonra"}
             other{"{0} yıl sonra"}
         }
         year-past{
-            0{"0 yıl önce"}
-            1{"1 yıl önce"}
             other{"{0} yıl önce"}
         }
     }
@@ -878,7 +984,7 @@ tr{
             other{"{0} sn."}
         }
         week{
-            other{"{0} hafta"}
+            other{"{0} hf."}
         }
         year{
             other{"{0} yıl"}

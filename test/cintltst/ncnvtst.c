@@ -191,8 +191,8 @@ static void TestSurrogateBehaviour(){
 
 
         int32_t offsets[] = {0,0,0,0,0,1,1,2,2,2,2,3,5 };
-     
-        // iso-2022-jp
+
+        // iso-2022-jp  android-change
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
                 expected, sizeof(expected), "iso-2022-jp", 0 , TRUE, U_ZERO_ERROR))
             log_err("u-> not match.\n");
@@ -222,7 +222,7 @@ static void TestSurrogateBehaviour(){
                                     3,  
                                     5,  };
 
-        // iso-2022-CN
+        // iso-2022-CN  android-change
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
                 expected, sizeof(expected), "iso-2022-cn", 0 , TRUE, U_ZERO_ERROR))
             log_err("u-> not match.\n");
@@ -252,7 +252,7 @@ static void TestSurrogateBehaviour(){
                               7,
                             };
 
-        // iso-2022-kr
+        // iso-2022-kr  android-change
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
                 expected, sizeof(expected), "iso-2022-kr", 0 , TRUE, U_ZERO_ERROR))
             log_err("u-> iso-2022-kr [UCNV_DBCS] not match.\n");
@@ -397,7 +397,6 @@ static void TestErrorBehaviour(){
         /* END android-changed */
         static const int32_t offsets4MBCS[]        = { 0x00, 0x01, 0x01, 0x01, 0x02, 0x02 };
 
-
         /*DBCS*/
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
                 expectedSUB, sizeof(expectedSUB), "ibm-1363", 0, TRUE, U_ZERO_ERROR))
@@ -498,7 +497,7 @@ static void TestErrorBehaviour(){
             log_err("u-> iso-2022-jp [UCNV_MBCS] \n");
     }
 
-    // iso-2022-cn
+    // iso-2022-cn  android-change
     log_verbose("Testing for iso-2022-cn\n");
     {
         static const UChar    sampleText[]    = { 0x0031, 0xd801};
@@ -549,7 +548,7 @@ static void TestErrorBehaviour(){
             log_err("u-> iso-2022-cn [UCNV_MBCS] \n");
     }
 
-    // iso-2022-kr
+    // iso-2022-kr  android-change
     log_verbose("Testing for iso-2022-kr\n");
     {
         static const UChar    sampleText[]    = { 0x0031, 0xd801};
@@ -1593,7 +1592,7 @@ static void TestResetBehaviour(void){
                                     0x31,0x1A, 0x32};
         static const int32_t offsets1[] =  { 3,5,10,11,12};
 
-        // iso-2022-jp
+        // iso-2022-jp  android-change
         if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
                 expected, sizeof(expected), "iso-2022-jp",  UCNV_FROM_U_CALLBACK_SUBSTITUTE , NULL, TRUE))
             log_err("u-> not match.\n");
@@ -1638,7 +1637,7 @@ static void TestResetBehaviour(void){
                                     };
         static const int32_t offsets1[] =  { 5,7,13,16,17};
 
-        // iso-2022-CN
+        // iso-2022-CN  android-change
         if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
                 expected, sizeof(expected), "iso-2022-cn", UCNV_FROM_U_CALLBACK_SUBSTITUTE , NULL, TRUE))
             log_err("u-> not match.\n");
@@ -1687,7 +1686,7 @@ static void TestResetBehaviour(void){
                               13, 14, 15  
                       
                             };
-        // iso-2022-kr
+        // iso-2022-kr  android-change
         if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
                 expected, sizeof(expected), "iso-2022-kr",  UCNV_FROM_U_CALLBACK_SUBSTITUTE , NULL, TRUE))
             log_err("u-> iso-2022-kr [UCNV_DBCS] not match.\n");

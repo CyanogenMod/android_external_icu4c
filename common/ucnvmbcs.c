@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2000-2011, International Business Machines
+*   Copyright (C) 2000-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -48,13 +48,15 @@
 #include "unicode/ucnv_cb.h"
 #include "unicode/udata.h"
 #include "unicode/uset.h"
+#include "unicode/utf8.h"
+#include "unicode/utf16.h"
 #include "ucnv_bld.h"
 #include "ucnvmbcs.h"
 #include "ucnv_ext.h"
 #include "ucnv_cnv.h"
-#include "umutex.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "umutex.h"
 
 /* control optimizations according to the platform */
 #define MBCS_UNROLL_SINGLE_TO_BMP 1
@@ -824,9 +826,9 @@ ucnv_MBCSGetFilteredUnicodeSetForUnicode(const UConverterSharedData *sharedData,
                                     switch(st3Multiplier) {
                                     case 4:
                                         b|=*stage3++;
-                                    case 3:
+                                    case 3: /*fall through*/
                                         b|=*stage3++;
-                                    case 2:
+                                    case 2: /*fall through*/
                                         b|=stage3[0]|stage3[1];
                                         stage3+=2;
                                     default:
@@ -1341,7 +1343,6 @@ reconstituteData(UConverterMBCSTable *mbcsTable,
                  UErrorCode *pErrorCode) {
     uint16_t *stage1;
     uint32_t *stage2;
-    uint8_t *bytes;
     uint32_t dataLength=stage1Length*2+fullStage2Length*4+mbcsTable->fromUBytesLength;
     mbcsTable->reconstitutedData=(uint8_t *)uprv_malloc(dataLength);
     if(mbcsTable->reconstitutedData==NULL) {
@@ -1360,7 +1361,7 @@ reconstituteData(UConverterMBCSTable *mbcsTable,
                 stage2Length*4);
 
     mbcsTable->fromUnicodeTable=stage1;
-    mbcsTable->fromUnicodeBytes=bytes=(uint8_t *)(stage2+fullStage2Length);
+    mbcsTable->fromUnicodeBytes=(uint8_t *)(stage2+fullStage2Length);
 
     /* indexes into stage 2 count from the bottom of the fromUnicodeTable */
     stage2=(uint32_t *)stage1;
@@ -3352,16 +3353,16 @@ ucnv_MBCSDoubleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                  * If it does, then surrogates are not paired but mapped separately.
                  * Note that in this case unmatched surrogates are not detected.
                  */
-                if(UTF_IS_SURROGATE(c) && !(unicodeMask&UCNV_HAS_SURROGATES)) {
-                    if(UTF_IS_SURROGATE_FIRST(c)) {
+                if(U16_IS_SURROGATE(c) && !(unicodeMask&UCNV_HAS_SURROGATES)) {
+                    if(U16_IS_SURROGATE_LEAD(c)) {
 getTrail:
                         if(source<sourceLimit) {
                             /* test the following code unit */
                             UChar trail=*source;
-                            if(UTF_IS_SECOND_SURROGATE(trail)) {
+                            if(U16_IS_TRAIL(trail)) {
                                 ++source;
                                 ++nextSourceIndex;
-                                c=UTF16_GET_PAIR_VALUE(c, trail);
+                                c=U16_GET_SUPPLEMENTARY(c, trail);
                                 if(!(unicodeMask&UCNV_HAS_SUPPLEMENTARY)) {
                                     /* BMP-only codepages are stored without stage 1 entries for supplementary code points */
                                     /* callback(unassigned) */
@@ -3557,16 +3558,16 @@ ucnv_MBCSSingleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
              */
             c=*source++;
             ++nextSourceIndex;
-            if(UTF_IS_SURROGATE(c)) {
-                if(UTF_IS_SURROGATE_FIRST(c)) {
+            if(U16_IS_SURROGATE(c)) {
+                if(U16_IS_SURROGATE_LEAD(c)) {
 getTrail:
                     if(source<sourceLimit) {
                         /* test the following code unit */
                         UChar trail=*source;
-                        if(UTF_IS_SECOND_SURROGATE(trail)) {
+                        if(U16_IS_TRAIL(trail)) {
                             ++source;
                             ++nextSourceIndex;
-                            c=UTF16_GET_PAIR_VALUE(c, trail);
+                            c=U16_GET_SUPPLEMENTARY(c, trail);
                             if(!hasSupplementary) {
                                 /* BMP-only codepages are stored without stage 1 entries for supplementary code points */
                                 /* callback(unassigned) */
@@ -3805,16 +3806,16 @@ unrolled:
             /* normal end of conversion: prepare for a new character */
             c=0;
             continue;
-        } else if(!UTF_IS_SURROGATE(c)) {
+        } else if(!U16_IS_SURROGATE(c)) {
             /* normal, unassigned BMP character */
-        } else if(UTF_IS_SURROGATE_FIRST(c)) {
+        } else if(U16_IS_SURROGATE_LEAD(c)) {
 getTrail:
             if(source<sourceLimit) {
                 /* test the following code unit */
                 UChar trail=*source;
-                if(UTF_IS_SECOND_SURROGATE(trail)) {
+                if(U16_IS_TRAIL(trail)) {
                     ++source;
-                    c=UTF16_GET_PAIR_VALUE(c, trail);
+                    c=U16_GET_SUPPLEMENTARY(c, trail);
                     /* this codepage does not map supplementary code points */
                     /* callback(unassigned) */
                 } else {
@@ -3917,6 +3918,11 @@ getTrail:
     pArgs->target=(char *)target;
     pArgs->offsets=offsets;
 }
+
+/* Begin Android-added */
+#undef si_value
+#undef so_value
+/* End Android-added */
 
 U_CFUNC void
 ucnv_MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
@@ -4235,16 +4241,16 @@ ucnv_MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                  * If it does, then surrogates are not paired but mapped separately.
                  * Note that in this case unmatched surrogates are not detected.
                  */
-                if(UTF_IS_SURROGATE(c) && !(unicodeMask&UCNV_HAS_SURROGATES)) {
-                    if(UTF_IS_SURROGATE_FIRST(c)) {
+                if(U16_IS_SURROGATE(c) && !(unicodeMask&UCNV_HAS_SURROGATES)) {
+                    if(U16_IS_SURROGATE_LEAD(c)) {
 getTrail:
                         if(source<sourceLimit) {
                             /* test the following code unit */
                             UChar trail=*source;
-                            if(UTF_IS_SECOND_SURROGATE(trail)) {
+                            if(U16_IS_TRAIL(trail)) {
                                 ++source;
                                 ++nextSourceIndex;
-                                c=UTF16_GET_PAIR_VALUE(c, trail);
+                                c=U16_GET_SUPPLEMENTARY(c, trail);
                                 if(!(unicodeMask&UCNV_HAS_SUPPLEMENTARY)) {
                                     /* BMP-only codepages are stored without stage 1 entries for supplementary code points */
                                     cnv->fromUnicodeStatus=prevLength; /* save the old state */
@@ -4495,11 +4501,11 @@ unassigned:
                         /* each branch falls through to the next one */
                     case 4:
                         *target++=(uint8_t)(value>>24);
-                    case 3:
+                    case 3: /*fall through*/
                         *target++=(uint8_t)(value>>16);
-                    case 2:
+                    case 2: /*fall through*/
                         *target++=(uint8_t)(value>>8);
-                    case 1:
+                    case 1: /*fall through*/
                         *target++=(uint8_t)value;
                     default:
                         /* will never occur */
@@ -4511,13 +4517,13 @@ unassigned:
                     case 4:
                         *target++=(uint8_t)(value>>24);
                         *offsets++=sourceIndex;
-                    case 3:
+                    case 3: /*fall through*/
                         *target++=(uint8_t)(value>>16);
                         *offsets++=sourceIndex;
-                    case 2:
+                    case 2: /*fall through*/
                         *target++=(uint8_t)(value>>8);
                         *offsets++=sourceIndex;
-                    case 1:
+                    case 1: /*fall through*/
                         *target++=(uint8_t)value;
                         *offsets++=sourceIndex;
                     default:
@@ -4542,9 +4548,9 @@ unassigned:
                     /* each branch falls through to the next one */
                 case 3:
                     *charErrorBuffer++=(uint8_t)(value>>16);
-                case 2:
+                case 2: /*fall through*/
                     *charErrorBuffer++=(uint8_t)(value>>8);
-                case 1:
+                case 1: /*fall through*/
                     *charErrorBuffer=(uint8_t)value;
                 default:
                     /* will never occur */
@@ -4561,12 +4567,12 @@ unassigned:
                     if(offsets!=NULL) {
                         *offsets++=sourceIndex;
                     }
-                case 2:
+                case 2: /*fall through*/
                     *target++=(uint8_t)(value>>8);
                     if(offsets!=NULL) {
                         *offsets++=sourceIndex;
                     }
-                case 1:
+                case 1: /*fall through*/
                     *target++=(uint8_t)value;
                     if(offsets!=NULL) {
                         *offsets++=sourceIndex;
@@ -4929,7 +4935,7 @@ ucnv_SBCSFromUTF8(UConverterFromUnicodeArgs *pFromUArgs,
             if(U8_IS_TRAIL(b)) {
                 ++i;
             } else {
-                if(i<utf8_countTrailBytes[b]) {
+                if(i<U8_COUNT_TRAIL_BYTES(b)) {
                     /* exit the conversion loop before the lead byte if there are not enough trail bytes for it */
                     sourceLimit-=i+1;
                 }
@@ -5022,7 +5028,7 @@ ucnv_SBCSFromUTF8(UConverterFromUnicodeArgs *pFromUArgs,
                     /* handle "complicated" and error cases, and continuing partial characters */
                     oldToULength=0;
                     toULength=1;
-                    toULimit=utf8_countTrailBytes[b]+1;
+                    toULimit=U8_COUNT_TRAIL_BYTES(b)+1;
                     c=b;
 moreBytes:
                     while(toULength<toULimit) {
@@ -5121,6 +5127,7 @@ moreBytes:
                      * but then exit the loop because the extension match would
                      * have consumed the source.
                      */
+                    *pErrorCode=U_USING_DEFAULT_WARNING;
                     break;
                 } else {
                     /* a mapping was written to the target, continue */
@@ -5141,10 +5148,12 @@ moreBytes:
      * to stop before a truncated sequence.
      * If so, then collect the truncated sequence now.
      */
-    if(U_SUCCESS(*pErrorCode) && source<(sourceLimit=(uint8_t *)pToUArgs->sourceLimit)) {
+    if(U_SUCCESS(*pErrorCode) &&
+            cnv->preFromUFirstCP<0 &&
+            source<(sourceLimit=(uint8_t *)pToUArgs->sourceLimit)) {
         c=utf8->toUBytes[0]=b=*source++;
         toULength=1;
-        toULimit=utf8_countTrailBytes[b]+1;
+        toULimit=U8_COUNT_TRAIL_BYTES(b)+1;
         while(source<sourceLimit) {
             utf8->toUBytes[toULength++]=b=*source++;
             c=(c<<6)+b;
@@ -5178,7 +5187,7 @@ ucnv_DBCSFromUTF8(UConverterFromUnicodeArgs *pFromUArgs,
 
     uint32_t stage2Entry;
     uint32_t asciiRoundtrips;
-    uint16_t value, minValue;
+    uint16_t value;
     UBool hasSupplementary;
 
     /* set up the local pointers */
@@ -5198,13 +5207,6 @@ ucnv_DBCSFromUTF8(UConverterFromUnicodeArgs *pFromUArgs,
     }
     asciiRoundtrips=cnv->sharedData->mbcs.asciiRoundtrips;
 
-    if(cnv->useFallback) {
-        /* use all roundtrip and fallback results */
-        minValue=0x800;
-    } else {
-        /* use only roundtrips and fallbacks from private-use characters */
-        minValue=0xc00;
-    }
     hasSupplementary=(UBool)(cnv->sharedData->mbcs.unicodeMask&UCNV_HAS_SUPPLEMENTARY);
 
     /* get the converter state from the UTF-8 UConverter */
@@ -5233,7 +5235,7 @@ ucnv_DBCSFromUTF8(UConverterFromUnicodeArgs *pFromUArgs,
             if(U8_IS_TRAIL(b)) {
                 ++i;
             } else {
-                if(i<utf8_countTrailBytes[b]) {
+                if(i<U8_COUNT_TRAIL_BYTES(b)) {
                     /* exit the conversion loop before the lead byte if there are not enough trail bytes for it */
                     sourceLimit-=i+1;
                 }
@@ -5306,7 +5308,7 @@ ucnv_DBCSFromUTF8(UConverterFromUnicodeArgs *pFromUArgs,
                     /* handle "complicated" and error cases, and continuing partial characters */
                     oldToULength=0;
                     toULength=1;
-                    toULimit=utf8_countTrailBytes[b]+1;
+                    toULimit=U8_COUNT_TRAIL_BYTES(b)+1;
                     c=b;
 moreBytes:
                     while(toULength<toULimit) {
@@ -5434,6 +5436,7 @@ unassigned:
                      * but then exit the loop because the extension match would
                      * have consumed the source.
                      */
+                    *pErrorCode=U_USING_DEFAULT_WARNING;
                     break;
                 } else {
                     /* a mapping was written to the target, continue */
@@ -5455,10 +5458,12 @@ unassigned:
      * to stop before a truncated sequence.
      * If so, then collect the truncated sequence now.
      */
-    if(U_SUCCESS(*pErrorCode) && source<(sourceLimit=(uint8_t *)pToUArgs->sourceLimit)) {
+    if(U_SUCCESS(*pErrorCode) &&
+            cnv->preFromUFirstCP<0 &&
+            source<(sourceLimit=(uint8_t *)pToUArgs->sourceLimit)) {
         c=utf8->toUBytes[0]=b=*source++;
         toULength=1;
-        toULimit=utf8_countTrailBytes[b]+1;
+        toULimit=U8_COUNT_TRAIL_BYTES(b)+1;
         while(source<sourceLimit) {
             utf8->toUBytes[toULength++]=b=*source++;
             c=(c<<6)+b;

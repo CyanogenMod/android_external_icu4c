@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2011, International Business Machines Corporation and
+ * Copyright (c) 1997-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -21,6 +21,7 @@
 
 #include "unicode/uloc.h"
 #include "unicode/udat.h"
+#include "unicode/udatpg.h"
 #include "unicode/ucal.h"
 #include "unicode/unum.h"
 #include "unicode/ustring.h"
@@ -34,6 +35,7 @@
 static void TestExtremeDates(void);
 static void TestAllLocales(void);
 static void TestRelativeCrash(void);
+static void TestContext(void);
 
 #define LEN(a) (sizeof(a)/sizeof(a[0]))
 
@@ -50,6 +52,7 @@ void addDateForTest(TestNode** root)
     TESTCASE(TestExtremeDates);
     TESTCASE(TestAllLocales);
     TESTCASE(TestRelativeCrash);
+    TESTCASE(TestContext);
 }
 /* Testing the DateFormat API */
 static void TestDateFormat()
@@ -147,7 +150,7 @@ static void TestDateFormat()
     
     /*Testing udat_format()*/
     log_verbose("\nTesting the udat_format() function of date format\n");
-    u_uastrcpy(temp, "7/10/96 4:05 PM");
+    u_uastrcpy(temp, "7/10/96, 4:05 PM");
     /*format using def */
     resultlength=0;
     resultlengthneeded=udat_format(def, d, NULL, resultlength, NULL, &status);
@@ -211,7 +214,7 @@ static void TestDateFormat()
     
     /*Testing parsing using udat_parse()*/
     log_verbose("\nTesting parsing using udat_parse()\n");
-    u_uastrcpy(temp,"2/3/76 2:50 AM");
+    u_uastrcpy(temp,"2/3/76, 2:50 AM");
     parsepos=0;
     status=U_ZERO_ERROR;
     
@@ -247,7 +250,7 @@ static void TestDateFormat()
     status=U_ZERO_ERROR;
     log_verbose("\nTesting the udat_openPattern with a specified pattern\n");
     /*for french locale */
-    fr_pat=udat_open(UDAT_IGNORE, UDAT_IGNORE,"fr_FR",NULL,0,temp, u_strlen(temp), &status);
+    fr_pat=udat_open(UDAT_PATTERN, UDAT_PATTERN,"fr_FR",NULL,0,temp, u_strlen(temp), &status);
     if(U_FAILURE(status))
     {
         log_err("FAIL: Error in creating a date format using udat_openPattern \n %s\n", 
@@ -393,6 +396,9 @@ static const UChar newTimePatn[] = { 0x0048, 0x0048, 0x002C, 0x006D, 0x006D, 0 }
 static const UChar minutesStr[] = { 0x0034, 0x0039, 0 }; /* "49", minutes string to search for in output */
 enum { kDateOrTimeOutMax = 96, kDateAndTimeOutMax = 192 };
 
+static const UDate minutesTolerance = 2 * 60.0 * 1000.0;
+static const UDate daysTolerance = 2 * 24.0 * 60.0 * 60.0 * 1000.0;
+
 static void TestRelativeDateFormat()
 {
     UDate today = 0.0;
@@ -420,10 +426,10 @@ static void TestRelativeDateFormat()
         UDateFormat* fmtTime;
         int32_t dayOffset, limit;
         UFieldPosition fp;
-		UChar   strDateTime[kDateAndTimeOutMax];
-		UChar   strDate[kDateOrTimeOutMax];
-		UChar   strTime[kDateOrTimeOutMax];
-		UChar * strPtr;
+        UChar   strDateTime[kDateAndTimeOutMax];
+        UChar   strDate[kDateOrTimeOutMax];
+        UChar   strTime[kDateOrTimeOutMax];
+        UChar * strPtr;
         int32_t dtpatLen;
 
         fmtRelDateTime = udat_open(UDAT_SHORT, *stylePtr | UDAT_RELATIVE, trdfLocale, trdfZone, -1, NULL, 0, &status);
@@ -447,37 +453,37 @@ static void TestRelativeDateFormat()
 
         dtpatLen = udat_toPatternRelativeDate(fmtRelDateTime, strDate, kDateAndTimeOutMax, &status);
         if ( U_FAILURE(status) ) {
-        	log_err("udat_toPatternRelativeDate timeStyle SHORT dateStyle (%d | UDAT_RELATIVE) fails, error %s\n", *stylePtr, myErrorName(status) );
-        	status = U_ZERO_ERROR;
+            log_err("udat_toPatternRelativeDate timeStyle SHORT dateStyle (%d | UDAT_RELATIVE) fails, error %s\n", *stylePtr, myErrorName(status) );
+            status = U_ZERO_ERROR;
         } else if ( u_strstr(strDate, *monthPtnPtr) == NULL || dtpatLen != u_strlen(strDate) ) {
-        	log_err("udat_toPatternRelativeDate timeStyle SHORT dateStyle (%d | UDAT_RELATIVE) date pattern incorrect\n", *stylePtr );
+            log_err("udat_toPatternRelativeDate timeStyle SHORT dateStyle (%d | UDAT_RELATIVE) date pattern incorrect\n", *stylePtr );
         }
         dtpatLen = udat_toPatternRelativeTime(fmtRelDateTime, strTime, kDateAndTimeOutMax, &status);
         if ( U_FAILURE(status) ) {
-        	log_err("udat_toPatternRelativeTime timeStyle SHORT dateStyle (%d | UDAT_RELATIVE) fails, error %s\n", *stylePtr, myErrorName(status) );
-        	status = U_ZERO_ERROR;
+            log_err("udat_toPatternRelativeTime timeStyle SHORT dateStyle (%d | UDAT_RELATIVE) fails, error %s\n", *stylePtr, myErrorName(status) );
+            status = U_ZERO_ERROR;
         } else if ( u_strstr(strTime, minutesPatn) == NULL || dtpatLen != u_strlen(strTime) ) {
-        	log_err("udat_toPatternRelativeTime timeStyle SHORT dateStyle (%d | UDAT_RELATIVE) time pattern incorrect\n", *stylePtr );
+            log_err("udat_toPatternRelativeTime timeStyle SHORT dateStyle (%d | UDAT_RELATIVE) time pattern incorrect\n", *stylePtr );
         }
         dtpatLen = udat_toPattern(fmtRelDateTime, FALSE, strDateTime, kDateAndTimeOutMax, &status);
         if ( U_FAILURE(status) ) {
-        	log_err("udat_toPattern timeStyle SHORT dateStyle (%d | UDAT_RELATIVE) fails, error %s\n", *stylePtr, myErrorName(status) );
-        	status = U_ZERO_ERROR;
+            log_err("udat_toPattern timeStyle SHORT dateStyle (%d | UDAT_RELATIVE) fails, error %s\n", *stylePtr, myErrorName(status) );
+            status = U_ZERO_ERROR;
         } else if ( u_strstr(strDateTime, strDate) == NULL || u_strstr(strDateTime, strTime) == NULL || dtpatLen != u_strlen(strDateTime) ) {
-        	log_err("udat_toPattern timeStyle SHORT dateStyle (%d | UDAT_RELATIVE) dateTime pattern incorrect\n", *stylePtr );
+            log_err("udat_toPattern timeStyle SHORT dateStyle (%d | UDAT_RELATIVE) dateTime pattern incorrect\n", *stylePtr );
         }
         udat_applyPatternRelative(fmtRelDateTime, strDate, u_strlen(strDate), newTimePatn, u_strlen(newTimePatn), &status);
         if ( U_FAILURE(status) ) {
-        	log_err("udat_applyPatternRelative timeStyle SHORT dateStyle (%d | UDAT_RELATIVE) fails, error %s\n", *stylePtr, myErrorName(status) );
-        	status = U_ZERO_ERROR;
+            log_err("udat_applyPatternRelative timeStyle SHORT dateStyle (%d | UDAT_RELATIVE) fails, error %s\n", *stylePtr, myErrorName(status) );
+            status = U_ZERO_ERROR;
         } else {
-        	udat_toPattern(fmtRelDateTime, FALSE, strDateTime, kDateAndTimeOutMax, &status);
-        	if ( U_FAILURE(status) ) {
-        		log_err("udat_toPattern timeStyle SHORT dateStyle (%d | UDAT_RELATIVE) fails, error %s\n", *stylePtr, myErrorName(status) );
-        		status = U_ZERO_ERROR;
-        	} else if ( u_strstr(strDateTime, newTimePatn) == NULL ) {
-        		log_err("udat_applyPatternRelative timeStyle SHORT dateStyle (%d | UDAT_RELATIVE) didn't update time pattern\n", *stylePtr );
-        	}
+            udat_toPattern(fmtRelDateTime, FALSE, strDateTime, kDateAndTimeOutMax, &status);
+            if ( U_FAILURE(status) ) {
+                log_err("udat_toPattern timeStyle SHORT dateStyle (%d | UDAT_RELATIVE) fails, error %s\n", *stylePtr, myErrorName(status) );
+                status = U_ZERO_ERROR;
+            } else if ( u_strstr(strDateTime, newTimePatn) == NULL ) {
+                log_err("udat_applyPatternRelative timeStyle SHORT dateStyle (%d | UDAT_RELATIVE) didn't update time pattern\n", *stylePtr );
+            }
         }
         udat_applyPatternRelative(fmtRelDateTime, strDate, u_strlen(strDate), strTime, u_strlen(strTime), &status); /* restore original */
 
@@ -490,12 +496,30 @@ static void TestRelativeDateFormat()
                 log_err("udat_format timeStyle SHORT dateStyle (%d | UDAT_RELATIVE) fails, error %s\n", *stylePtr, myErrorName(status) );
                 status = U_ZERO_ERROR;
             } else {
+                int32_t parsePos = 0;
+                UDate dateResult = udat_parse(fmtRelDateTime, strDateTime, -1, &parsePos, &status);
+                UDate dateDiff =  (dateResult >= dateToUse)? dateResult - dateToUse: dateToUse - dateResult;
+                if ( U_FAILURE(status) || dateDiff > minutesTolerance ) {
+                    log_err("udat_parse timeStyle SHORT dateStyle (%d | UDAT_RELATIVE) fails, error %s, expect approx %.1f, got %.1f, parsePos %d\n",
+                            *stylePtr, myErrorName(status), dateToUse, dateResult, parsePos );
+                    status = U_ZERO_ERROR;
+                } 
+
                 udat_format(fmtRelDate, dateToUse, strDate, kDateOrTimeOutMax, NULL, &status);
                 if ( U_FAILURE(status) ) {
                     log_err("udat_format timeStyle NONE dateStyle (%d | UDAT_RELATIVE) fails, error %s\n", *stylePtr, myErrorName(status) );
                     status = U_ZERO_ERROR;
                 } else if ( u_strstr(strDateTime, strDate) == NULL ) {
                     log_err("relative date string not found in udat_format timeStyle SHORT dateStyle (%d | UDAT_RELATIVE)\n", *stylePtr );
+                } else {
+                    parsePos = 0;
+                    dateResult = udat_parse(fmtRelDate, strDate, -1, &parsePos, &status);
+                    dateDiff =  (dateResult >= dateToUse)? dateResult - dateToUse: dateToUse - dateResult;
+                    if ( U_FAILURE(status) || dateDiff > daysTolerance ) {
+                        log_err("udat_parse timeStyle NONE dateStyle (%d | UDAT_RELATIVE) fails, error %s, expect approx %.1f, got %.1f, parsePos %d\n",
+                                *stylePtr, myErrorName(status), dateToUse, dateResult, parsePos );
+                        status = U_ZERO_ERROR;
+                    } 
                 }
 
                 udat_format(fmtTime, dateToUse, strTime, kDateOrTimeOutMax, NULL, &status);
@@ -620,7 +644,7 @@ static void TestSymbols()
     VerifygetSymbols(def, UDAT_QUARTERS, 3, "4th quarter");
     VerifygetSymbols(fr, UDAT_SHORT_QUARTERS, 1, "T2");
     VerifygetSymbols(def, UDAT_SHORT_QUARTERS, 2, "Q3");
-    VerifygetSymbols(def,UDAT_LOCALIZED_CHARS, 0, "GyMdkHmsSEDFwWahKzYeugAZvcLQqV");
+    VerifygetSymbols(def,UDAT_LOCALIZED_CHARS, 0, "GyMdkHmsSEDFwWahKzYeugAZvcLQqVU");
 
 
     if(result != NULL) {
@@ -1191,7 +1215,7 @@ static void TestRelativeCrash(void) {
             }            
         }
         {
-        	UChar erabuf[32];
+            UChar erabuf[32];
             UErrorCode subStatus = U_ZERO_ERROR;
             what = "udat_getSymbols";
             log_verbose("Trying %s on a relative date..\n", what);
@@ -1230,6 +1254,93 @@ static void TestRelativeCrash(void) {
         udat_close(icudf);
     } else {
          log_data_err("FAIL: err calling udat_open() ->%s (Are you missing data?)\n", u_errorName(status));
+    }
+}
+
+static const UChar skeleton_yMMMM[] = { 0x79,0x4D,0x4D,0x4D,0x4D,0 }; /* "yMMMM"; fr maps to "MMMM y", cs maps to "LLLL y" */
+static const UChar july2008_frDefault[] = { 0x6A,0x75,0x69,0x6C,0x6C,0x65,0x74,0x20,0x32,0x30,0x30,0x38,0 }; /* "juillet 2008" */
+static const UChar july2008_frTitle[] = { 0x4A,0x75,0x69,0x6C,0x6C,0x65,0x74,0x20,0x32,0x30,0x30,0x38,0 };  /* "Juillet 2008" sentence-begin, standalone */
+static const UChar july2008_csDefault[] = { 0x10D,0x65,0x72,0x76,0x65,0x6E,0x65,0x63,0x20,0x32,0x30,0x30,0x38,0 }; /* "c(hacek)ervenec 2008" */
+static const UChar july2008_csTitle[] = { 0x10C,0x65,0x72,0x76,0x65,0x6E,0x65,0x63,0x20,0x32,0x30,0x30,0x38,0 }; /* "C(hacek)ervenec 2008" sentence-begin, uiListOrMenu */
+
+typedef struct {
+    const char * locale;
+    const UChar * skeleton;
+    UDisplayContext capitalizationContext;
+    const UChar * expectedFormat;
+} TestContextItem;
+
+static const TestContextItem textContextItems[] = {
+    { "fr", skeleton_yMMMM, UDISPCTX_CAPITALIZATION_NONE,                   july2008_frDefault },
+#if !UCONFIG_NO_BREAK_ITERATION
+    { "fr", skeleton_yMMMM, UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, july2008_frDefault },
+    { "fr", skeleton_yMMMM, UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, july2008_frTitle },
+    { "fr", skeleton_yMMMM, UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU,    july2008_frDefault },
+    { "fr", skeleton_yMMMM, UDISPCTX_CAPITALIZATION_FOR_STANDALONE,         july2008_frTitle },
+#endif
+    { "cs", skeleton_yMMMM, UDISPCTX_CAPITALIZATION_NONE,                   july2008_csDefault },
+#if !UCONFIG_NO_BREAK_ITERATION
+    { "cs", skeleton_yMMMM, UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, july2008_csDefault },
+    { "cs", skeleton_yMMMM, UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, july2008_csTitle },
+    { "cs", skeleton_yMMMM, UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU,    july2008_csTitle },
+    { "cs", skeleton_yMMMM, UDISPCTX_CAPITALIZATION_FOR_STANDALONE,         july2008_csDefault },
+#endif
+    { NULL, NULL, (UDisplayContext)0, NULL }
+};
+
+static const UDate july022008 = 1215000001979.0;
+enum { kUbufMax = 64, kBbufMax = 3*kUbufMax };
+
+static void TestContext(void) {
+    const TestContextItem* textContextItemPtr = textContextItems;
+    for (; textContextItemPtr->locale != NULL; ++textContextItemPtr) {
+        UErrorCode status = U_ZERO_ERROR;
+        UDateFormat* udfmt = udat_open(UDAT_NONE, UDAT_MEDIUM, textContextItemPtr->locale, NULL, 0, NULL, 0, &status);
+        if ( U_FAILURE(status) ) {
+            log_data_err("FAIL: udat_open for locale %s, status %s\n", textContextItemPtr->locale, u_errorName(status) );
+        } else {
+            UDateTimePatternGenerator* udtpg = udatpg_open(textContextItemPtr->locale, &status);
+            if ( U_FAILURE(status) ) {
+                log_err("FAIL: udatpg_open for locale %s, status %s\n", textContextItemPtr->locale, u_errorName(status) );
+            } else {
+                UChar ubuf[kUbufMax];
+                int32_t len = udatpg_getBestPattern(udtpg, textContextItemPtr->skeleton, -1, ubuf, kUbufMax, &status);
+                if ( U_FAILURE(status) ) {
+                    log_err("FAIL: udatpg_getBestPattern for locale %s, status %s\n", textContextItemPtr->locale, u_errorName(status) );
+                } else {
+                    udat_applyPattern(udfmt, FALSE, ubuf, len);
+                    udat_setContext(udfmt, textContextItemPtr->capitalizationContext, &status);
+                    if ( U_FAILURE(status) ) {
+                        log_err("FAIL: udat_setContext for locale %s, capitalizationContext %d, status %s\n",
+                                textContextItemPtr->locale, (int)textContextItemPtr->capitalizationContext, u_errorName(status) );
+                    } else {
+                        UDisplayContext getContext;
+                        len = udat_format(udfmt, july022008, ubuf, kUbufMax, NULL, &status);
+                        if ( U_FAILURE(status) ) {
+                            log_err("FAIL: udat_format for locale %s, capitalizationContext %d, status %s\n",
+                                    textContextItemPtr->locale, (int)textContextItemPtr->capitalizationContext, u_errorName(status) );
+                            status = U_ZERO_ERROR;
+                        } else if (u_strncmp(ubuf, textContextItemPtr->expectedFormat, kUbufMax) != 0) {
+                            char bbuf1[kBbufMax];
+                            char bbuf2[kBbufMax];
+                            log_err("FAIL: udat_format for locale %s, capitalizationContext %d, expected %s, got %s\n",
+                                    textContextItemPtr->locale, (int)textContextItemPtr->capitalizationContext,
+                                    u_austrncpy(bbuf1,textContextItemPtr->expectedFormat,kUbufMax), u_austrncpy(bbuf2,ubuf,kUbufMax) );
+                        }
+                        getContext = udat_getContext(udfmt, UDISPCTX_TYPE_CAPITALIZATION, &status);
+                        if ( U_FAILURE(status) ) {
+                            log_err("FAIL: udat_getContext for locale %s, capitalizationContext %d, status %s\n",
+                                    textContextItemPtr->locale, (int)textContextItemPtr->capitalizationContext, u_errorName(status) );
+                        } else if (getContext != textContextItemPtr->capitalizationContext) {
+                            log_err("FAIL: udat_getContext for locale %s, capitalizationContext %d, got context %d\n",
+                                    textContextItemPtr->locale, (int)textContextItemPtr->capitalizationContext, (int)getContext );
+                        }
+                    }
+                }
+                udatpg_close(udtpg);
+            }
+            udat_close(udfmt);
+        }
     }
 }
 

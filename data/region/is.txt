@@ -1,9 +1,9 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
-// * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/is.xml
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/is.xml
 // *
 // ***************************************************************************
 /**
@@ -11,7 +11,7 @@
  */
 is{
     Countries{
-        001{"heimur"}
+        001{"Heimurinn"}
         002{"Afríka"}
         003{"Norður-Ameríka"}
         005{"Suður-Ameríka"}
@@ -26,14 +26,13 @@ is{
         021{"Ameríka norðan Mexikó"}
         029{"Karabíska hafið"}
         030{"Austur-Asía"}
-        034{"suðurhluti Asíu"}
+        034{"Suður-Asía"}
         035{"Suðaustur-Asía"}
         039{"Suður-Evrópa"}
-        053{"Ástralía og Nýja-Sjáland"}
+        053{"Ástralasía"}
         054{"Melanesía"}
         057{"Míkrónesía"}
         061{"Pólýnesía"}
-        062{"Syðri-Mið-Asía"}
         142{"Asía"}
         143{"Mið-Asía"}
         145{"Vestur-Asía"}
@@ -41,9 +40,7 @@ is{
         151{"Austur-Evrópa"}
         154{"Norður-Evrópa"}
         155{"Vestur-Evrópa"}
-        172{"Samveldi sjálfstæðra ríkja"}
         419{"Latín-Ameríka"}
-        830{"Ermasundseyjar"}
         AC{"Ascension-eyja"}
         AD{"Andorra"}
         AE{"Sameinuðu arabísku furstadæmin"}
@@ -75,6 +72,7 @@ is{
         BM{"Bermúdaeyjar"}
         BN{"Brúnei"}
         BO{"Bólivía"}
+        BQ{"Karíbahafshluti Hollands"}
         BR{"Brasilía"}
         BS{"Bahamaeyjar"}
         BT{"Bútan"}
@@ -84,9 +82,9 @@ is{
         BZ{"Belís"}
         CA{"Kanada"}
         CC{"Kókoseyjar"}
-        CD{"Austur-Kongó"}
+        CD{"Kongó-Kinshasa"}
         CF{"Mið-Afríkulýðveldið"}
-        CG{"Vestur-Kongó"}
+        CG{"Kongó-Brazzaville"}
         CH{"Sviss"}
         CI{"Fílabeinsströndin"}
         CK{"Cookseyjar"}
@@ -96,9 +94,9 @@ is{
         CO{"Kólumbía"}
         CP{"Clipperton-eyja"}
         CR{"Kostaríka"}
-        CS{"Serbía og Svartfjallaland"}
         CU{"Kúba"}
         CV{"Grænhöfðaeyjar"}
+        CW{"Curacao"}
         CX{"Jólaey"}
         CY{"Kýpur"}
         CZ{"Tékkland"}
@@ -195,7 +193,7 @@ is{
         MH{"Marshalleyjar"}
         MK{"Makedónía"}
         ML{"Malí"}
-        MM{"Mjanmar"}
+        MM{"Mjanmar [Búrma]"}
         MN{"Mongólía"}
         MO{"Makaó"}
         MP{"Norður-Maríanaeyjar"}
@@ -230,7 +228,7 @@ is{
         PK{"Pakistan"}
         PL{"Pólland"}
         PM{"Sankti Pierre og Miquelon"}
-        PN{"Pitcairn"}
+        PN{"Pitcairneyjar"}
         PR{"Púertó Ríkó"}
         PS{"Palestína"}
         PT{"Portúgal"}
@@ -258,8 +256,10 @@ is{
         SN{"Senegal"}
         SO{"Sómalía"}
         SR{"Súrínam"}
+        SS{"Suður-Súdan"}
         ST{"Saó Tóme og Prinsípe"}
         SV{"El Salvador"}
+        SX{"Sint Maarten"}
         SY{"Sýrland"}
         SZ{"Svasíland"}
         TA{"Tristan da Cunha"}
@@ -270,7 +270,7 @@ is{
         TH{"Taíland"}
         TJ{"Tadsjikistan"}
         TK{"Tókelá"}
-        TL{"Austur-Tímor"}
+        TL{"Tímor-Leste"}
         TM{"Túrkmenistan"}
         TN{"Túnis"}
         TO{"Tonga"}
@@ -299,7 +299,7 @@ is{
         ZA{"Suður-Afríka"}
         ZM{"Sambía"}
         ZW{"Simbabve"}
-        ZZ{"Óþekkt eða ógilt svæði"}
+        ZZ{"Óþekkt svæði"}
     }
-    Version{"2.0.59.68"}
+    Version{"2.0.78.32"}
 }

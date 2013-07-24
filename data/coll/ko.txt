@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/collation/ko.xml
@@ -10,12 +10,12 @@
  *  ICU <specials> source: <path>/xml/collation/ko.xml
  */
 ko{
-    Version{"2.0.59.79"}
+    Version{"2.0.76.11"}
     collations{
         search{
             Sequence{
                 " [normalization on ][suppressContractions [เ-ไ ເ-ໄ] ]"
-                "&ا<<<ﺎ<<<ﺍ<<آ<<<ﺂ<<<ﺁ<<أ<<<ﺄ<<<ﺃ<<إ<<<ﺈ<<<ﺇ"
+                "&'='<'\u2260'&ا<<<ﺎ<<<ﺍ<<آ<<<ﺂ<<<ﺁ<<أ<<<ﺄ<<<ﺃ<<إ<<<ﺈ<<<ﺇ"
                 "&و<<<ۥ<<<ﻮ<<<ﻭ<<ؤ<<<ﺆ<<<ﺅ"
                 "&ي<<<ۦ<<<ﻳ<<<ﻴ<<<ﻲ<<<ﻱ<<ئ<<<ﺋ<<<ﺌ<<<ﺊ<<<ﺉ<<ى<<<ﯨ<<<ﯩ<<<ﻰ<<<ﻯ"
                 "&ه<<<ﻫ<<<ﻬ<<<ﻪ<<<ﻩ<<ة<<<ﺔ<<<ﺓ"
@@ -199,7 +199,7 @@ ko{
                 "&ᅩᅣ=ᆦ"
                 "&ᅩᅣᅵ=ᆧ"
             }
-            Version{"2.0.1"}
+            Version{"22.1.1"}
         }
         searchjl{
             Sequence{
@@ -217,12 +217,14 @@ ko{
                 "&ᄉ<<ᄊ=ᄉᄉ<<<ㅆ"
                 "&ᄌ<<ᄍ=ᄌᄌ<<<ㅉ"
             }
-            Version{"2.0.1"}
+            Version{"22.1.1"}
         }
         standard{
             Sequence{
+                // BEGIN android-added
                 " [reorder Hang Hani]"
-                " [optimize [가-각간갇-갊감-갗같-객갠갤갬-갭갯-갱갸-갹갼걀걋걍걔걘걜거-걱건걷-걸걺검-겁것-겆겉-게겐겔겜-겝겟-겡겨"
+                // END android-added
+                "[optimize [가-각간갇-갊감-갗같-객갠갤갬-갭갯-갱갸-갹갼걀걋걍걔걘걜거-걱건걷-걸걺검-겁것-겆겉-게겐겔겜-겝겟-겡겨"
                 "-겪견겯-결겸-겹겻-경곁계곈곌곕곗고-곡곤곧-골곪곬곯-곱곳공-곶과-곽관괄괆괌-괍괏광괘괜괠괩괬-괭괴-괵괸괼굄-굅굇굉교굔굘굡굣구"
                 "-국군굳-굶굻-굽굿궁-궂궈-궉권궐궜-궝궤궷귀-귁귄귈귐-귑귓규균귤그-극근귿-긁금-급긋긍긔기-긱긴긷-길긺김-깁깃깅-깆깊까-깎깐"
                 "깔깖깜-깝깟-깡깥깨-깩깬깰깸-깹깻-깽꺄-꺅꺌꺼-꺾껀껄껌-껍껏-껑께-껙껜껨껫껭껴껸껼꼇-꼈꼍꼐꼬-꼭꼰꼲꼴꼼-꼽꼿꽁-꽃꽈-꽉꽐꽜"
@@ -753,7 +755,10 @@ ko{
                 "&희<<*僖凞喜噫囍姬嬉希憙憘戱晞曦熙熹熺犧禧稀羲咥唏嘻悕戲暿欷燹爔豨餼"
                 "&힐<<*詰犵纈襭頡黠"
             }
-            Version{"2.0.1"}
+            Version{"22.1.1"}
+            // BEGIN android-remove
+            // To save space, Android does not include the unihan collation sequence.
+            // END android-remove
         }
     }
 }

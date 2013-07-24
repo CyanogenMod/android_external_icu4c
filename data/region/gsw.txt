@@ -1,9 +1,9 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
-// * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/gsw.xml
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/gsw.xml
 // *
 // ***************************************************************************
 /**
@@ -33,7 +33,6 @@ gsw{
         054{"Melaneesie"}
         057{"Mikroneesischs Inselgebiet"}
         061{"Polineesie"}
-        062{"Süüd-Zentraalaasie"}
         142{"Aasie"}
         143{"Zentraalaasie"}
         145{"Weschtaasie"}
@@ -41,9 +40,7 @@ gsw{
         151{"Oschteuroopa"}
         154{"Nordeuroopa"}
         155{"Weschteuroopa"}
-        172{"Gmäinschaft vo Unabhängige Schtaate"}
         419{"Latiinameerika"}
-        830{"Kanaalinsle"}
         AD{"Andorra"}
         AE{"Veräinigti Arabischi Emiräät"}
         AF{"Afganischtan"}
@@ -94,7 +91,6 @@ gsw{
         CN{"Chiina"}
         CO{"Kolumbie"}
         CR{"Coschta Rica"}
-        CS{"Särbie und Monteneegro"}
         CU{"Kuba"}
         CV{"Kap Verde"}
         CX{"Wienachts-Insle"}
@@ -139,7 +135,7 @@ gsw{
         GU{"Guam"}
         GW{"Gineea-Bissau"}
         GY{"Guäjaana"}
-        HK{"Sonderverwaltigszone Hongkong"}
+        HK{"Hongkong"}
         HM{"Höörd- und MäcDonald-Insle"}
         HN{"Honduras"}
         HR{"Kroaazie"}
@@ -192,7 +188,7 @@ gsw{
         ML{"Maali"}
         MM{"Müanmar"}
         MN{"Mongolei"}
-        MO{"Sonderverwaltigszone Macao"}
+        MO{"Macao"}
         MP{"Nördlichi Mariaane"}
         MQ{"Martinigg"}
         MR{"Mauretaanie"}
@@ -295,5 +291,5 @@ gsw{
         ZW{"Simbabwe"}
         ZZ{"Unbekannti oder ungültigi Regioon"}
     }
-    Version{"2.0.59.68"}
+    Version{"2.0.78.47"}
 }

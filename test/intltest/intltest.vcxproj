@@ -224,7 +224,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="bytestrietest.cpp" />
-    <ClCompile Include="dicttest.cpp" />
     <ClCompile Include="ucharstrietest.cpp" />
     <ClCompile Include="itrbbi.cpp" />
     <ClCompile Include="rbbiapts.cpp" />
@@ -293,6 +292,7 @@
     <ClCompile Include="dtifmtts.cpp" />
     <ClCompile Include="dtptngts.cpp" />
     <ClCompile Include="fldset.cpp" />
+    <ClCompile Include="genderinfotest.cpp" />
     <ClCompile Include="incaltst.cpp" />
     <ClCompile Include="itformat.cpp" />
     <ClCompile Include="itrbnf.cpp" />
@@ -388,9 +388,9 @@
     <ClCompile Include="convtest.cpp" />
     <ClCompile Include="csdetest.cpp" />
     <ClCompile Include="bidiconf.cpp" />
+    <ClCompile Include="listformattertest.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="dicttest.h" />
     <ClInclude Include="itrbbi.h" />
     <ClInclude Include="rbbiapts.h" />
     <ClInclude Include="rbbitst.h" />
@@ -513,6 +513,7 @@
     <ClInclude Include="trnserr.h" />
     <ClInclude Include="convtest.h" />
     <ClInclude Include="csdetest.h" />
+    <ClInclude Include="listformattertest.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\common\common.vcxproj">

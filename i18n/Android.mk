@@ -40,7 +40,8 @@ src_files += \
 	datefmt.cpp     dcfmtsym.cpp decimfmt.cpp \
 	digitlst.cpp    dtfmtsym.cpp esctrn.cpp   \
 	fmtable_cnv.cpp fmtable.cpp  format.cpp   \
-	funcrepl.cpp    gregocal.cpp gregoimp.cpp \
+	funcrepl.cpp    gender.cpp \
+	gregocal.cpp gregoimp.cpp \
 	hebrwcal.cpp    inputext.cpp islamcal.cpp \
 	japancal.cpp    measfmt.cpp  measure.cpp  \
 	msgfmt.cpp      name2uni.cpp nfrs.cpp     \
@@ -49,6 +50,7 @@ src_files += \
 	quant.cpp       rbnf.cpp     rbt.cpp      \
 	rbt_data.cpp    rbt_pars.cpp rbt_rule.cpp \
 	rbt_set.cpp     regexcmp.cpp regexst.cpp  \
+	regeximp.cpp \
 	rematch.cpp     remtrans.cpp repattrn.cpp \
 	search.cpp      simpletz.cpp smpdtfmt.cpp \
 	sortkey.cpp     strmatch.cpp strrepl.cpp  \
@@ -95,11 +97,14 @@ local_ldlibs := -lpthread -lm
 
 include $(CLEAR_VARS)
 LOCAL_SRC_FILES := $(src_files)
-LOCAL_C_INCLUDES := $(c_includes) \
-                    abi/cpp/include
+LOCAL_C_INCLUDES += $(c_includes) \
+                    abi/cpp/include \
+                    bionic \
+                    bionic/libstdc++/include \
+                    external/stlport/stlport
 LOCAL_CFLAGS += $(local_cflags) -DPIC -fPIC
 LOCAL_RTTI_FLAG := -frtti
-LOCAL_SHARED_LIBRARIES += libicuuc libgabi++
+LOCAL_SHARED_LIBRARIES += libicuuc libgabi++ libstlport
 LOCAL_LDLIBS += $(local_ldlibs)
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := libicui18n

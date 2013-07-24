@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2005-2011, International Business Machines
+ *   Copyright (C) 2005-2012, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -904,7 +904,6 @@ static char *printOrders(char *buffer, OrderList &list)
 
 void SSearchTest::offsetTest()
 {
-    static const UVersionInfo icu49 = { 4, 9, 0, 0 };
     const char *test[] = {
         // The sequence \u0FB3\u0F71\u0F71\u0F80 contains a discontiguous
         // contraction (\u0FB3\u0F71\u0F80) logically followed by \u0F71.
@@ -981,8 +980,8 @@ void SSearchTest::offsetTest()
     col->setAttribute(UCOL_NORMALIZATION_MODE, UCOL_ON, status);
 
     for(int32_t i = 0; i < testCount; i += 1) {
-        if (!isICUVersionAtLeast(icu49) && i>=4 && i<=6) {
-            continue; // timebomb until ticket #8080 is resolved
+        if (!isICUVersionAtLeast(51, 1) && i>=4 && i<=6) {
+            continue; // timebomb until ticket #9156 (was #8081) is resolved
         }
         UnicodeString ts = CharsToUnicodeString(test[i]);
         CollationElementIterator *iter = col->createCollationElementIterator(ts);
@@ -2132,26 +2131,6 @@ int32_t SSearchTest::monkeyTestCase(UCollator *coll, const UnicodeString &testCa
     return notFoundCount;
 }
 
-static void hexForUnicodeString(const UnicodeString &ustr, char * cbuf, int32_t cbuflen)
-{
-    int32_t ustri, ustrlen = ustr.length();
-
-    for (ustri = 0; ustri < ustrlen; ++ustri) {
-        if (cbuflen >= 9 /* format width for single code unit(5) + terminating ellipsis(3) + null(1) */) {
-            int len = sprintf(cbuf, " %04X", ustr.charAt(ustri));
-            cbuflen -= len;
-            cbuf += len;
-        } else {
-            if (cbuflen >= 4 /* terminating ellipsis(3) + null(1) */) {
-                sprintf(cbuf, "...");
-            } else if (cbuflen >= 1) {
-                cbuf = 0;
-            }
-            break;
-        }
-    }
-}
-
 int32_t SSearchTest::bmMonkeyTestCase(UCollator *coll, const UnicodeString &testCase, const UnicodeString &pattern, const UnicodeString &altPattern,
                                     BoyerMooreSearch *bms, BoyerMooreSearch *abms,
                                     const char *name, const char *strength, uint32_t seed)
@@ -2161,7 +2140,6 @@ int32_t SSearchTest::bmMonkeyTestCase(UCollator *coll, const UnicodeString &test
   //int32_t expectedStart = prefix.length(), expectedEnd = prefix.length() + altPattern.length();
     int32_t expectedStart = -1, expectedEnd = -1;
     int32_t notFoundCount = 0;
-    char    hexbuf[128];
 
     // **** TODO: find *all* matches, not just first one ****
     simpleSearch(coll, testCase, 0, pattern, expectedStart, expectedEnd);
@@ -2170,10 +2148,10 @@ int32_t SSearchTest::bmMonkeyTestCase(UCollator *coll, const UnicodeString &test
     bms->search(0, actualStart, actualEnd);
 
     if (expectedStart >= 0 && (actualStart != expectedStart || actualEnd != expectedEnd)) {
-        hexForUnicodeString(pattern, hexbuf, sizeof(hexbuf));
         errln("Boyer-Moore Search for <pattern> in <%s> failed: expected [%d, %d], got [%d, %d]\n"
-              "    strength=%s seed=%d <pattern>: %s",
-              name, expectedStart, expectedEnd, actualStart, actualEnd, strength, seed, hexbuf);
+              "    strength=%s seed=%d",
+              name, expectedStart, expectedEnd, actualStart, actualEnd, strength, seed);
+        errln(UNICODE_STRING_SIMPLE("    <pattern>: ") + prettify(pattern));
     }
 
     if (expectedStart == -1 && actualStart == -1) {
@@ -2187,10 +2165,10 @@ int32_t SSearchTest::bmMonkeyTestCase(UCollator *coll, const UnicodeString &test
     abms->search(0, actualStart, actualEnd);
 
     if (expectedStart >= 0 && (actualStart != expectedStart || actualEnd != expectedEnd)) {
-        hexForUnicodeString(altPattern, hexbuf, sizeof(hexbuf));
         errln("Boyer-Moore Search for <alt_pattern> in <%s> failed: expected [%d, %d], got [%d, %d]\n"
-              "    strength=%s seed=%d <pattern>: %s",
-              name, expectedStart, expectedEnd, actualStart, actualEnd, strength, seed, hexbuf);
+              "    strength=%s seed=%d",
+              name, expectedStart, expectedEnd, actualStart, actualEnd, strength, seed);
+        errln(UNICODE_STRING_SIMPLE("    <alt_pattern>: ") + prettify(altPattern));
     }
 
     if (expectedStart == -1 && actualStart == -1) {
@@ -2342,7 +2320,6 @@ void SSearchTest::monkeyTest(char *params)
 
 void SSearchTest::bmMonkeyTest(char *params)
 {
-    static const UVersionInfo icu49 = { 4, 9, 0, 0 }; // for timebomb
     static const UChar skipChars[] = { 0x0E40, 0x0E41, 0x0E42, 0x0E43, 0x0E44, 0xAAB5, 0xAAB6, 0xAAB9, 0xAABB, 0xAABC, 0 }; // for timebomb
     // ook!
     UErrorCode status = U_ZERO_ERROR;
@@ -2436,10 +2413,21 @@ void SSearchTest::bmMonkeyTest(char *params)
 
         CollData *data = CollData::open(coll, status);
 
-        UnicodeString skipString(skipChars); // for timebomb
-        UnicodeSet* skipSet = UnicodeSet::createFromAll(skipString); // for timebomb
+        UnicodeSet skipSet;
+        if(isICUVersionBefore(51, 1)) {
+            // timebomb until ticket #9156 (was #8081) is resolved
+            UnicodeString skipString(skipChars);
+            skipSet.addAll(skipString);
+        }
+        if(isICUVersionBefore(51, 1)) {
+            // Time bomb until ticket #9490 is fixed.
+            skipSet.add(0x12327);
+            skipSet.add(0x1311b);
+            skipSet.add(0x1200d);
+        }
+        skipSet.freeze();
         // TODO: try alternate prefix and suffix too?
-        // TODO: alterntaes are only equal at primary strength. Is this OK?
+        // TODO: alternates are only equal at primary strength. Is this OK?
         for(int32_t t = 0; t < loopCount; t += 1) {
             uint32_t seed = m_seed;
             // int32_t  nmc = 0;
@@ -2447,9 +2435,9 @@ void SSearchTest::bmMonkeyTest(char *params)
             generateTestCase(coll, monkeys, monkeyCount, pattern, altPattern);
             generateTestCase(coll, monkeys, monkeyCount, prefix,  altPrefix);
             generateTestCase(coll, monkeys, monkeyCount, suffix,  altSuffix);
-            
-            if (!isICUVersionAtLeast(icu49) && skipSet->containsSome(pattern)) {
-                continue; // timebomb until ticket #8080 is resolved
+
+            if (skipSet.containsSome(pattern)) {
+                continue; // time bomb
             }
 
             BoyerMooreSearch pat(data, pattern, NULL, status);
@@ -2485,7 +2473,6 @@ void SSearchTest::bmMonkeyTest(char *params)
             // pattern + suffix
             notFoundCount += bmMonkeyTestCase(coll, testCase, pattern, altPattern, &pat, &alt, "pattern + suffix", strengthNames[s], seed);
         }
-        delete skipSet; // for timebomb
 
         CollData::close(data);
 

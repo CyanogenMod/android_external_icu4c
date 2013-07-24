@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1997-2011, International Business Machines
+*   Copyright (C) 1997-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -37,8 +37,16 @@
 #include "unicode/locid.h"
 #include "unicode/fpositer.h"
 #include "unicode/stringpiece.h"
+#include "unicode/curramt.h"
+#include "unicode/enumset.h"
 
-union UHashTok;
+/**
+ * \def UNUM_DECIMALFORMAT_INTERNAL_SIZE
+ * @internal
+ */
+#if UCONFIG_FORMAT_FASTPATHS_49
+#define UNUM_DECIMALFORMAT_INTERNAL_SIZE 16
+#endif
 
 U_NAMESPACE_BEGIN
 
@@ -48,6 +56,13 @@ class CurrencyPluralInfo;
 class Hashtable;
 class UnicodeSet;
 class FieldPositionHandler;
+
+// explicit template instantiation. see digitlst.h
+#if defined (_MSC_VER)
+template class U_I18N_API    EnumSet<UNumberFormatAttribute,
+            UNUM_MAX_NONBOOLEAN_ATTRIBUTE+1, 
+            UNUM_LIMIT_BOOLEAN_ATTRIBUTE>;
+#endif
 
 /**
  * DecimalFormat is a concrete subclass of NumberFormat that formats decimal
@@ -661,9 +676,9 @@ public:
                              away from zero if equidistant */
         /**
           *  Return U_FORMAT_INEXACT_ERROR if number does not format exactly. 
-          *  @draft ICU 4.8 
+          *  @stable ICU 4.8 
           */
-        kRoundUnnecessary 
+        kRoundUnnecessary
     };
 
     /**
@@ -731,6 +746,7 @@ public:
                     DecimalFormatSymbols* symbolsToAdopt,
                     UErrorCode& status);
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * This API is for ICU use only.
      * Create a DecimalFormat from the given pattern, symbols, and style.
@@ -747,6 +763,42 @@ public:
                     DecimalFormatSymbols* symbolsToAdopt,
                     UNumberFormatStyle style,
                     UErrorCode& status);
+
+
+    /**
+     * Set an integer attribute on this DecimalFormat.
+     * May return U_UNSUPPORTED_ERROR if this instance does not support
+     * the specified attribute.
+     * @param attr the attribute to set
+     * @param newvalue new value
+     * @param status the error type
+     * @return *this - for chaining
+     * @internal ICU 50
+     */
+    virtual DecimalFormat& setAttribute( UNumberFormatAttribute attr,
+                                       int32_t newvalue,
+                                       UErrorCode &status);
+
+    /**
+     * Get an integer
+     * May return U_UNSUPPORTED_ERROR if this instance does not support
+     * the specified attribute.
+     * @param attr the attribute to set
+     * @param status the error type
+     * @return the attribute value. Undefined if there is an error.
+     * @internal ICU 50
+     */
+    virtual int32_t getAttribute( UNumberFormatAttribute attr,
+                                  UErrorCode &status) const;
+
+#if UCONFIG_HAVE_PARSEALLINPUT
+    /**
+     * @internal 
+     */
+    void setParseAllInput(UNumberFormatAttributeValue value);
+#endif
+
+#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      * Create a DecimalFormat from the given pattern and symbols.
@@ -851,6 +903,24 @@ public:
                                   UnicodeString& appendTo,
                                   FieldPosition& pos) const;
 
+
+    /**
+     * Format a double or long number using base-10 representation.
+     *
+     * @param number    The value to be formatted.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @param pos       On input: an alignment field, if desired.
+     *                  On output: the offsets of the alignment field.
+     * @param status
+     * @return          Reference to 'appendTo' parameter.
+     * @internal
+     */
+    virtual UnicodeString& format(double number,
+                                  UnicodeString& appendTo,
+                                  FieldPosition& pos,
+                                  UErrorCode &status) const;
+
     /**
      * Format a double or long number using base-10 representation.
      *
@@ -890,6 +960,22 @@ public:
      * @param number    The value to be formatted.
      * @param appendTo  Output parameter to receive result.
      *                  Result is appended to existing contents.
+     * @param pos       On input: an alignment field, if desired.
+     *                  On output: the offsets of the alignment field.
+     * @return          Reference to 'appendTo' parameter.
+     * @internal
+     */
+    virtual UnicodeString& format(int32_t number,
+                                  UnicodeString& appendTo,
+                                  FieldPosition& pos,
+                                  UErrorCode &status) const;
+
+    /**
+     * Format a long number using base-10 representation.
+     *
+     * @param number    The value to be formatted.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
      * @param posIter   On return, can be used to iterate over positions
      *                  of fields generated by this format call.
      *                  Can be NULL.
@@ -916,6 +1002,22 @@ public:
     virtual UnicodeString& format(int64_t number,
                                   UnicodeString& appendTo,
                                   FieldPosition& pos) const;
+
+    /**
+     * Format an int64 number using base-10 representation.
+     *
+     * @param number    The value to be formatted.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @param pos       On input: an alignment field, if desired.
+     *                  On output: the offsets of the alignment field.
+     * @return          Reference to 'appendTo' parameter.
+     * @internal
+     */
+    virtual UnicodeString& format(int64_t number,
+                                  UnicodeString& appendTo,
+                                  FieldPosition& pos,
+                                  UErrorCode &status) const;
 
     /**
      * Format an int64 number using base-10 representation.
@@ -1106,6 +1208,7 @@ public:
                        Formattable& result,
                        UErrorCode& status) const;
 
+/* Cannot use #ifndef U_HIDE_DRAFT_API for the following draft method since it is virtual */
     /**
      * Parses text from the given string as a currency amount.  Unlike
      * the parse() method, this method will attempt to parse a generic
@@ -1116,18 +1219,17 @@ public:
      * (U+00A4) in its prefix or suffix.
      *
      * @param text the string to parse
-     * @param result output parameter to receive result. This will have
-     * its currency set to the parsed ISO currency code.
-     * @param pos input-output position; on input, the position within
-     * text to match; must have 0 <= pos.getIndex() < text.length();
-     * on output, the position after the last matched character. If
-     * the parse fails, the position in unchanged upon output.
-     * @return a reference to result
-     * @internal
+     * @param pos  input-output position; on input, the position within text
+     *             to match; must have 0 <= pos.getIndex() < text.length();
+     *             on output, the position after the last matched character.
+     *             If the parse fails, the position in unchanged upon output.
+     * @return     if parse succeeds, a pointer to a newly-created CurrencyAmount
+     *             object (owned by the caller) containing information about
+     *             the parsed currency; if parse fails, this is NULL.
+     * @draft ICU 49
      */
-    virtual Formattable& parseCurrency(const UnicodeString& text,
-                                       Formattable& result,
-                                       ParsePosition& pos) const;
+    virtual CurrencyAmount* parseCurrency(const UnicodeString& text,
+                                          ParsePosition& pos) const;
 
     /**
      * Returns the decimal format symbols, which is generally not changed
@@ -1863,7 +1965,7 @@ private:
      *   Initialize all fields of a new DecimalFormatter.
      *      Common code for use by constructors.
      */
-    void init();
+    void init(UErrorCode& status);
 
     /**
      * Do real work of constructing a new DecimalFormat.
@@ -1936,13 +2038,14 @@ private:
     UnicodeString& subformat(UnicodeString& appendTo,
                              FieldPositionHandler& handler,
                              DigitList&     digits,
-                             UBool          isInteger) const;
+                             UBool          isInteger, 
+                             UErrorCode &status) const;
 
 
     void parse(const UnicodeString& text,
                Formattable& result,
                ParsePosition& pos,
-               UBool parseCurrency) const;
+               UChar* currency) const;
 
     enum {
         fgStatusInfinite,
@@ -2091,10 +2194,12 @@ private:
 
     UnicodeString& _format(int64_t number,
                            UnicodeString& appendTo,
-                           FieldPositionHandler& handler) const;
+                           FieldPositionHandler& handler,
+                           UErrorCode &status) const;
     UnicodeString& _format(double number,
                            UnicodeString& appendTo,
-                           FieldPositionHandler& handler) const;
+                           FieldPositionHandler& handler,
+                           UErrorCode &status) const;
     UnicodeString& _format(const DigitList &number,
                            UnicodeString& appendTo,
                            FieldPositionHandler& handler,
@@ -2142,6 +2247,11 @@ private:
     int8_t                  fMinExponentDigits;
     UBool                   fExponentSignAlwaysShown;
 
+    EnumSet<UNumberFormatAttribute,
+            UNUM_MAX_NONBOOLEAN_ATTRIBUTE+1, 
+            UNUM_LIMIT_BOOLEAN_ATTRIBUTE>  
+                            fBoolFlags;
+
     DigitList*              fRoundingIncrement;  // NULL if no rounding increment specified.
     ERoundingMode           fRoundingMode;
 
@@ -2177,7 +2287,7 @@ private:
      * and plural currency style. And the patterns are set through applyPattern.
      */
     // TODO: innerclass?
-	/* This is not needed in the class declaration, so it is moved into decimfmp.cpp
+    /* This is not needed in the class declaration, so it is moved into decimfmp.cpp
     struct AffixPatternsForCurrency : public UMemory {
         // negative prefix pattern
         UnicodeString negPrefixPatternForCurrency;
@@ -2207,7 +2317,7 @@ private:
      * equals to 3, such as the pattern contains 3 currency sign or
      * the formatter style is currency plural format style.
      */
-	/* This is not needed in the class declaration, so it is moved into decimfmp.cpp
+    /* This is not needed in the class declaration, so it is moved into decimfmp.cpp
     struct AffixesForCurrency : public UMemory {
         // negative prefix
         UnicodeString negPrefixForCurrency;
@@ -2260,6 +2370,11 @@ private:
     // Information needed for DecimalFormat to format/parse currency plural.
     CurrencyPluralInfo* fCurrencyPluralInfo;
 
+#if UCONFIG_HAVE_PARSEALLINPUT
+    UNumberFormatAttributeValue fParseAllInput;
+#endif
+
+
 protected:
 
     /**
@@ -2292,6 +2407,21 @@ protected:
      * @stable ICU 2.8
      */
     static const int32_t  kMaxScientificIntegerDigits;
+
+#if UCONFIG_FORMAT_FASTPATHS_49
+ private:
+    /**
+     * Internal state. 
+     * @internal
+     */
+    uint8_t fReserved[UNUM_DECIMALFORMAT_INTERNAL_SIZE];
+
+
+    /**
+     * Called whenever any state changes. Recomputes whether fastpath is OK to use.
+     */
+    void handleChanged();
+#endif
 };
 
 inline UnicodeString&
@@ -2317,10 +2447,13 @@ DecimalFormat::format(int32_t number,
     return format((int64_t)number, appendTo, pos);
 }
 
+#ifndef U_HIDE_INTERNAL_API
 inline const UnicodeString &
 DecimalFormat::getConstSymbol(DecimalFormatSymbols::ENumberFormatSymbol symbol) const {
     return fSymbols->getConstSymbol(symbol);
 }
+
+#endif
 
 U_NAMESPACE_END
 

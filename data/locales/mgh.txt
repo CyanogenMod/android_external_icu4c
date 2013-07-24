@@ -1,9 +1,9 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/mgh.xml
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/mgh.xml
 // *
 // ***************************************************************************
 /**
@@ -24,9 +24,13 @@ mgh{
             }
         }
     }
-    Version{"2.0.58.81"}
+    Version{"2.0.77.46"}
     calendar{
         gregorian{
+            AmPmMarkers{
+                "wichishu",
+                "mchochil'l",
+            }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",
@@ -43,7 +47,7 @@ mgh{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"EEE d"}
+                Ed{"E d"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
@@ -58,13 +62,13 @@ mgh{
                 ms{"m:ss"}
                 y{"y"}
                 yM{"M/y"}
-                yMEd{"EEE, M/d/y"}
+                yMEd{"E, M/d/y"}
                 yMMM{"MMM y"}
-                yMMMEd{"EEE, MMM d, y"}
+                yMMMEd{"E, MMM d, y"}
                 yMMMd{"MMM d, y"}
                 yMd{"d/M/y"}
-                yQ{"Q y"}
                 yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
             }
             dayNames{
                 format{
@@ -118,9 +122,6 @@ mgh{
                         "1"{"me'llo"}
                     }
                 }
-                dayperiod{
-                    dn{"nihuku"}
-                }
                 era{
                     dn{"kal'lai"}
                 }
@@ -144,9 +145,6 @@ mgh{
                 }
                 year{
                     dn{"yaka"}
-                }
-                zone{
-                    dn{""}
                 }
             }
             monthNames{

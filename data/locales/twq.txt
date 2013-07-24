@@ -1,9 +1,9 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/twq.xml
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/twq.xml
 // *
 // ***************************************************************************
 /**
@@ -11,7 +11,7 @@
  */
 twq{
     AuxExemplarCharacters{"[v]"}
-    ExemplarCharacters{"[a ã b c d e ẽ f g h i j k l m n ŋ ɲ o õ p q r s š t u w x y z ž ]"}
+    ExemplarCharacters{"[a ã b c d e ẽ f g h i j k l m n ɲ ŋ o õ p q r s š t u w x y z ž]"}
     LocaleScript{
         "Latn",
     }
@@ -28,9 +28,13 @@ twq{
             }
         }
     }
-    Version{"2.0.57.98"}
+    Version{"2.0.77.46"}
     calendar{
         gregorian{
+            AmPmMarkers{
+                "Subbaahi",
+                "Zaarikay b",
+            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -47,11 +51,11 @@ twq{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"EEE d"}
+                Ed{"E d"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
-                MEd{"EEE d/M"}
+                MEd{"E d/M"}
                 MMM{"LLL"}
                 MMMEd{"E d MMM"}
                 MMMd{"d MMM"}
@@ -62,13 +66,13 @@ twq{
                 ms{"m:ss"}
                 y{"y"}
                 yM{"M/y"}
-                yMEd{"EEE d/M/y"}
+                yMEd{"E d/M/y"}
                 yMMM{"MMM y"}
-                yMMMEd{"EEE d MMM y"}
+                yMMMEd{"E d MMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"d/M/y"}
-                yQ{"Q y"}
                 yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
             }
             dayNames{
                 format{
@@ -77,8 +81,8 @@ twq{
                         "Ati",
                         "Ata",
                         "Ala",
-                        "Ala",
-                        "Ala",
+                        "Alm",
+                        "Alz",
                         "Asi",
                     }
                     wide{
@@ -86,8 +90,8 @@ twq{
                         "Atinni",
                         "Atalaata",
                         "Alarba",
-                        "Alarba",
-                        "Alarba",
+                        "Alhamiisa",
+                        "Alzuma",
                         "Asibti",
                     }
                 }
@@ -142,9 +146,6 @@ twq{
                 }
                 week{
                     dn{"Hebu"}
-                }
-                weekday{
-                    dn{"Zaari"}
                 }
                 year{
                     dn{"Jiiri"}
@@ -220,8 +221,8 @@ twq{
         }
     }
     delimiters{
-        alternateQuotationEnd{"»"}
-        alternateQuotationStart{"«"}
+        alternateQuotationEnd{"’"}
+        alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
     }
