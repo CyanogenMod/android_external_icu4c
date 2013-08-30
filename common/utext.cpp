@@ -691,7 +691,10 @@ utext_close(UText *ut) {
     return ut;
 }
 
-
+U_CAPI UText * U_EXPORT2
+utext_close_48(UText *ut) {
+	return utext_close(ut);
+}
 
 
 //
@@ -2613,6 +2616,11 @@ utext_openUChars(UText *ut, const UChar *s, int64_t length, UErrorCode *status) 
         ut->nativeIndexingLimit  = ut->chunkLength;
     }
     return ut;
+}
+
+U_CAPI UText * U_EXPORT2
+utext_openUChars_48(UText *ut, const UChar *s, int64_t length, UErrorCode *status) {
+	return utext_openUChars(ut, s, length, status);
 }
 
 
