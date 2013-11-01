@@ -24,6 +24,7 @@
 
 import getopt
 import glob
+import os
 import os.path
 import re
 import shutil
@@ -68,8 +69,19 @@ def MakeDat(input_file, stubdata_dir):
   GenResIndex(input_file)
   CopyAndroidCnvFiles(stubdata_dir)
   # Run "icupkg -tl -s icudtXXl -a icu-data-default.txt new icudtXXl.dat".
-  args = ["-tl", "-s", TMP_DAT_PATH, "-a", input_file, "new", ICU_DATA + ".dat"]
+  args = ["-tl", "-s", TMP_DAT_PATH, "-a", "add_list.txt", "new", ICU_DATA + ".dat"]
   InvokeIcuTool("icupkg", TMP_DAT_PATH, args)
+
+
+def ResFilesToLocales(res_files):
+  locales = []
+  for res_file in res_files:
+    # res_file is something like 'coll/en_US.res'.
+    if not '/' in res_file:
+      locales.append(res_file)
+    else:
+      locales.append(res_file.split('/')[1].replace('.res', ''))
+  return locales
 
 
 def WriteIndex(path, locales):
@@ -78,7 +90,7 @@ def WriteIndex(path, locales):
   f = open(path, "w")
   f.write("res_index:table(nofallback) {\n")
   f.write("  InstalledLocales {\n")
-  for locale in locales:
+  for locale in sorted(locales):
     f.write(locale + empty_value)
 
   f.write("  }\n")
@@ -96,12 +108,30 @@ def AddResFile(collection, path):
   return
 
 
+def AddAllResFiles(collection, dir_name, language):
+  pattern1 = '%s/data/%s/%s.txt' % (ICU4C_DIR, dir_name, language)
+  pattern2 = '%s/data/%s/%s_*.txt' % (ICU4C_DIR, dir_name, language)
+  for path in glob.glob(pattern1) + glob.glob(pattern2):
+    if 'TRADITIONAL' in path or 'PHONEBOOK' in path:
+      continue
+    parts = path.split('/')
+    if dir_name == 'locales':
+      path = parts[-1].replace('.txt', '')
+    else:
+      path = parts[-2] + '/' + parts[-1].replace('.txt', '.res')
+    collection.add(path)
+
+
+def DumpFile(filename):
+  print ' ----------------- %s' % filename
+  os.system("cat %s" % filename)
+  print ' ----------------- END'
+
+
 # Open input file (such as icu-data-default.txt).
-# Go through the list and generate res_index.txt for locales, brkitr,
+# Go through the list and generate res_index.res for locales, brkitr,
 # coll, et cetera.
 def GenResIndex(input_file):
-  res_index = "res_index.txt"
-
   brkitrs = set()
   colls = set()
   currs = set()
@@ -110,7 +140,103 @@ def GenResIndex(input_file):
   regions = set()
   zones = set()
 
+  languages = [
+    # Group 0.
+    'en',
+
+    # Group 1.
+    'ar',
+    'zh',
+    'nl',
+    'fr',
+    'de',
+    'it',
+    'ja',
+    'ko',
+    'pl',
+    'pt',
+    'ru',
+    'es',
+    'th',
+    'tr',
+
+    # Group 2.
+    'bg',
+    'ca',
+    'hr',
+    'cs',
+    'da',
+    'fil','tl',
+    'fi',
+    'el',
+    'iw','he',
+    'hi',
+    'hu',
+    'id','in',
+    'lv',
+    'lt',
+    'nb',
+    'ro',
+    'sr',
+    'sk',
+    'sl',
+    'sv',
+    'uk',
+    'vi',
+    'fa',
+
+    # Group 3.
+    'af',
+    'am',
+    'bn',
+    'et',
+    'is',
+    'ms',
+    'mr',
+    'sw',
+    'ta',
+    'zu',
+
+    # Group 4.
+    'eu',
+    'gl',
+    'gu',
+    'kn',
+    'ml',
+    'te',
+    'ur',
+
+    # Group 5.
+    'km',
+    'lo',
+    'ne',
+    'si',
+    'ka',
+    'hy',
+    'mn',
+    'cy',
+
+    # Others.
+    'az',
+    'be',
+    'rm',
+  ]
+
+  for language in languages:
+    AddAllResFiles(brkitrs, 'brkitr', language)
+    AddAllResFiles(colls, 'coll', language)
+    AddAllResFiles(currs, 'curr', language)
+    AddAllResFiles(langs, 'lang', language)
+    AddAllResFiles(regions, 'region', language)
+    AddAllResFiles(zones, 'zone', language)
+    AddAllResFiles(locales, 'locales', language)
+
+  # We need to merge the human-edited icu-data-default.txt with the
+  # machine-generated list of files needed to support the various languages.
+  new_add_list = []
+
   for line in open(input_file, "r"):
+    new_add_list.append(line)
     if "root." in line or "res_index" in line or "_.res" in line:
       continue
     if "brkitr/" in line:
@@ -126,13 +252,14 @@ def GenResIndex(input_file):
     elif "zone/" in line:
       AddResFile(zones, line)
     elif ".res" in line:
+      # TODO: these should all now be misc resources!
       # We need to determine the resource is locale resource or misc resource.
       # To determine the locale resource, we assume max script length is 3.
       end = line.find(".res")
       if end <= 3 or (line.find("_") <= 3 and line.find("_") > 0):
         locales.add(line[:end])
 
-  kind_to_locales = {
+  kind_to_res_files = {
       "brkitr": brkitrs,
       "coll": colls,
       "curr": currs,
@@ -142,47 +269,46 @@ def GenResIndex(input_file):
       "zone": zones
   }
 
-  # Find every locale we've mentioned, for whatever reason.
-  every_locale = set()
-  for locales in kind_to_locales.itervalues():
-    every_locale = every_locale.union(locales)
+  # Merge the machine-generated list into the human-generated list.
+  for kind, res_files in kind_to_res_files.items():
+    for res_file in sorted(res_files):
+      if '.' not in res_file:
+        res_file = res_file + '.res'
+      new_add_list.append(res_file)
 
   if VERBOSE:
-    for kind, locales in kind_to_locales.items():
-      print "%s=%s" % (kind, sorted(locales))
-
-  # Print a human-readable list of the languages supported.
-  every_language = set()
-  for locale in every_locale:
-    language = re.sub(r"(_.*)", "", locale)
-    if language != "pool" and language != "supplementalData":
-      every_language.add(language)
-  input_basename = os.path.basename(input_file)
-  print "%s includes %s." % (input_basename, ", ".join(sorted(every_language)))
-
-  # Find cases where we've included only part of a locale's data.
-  missing_files = []
-  for locale in every_locale:
-    for kind, locales in kind_to_locales.items():
-      p = os.path.join(ICU4C_DIR, "data", kind, locale + ".txt")
-      if not locale in locales and os.path.exists(p):
-        missing_files.append(p)
-
-  # Warn about the missing files.
-  for missing_file in sorted(missing_files):
-    relative_path = "/".join(missing_file.split("/")[-2:])
-    print "warning: missing data for supported locale: %s" % relative_path
+    for kind, res_files in kind_to_res_files.items():
+      print "%s=%s" % (kind, sorted(res_files))
 
   # Write the genrb input files.
+
+  # First add_list.txt, the argument to icupkg -a...
+  f = open(os.path.join(TMP_DAT_PATH, "add_list.txt"), "w")
+  for line in new_add_list:
+    if line.startswith('#'):
+      continue
+    f.write("%s\n" % line)
+  f.close()
+
+  # Second res_index.txt, used below by genrb.
+  res_index = "res_index.txt"
   WriteIndex(os.path.join(TMP_DAT_PATH, res_index), locales)
-  for kind, locales in kind_to_locales.items():
+  for kind, res_files in kind_to_res_files.items():
     if kind == "locales":
       continue
-    WriteIndex(os.path.join(TMP_DAT_PATH, kind, res_index), locales)
+    res_index_filename = os.path.join(TMP_DAT_PATH, kind, res_index)
+    WriteIndex(res_index_filename, ResFilesToLocales(res_files))
+    if VERY_VERBOSE:
+      DumpFile(res_index_filename)
+
+  # Useful if you need to see the temporary input files we generated.
+  if VERY_VERBOSE:
+    DumpFile('%s/add_list.txt' % TMP_DAT_PATH)
+    DumpFile('%s/res_index.txt' % TMP_DAT_PATH)
 
   # Call genrb to generate new res_index.res.
   InvokeIcuTool("genrb", TMP_DAT_PATH, [res_index])
-  for kind, locales in kind_to_locales.items():
+  for kind, res_files in kind_to_res_files.items():
     if kind == "locales":
       continue
     InvokeIcuTool("genrb", os.path.join(TMP_DAT_PATH, kind), [res_index])
@@ -191,11 +317,11 @@ def GenResIndex(input_file):
 def CopyAndroidCnvFiles(stubdata_dir):
   android_specific_cnv = ["gsm-03.38-2000.cnv",
                           "iso-8859_16-2001.cnv",
-                          "docomo-shift_jis-2007.cnv",
+                          "docomo-shift_jis-2012.cnv",
                           "kddi-jisx-208-2007.cnv",
-                          "kddi-shift_jis-2007.cnv",
+                          "kddi-shift_jis-2012.cnv",
                           "softbank-jisx-208-2007.cnv",
-                          "softbank-shift_jis-2007.cnv"]
+                          "softbank-shift_jis-2012.cnv"]
   for cnv_file in android_specific_cnv:
     src_path = os.path.join(stubdata_dir, "cnv", cnv_file)
     dst_path = os.path.join(TMP_DAT_PATH, cnv_file)
@@ -211,13 +337,13 @@ def main():
   global ICU_DATA           # e.g. "icudt50l"
   global TMP_DAT_PATH       # Temporary directory to store all resource files and
                             # intermediate dat files.
-  global VERBOSE
+  global VERBOSE, VERY_VERBOSE
 
-  VERBOSE = False
+  VERBOSE = VERY_VERBOSE = False
 
   show_help = False
   try:
-    opts, args = getopt.getopt(sys.argv[1:], "hv", ["help", "verbose"])
+    opts, args = getopt.getopt(sys.argv[1:], "hv", ["help", "verbose", "very-verbose"])
   except getopt.error:
     PrintHelpAndExit()
   for opt, _ in opts:
@@ -225,6 +351,8 @@ def main():
       show_help = True
     elif opt in ("-v", "--verbose"):
       VERBOSE = True
+    elif opt in ("--very-verbose"):
+      VERY_VERBOSE = VERBOSE = True
   if args:
     show_help = True
 

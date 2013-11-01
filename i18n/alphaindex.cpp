@@ -132,12 +132,9 @@ public:
         }
     }
 
-    virtual ~BucketList() {
-        delete bucketList_;
-        if (immutableVisibleList_ != bucketList_) {
-            delete immutableVisibleList_;
-        }
-    }
+    // The virtual destructor must not be inline.
+    // See ticket #8454 for details.
+    virtual ~BucketList();
 
     int32_t getBucketCount() const {
         return immutableVisibleList_->size();
@@ -171,6 +168,13 @@ public:
     /** Just the visible buckets. */
     UVector *immutableVisibleList_;
 };
+
+BucketList::~BucketList() {
+    delete bucketList_;
+    if (immutableVisibleList_ != bucketList_) {
+        delete immutableVisibleList_;
+    }
+}
 
 AlphabeticIndex::ImmutableIndex::~ImmutableIndex() {
     delete buckets_;
@@ -241,7 +245,7 @@ AlphabeticIndex &AlphabeticIndex::addLabels(const UnicodeSet &additions, UErrorC
 
 
 AlphabeticIndex &AlphabeticIndex::addLabels(const Locale &locale, UErrorCode &status) {
-    addIndexExemplars(locale, status);
+    addIndexExemplars(&locale, status);
     clearBuckets();
     return *this;
 }
@@ -705,12 +709,13 @@ void AlphabeticIndex::internalResetBucketIterator() {
 }
 
 
-void AlphabeticIndex::addIndexExemplars(const Locale &locale, UErrorCode &status) {
+void AlphabeticIndex::addIndexExemplars(const Locale *locale, UErrorCode &status) {
     if (U_FAILURE(status)) { return; }
     // Chinese index characters, which are specific to each of the several Chinese tailorings,
     // take precedence over the single locale data exemplar set per language.
-    const char *language = locale.getLanguage();
-    if (uprv_strcmp(language, "zh") == 0 || uprv_strcmp(language, "ja") == 0 ||
+    const char *language = locale == NULL ? NULL : locale->getLanguage();
+    if (language == NULL ||
+            uprv_strcmp(language, "zh") == 0 || uprv_strcmp(language, "ja") == 0 ||
             uprv_strcmp(language, "ko") == 0) {
         // TODO: This should be done regardless of the language, but it's expensive.
         // We should add a Collator function (can be @internal)
@@ -719,8 +724,9 @@ void AlphabeticIndex::addIndexExemplars(const Locale &locale, UErrorCode &status
             return;
         }
     }
+    if (locale == NULL) { return; }
 
-    LocalULocaleDataPointer uld(ulocdata_open(locale.getName(), &status));
+    LocalULocaleDataPointer uld(ulocdata_open(locale->getName(), &status));
     if (U_FAILURE(status)) {
         return;
     }
@@ -773,7 +779,7 @@ void AlphabeticIndex::addIndexExemplars(const Locale &locale, UErrorCode &status
     while (it.next()) {
         const UnicodeString &exemplarC = it.getString();
         upperC = exemplarC;
-        upperC.toUpper(locale);
+        upperC.toUpper(*locale);
         initialLabels_->add(upperC);
     }
 }
@@ -959,22 +965,38 @@ void AlphabeticIndex::init(const Locale *locale, UErrorCode &status) {
     firstCharsInScripts_ = firstStringsInScript(status);
     if (U_FAILURE(status)) { return; }
     firstCharsInScripts_->sortWithUComparator(collatorComparator, collatorPrimaryOnly_, status);
+
+    // Add index exemplar characters before checking the script boundaries,
+    // since this might modify them.
+    addIndexExemplars(locale, status);
+
     UnicodeString _4E00((UChar)0x4E00);
-    UnicodeString _1100((UChar)0x1100);
-    UnicodeString _1112((UChar)0x1112);
-    if (collatorPrimaryOnly_->compare(_4E00, _1112, status) <= 0 &&
-            collatorPrimaryOnly_->compare(_1100, _4E00, status) <= 0) {
-        // The standard Korean tailoring sorts Hanja (Han characters)
-        // as secondary differences from Hangul syllables.
-        // This makes U+4E00 not useful as a Han-script boundary.
+    int32_t hanIndex = binarySearch(
+            *firstCharsInScripts_, _4E00, *collatorPrimaryOnly_);
+    if (hanIndex >= 0) {
+        // Adjust the Han script boundary if necessary.
         // TODO: This becomes obsolete when the root collator gets
         // reliable script-first-primary mappings.
-        int32_t hanIndex = binarySearch(
-                *firstCharsInScripts_, _4E00, *collatorPrimaryOnly_);
-        if (hanIndex >= 0) {
+        UnicodeString _1100((UChar)0x1100);
+        UnicodeString _1112((UChar)0x1112);
+        UnicodeString _4E9C((UChar)0x4E9C);
+        if (collatorPrimaryOnly_->compare(_4E00, _1112, status) <= 0 &&
+                collatorPrimaryOnly_->compare(_1100, _4E00, status) <= 0) {
+            // The standard Korean tailoring sorts Hanja (Han characters)
+            // as secondary differences from Hangul syllables.
+            // This makes U+4E00 not useful as a Han-script boundary.
             firstCharsInScripts_->removeElementAt(hanIndex);
+        } else if (collatorPrimaryOnly_->compare(_4E9C, _4E00, status) < 0) {
+            // The standard Japanese tailoring sorts U+4E9C first among Kanji.
+            UnicodeString *fh = new UnicodeString(_4E9C);
+            if (fh == NULL) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                return;
+            }
+            firstCharsInScripts_->setElementAt(fh, hanIndex);
         }
     }
+
     // Guard against a degenerate collator where
     // some script boundary strings are primary ignorable.
     for (;;) {
@@ -991,10 +1013,6 @@ void AlphabeticIndex::init(const Locale *locale, UErrorCode &status) {
         } else {
             break;
         }
-    }
-
-    if (locale != NULL) {
-        addIndexExemplars(*locale, status);
     }
 }
 

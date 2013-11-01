@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*****************************************************************************
@@ -178,10 +178,6 @@ static void TestSurrogateBehaviour(){
             log_err("u-> ibm-1363 [UCNV_MBCS] not match.\n");
     }
 
-   /* BEGIN android-removed */
-   /* To save space, Android does not build full ISO2022 CJK tables.
-      We skip the tests for ISO-2022. */
-   /* 
     log_verbose("Testing for ISO-2022-jp\n");
     {
         UChar    sampleText[] =   { 0x4e00, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
@@ -201,6 +197,10 @@ static void TestSurrogateBehaviour(){
             log_err("u->  not match.\n");
     }
 
+   /* BEGIN android-removed */
+   /* To save space, Android does not build full ISO-2022-CN tables.
+      We skip the tests for ISO-2022-CN. */
+   /* 
     log_verbose("Testing for ISO-2022-cn\n");
     {
         static const UChar    sampleText[] =   { 0x4e00, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
@@ -230,6 +230,8 @@ static void TestSurrogateBehaviour(){
                 expected, sizeof(expected), "iso-2022-cn", offsets , TRUE, U_ZERO_ERROR))
             log_err("u-> not match.\n");
     }
+    */
+    /* END android-removed */
 
         log_verbose("Testing for ISO-2022-kr\n");
     {
@@ -260,8 +262,6 @@ static void TestSurrogateBehaviour(){
                 expected, sizeof(expected), "iso-2022-kr", offsets , TRUE, U_ZERO_ERROR))
             log_err("u-> iso-2022-kr [UCNV_DBCS] not match.\n");
     }
-    */
-    /* END android-removed */
 
         log_verbose("Testing for HZ\n");
     {
@@ -387,14 +387,8 @@ static void TestErrorBehaviour(){
         static const uint8_t expected3MBCS[] = { 0x01, 0xa2, 0xb4, 0xa1, 0xe0};
         static const int32_t offsets3MBCS[]        = { 0x00, 0x01, 0x01, 0x02, 0x02};
 
-        /* BEGIN android-changed */
-        /* Android uses a different EUC-JP table. We change one character,
-         * choosing a mapping that is common to both tables. */
-        static const UChar       sampleText4MBCS[] = { 0x0061, 0x9ED1, 0xdc01};
-        static const uint8_t expected4MBCS[] = { 0x61, 0x8f, 0xf4, 0xf8, 0xf4, 0xfe};
-        /* static const UChar       sampleText4MBCS[] = { 0x0061, 0xFFE4, 0xdc01}; */
-        /* static const uint8_t expected4MBCS[] = { 0x61, 0x8f, 0xa2, 0xc3, 0xf4, 0xfe}; */
-        /* END android-changed */
+        static const UChar       sampleText4MBCS[] = { 0x0061, 0xFFE4, 0xdc01};
+        static const uint8_t expected4MBCS[] = { 0x61, 0x8f, 0xa2, 0xc3, 0xf4, 0xfe};
         static const int32_t offsets4MBCS[]        = { 0x00, 0x01, 0x01, 0x01, 0x02, 0x02 };
 
         /*DBCS*/
@@ -402,14 +396,14 @@ static void TestErrorBehaviour(){
                 expectedSUB, sizeof(expectedSUB), "ibm-1363", 0, TRUE, U_ZERO_ERROR))
             log_err("u-> ibm-1363 [UCNV_DBCS portion] is supposed to fail\n");
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-                expected, sizeof(expected), "ibm-1363", 0, FALSE, U_ZERO_ERROR))
+                expected, sizeof(expected), "ibm-1363", 0, FALSE, U_AMBIGUOUS_ALIAS_WARNING))
             log_err("u-> ibm-1363 [UCNV_DBCS portion] is supposed to fail\n");
 
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
                 expectedSUB, sizeof(expectedSUB), "ibm-1363", offsetsSUB, TRUE, U_ZERO_ERROR))
             log_err("u-> ibm-1363 [UCNV_DBCS portion] is supposed to fail\n");
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-                expected, sizeof(expected), "ibm-1363", offsets, FALSE, U_ZERO_ERROR))
+                expected, sizeof(expected), "ibm-1363", offsets, FALSE, U_AMBIGUOUS_ALIAS_WARNING))
             log_err("u-> ibm-1363 [UCNV_DBCS portion] is supposed to fail\n");
 
         
@@ -425,7 +419,7 @@ static void TestErrorBehaviour(){
                 expectedSUB, sizeof(expectedSUB), "ibm-1363", 0, TRUE, U_ZERO_ERROR))
             log_err("u-> ibm-1363 [UCNV_MBCS] \n");
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-                expected, sizeof(expected), "ibm-1363", 0, FALSE, U_ZERO_ERROR))
+                expected, sizeof(expected), "ibm-1363", 0, FALSE, U_AMBIGUOUS_ALIAS_WARNING))
             log_err("u-> ibm-1363 [UCNV_MBCS] \n");
 
         if(!convertFromU(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
@@ -446,17 +440,13 @@ static void TestErrorBehaviour(){
             log_err("u-> ibm-1363 [UCNV_MBCS] \n");
 
         if(!convertFromU(sampleText4MBCS, sizeof(sampleText4MBCS)/sizeof(sampleText4MBCS[0]),
-                expected4MBCS, sizeof(expected4MBCS), "euc-jp", offsets4MBCS, TRUE, U_ZERO_ERROR))
+                expected4MBCS, sizeof(expected4MBCS), "IBM-eucJP", offsets4MBCS, TRUE, U_ZERO_ERROR))
             log_err("u-> euc-jp [UCNV_MBCS] \n");
         if(!convertFromU(sampleText4MBCS, sizeof(sampleText4MBCS)/sizeof(sampleText4MBCS[0]),
-                expected4MBCS, sizeof(expected4MBCS), "euc-jp", offsets4MBCS, FALSE, U_ZERO_ERROR))
+                expected4MBCS, sizeof(expected4MBCS), "IBM-eucJP", offsets4MBCS, FALSE, U_ZERO_ERROR))
             log_err("u-> euc-jp [UCNV_MBCS] \n");
     }
 
-    /* BEGIN android-removed */
-    /* To save space, Android does not build full ISO2022 CJK tables.
-       We skip the tests for ISO-2022. */
-    /*
     // iso-2022-jp
     log_verbose("Testing for iso-2022-jp\n");
     {
@@ -475,9 +465,15 @@ static void TestErrorBehaviour(){
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
                 expectedSUB, sizeof(expectedSUB), "iso-2022-jp", offsets, TRUE, U_ZERO_ERROR))
             log_err("u-> iso-2022-jp [UCNV_MBCS] \n");
+        // Google Patch: Change expected result code from U_AMBIGUOUS_ALIAS_WARNING to U_ZERO_ERROR.
+        //               Introduced with ICU 51.1.
+        //               Markus says this warning can occur when the set of available converters is changed,
+        //               and that it's not worth looking into in further detail.
+        //               Note: public ICU was U_ZERO_ERROR prior to ICU 51.
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
                 expected, sizeof(expected), "iso-2022-jp", offsets, FALSE, U_ZERO_ERROR))
-            log_err("u-> ibm-1363 [UCNV_MBCS] \n");
+            log_err("u-> iso-2022-jp [UCNV_MBCS] \n");
+        // End of Google Patch.
 
         if(!convertFromU(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
                 expected2, sizeof(expected2), "iso-2022-jp", offsets2, TRUE, U_ZERO_ERROR))
@@ -497,6 +493,10 @@ static void TestErrorBehaviour(){
             log_err("u-> iso-2022-jp [UCNV_MBCS] \n");
     }
 
+    /* BEGIN android-removed */
+    /* To save space, Android does not build full ISO-2022-CN tables.
+       We skip the tests for ISO-2022-CN. */
+    /*
     // iso-2022-cn  android-change
     log_verbose("Testing for iso-2022-cn\n");
     {
@@ -547,6 +547,8 @@ static void TestErrorBehaviour(){
                 expected4MBCS, sizeof(expected4MBCS), "iso-2022-cn", offsets4MBCS, FALSE, U_ZERO_ERROR))
             log_err("u-> iso-2022-cn [UCNV_MBCS] \n");
     }
+    */
+    /* END android-removed */
 
     // iso-2022-kr  android-change
     log_verbose("Testing for iso-2022-kr\n");
@@ -588,8 +590,6 @@ static void TestErrorBehaviour(){
                 expected3MBCS, sizeof(expected3MBCS), "iso-2022-kr", offsets3MBCS, FALSE, U_ZERO_ERROR))
             log_err("u-> iso-2022-kr[UCNV_MBCS] \n");
     }
-    */
-    /* END android-removed */
 
     /*HZ*/
     log_verbose("Testing for HZ\n");
@@ -654,10 +654,10 @@ static void TestToUnicodeErrorBehaviour()
         const UChar expected[] = { 0x00a1 };
         
         if(!convertToU(sampleText, sizeof(sampleText), 
-                expected, sizeof(expected)/sizeof(expected[0]), "ibm-1363", 0, TRUE, U_ZERO_ERROR ))
+                expected, sizeof(expected)/sizeof(expected[0]), "ibm-1363", 0, TRUE, U_AMBIGUOUS_ALIAS_WARNING ))
             log_err("DBCS (ibm-1363)->Unicode  did not match.\n");
         if(!convertToU(sampleText, sizeof(sampleText), 
-                expected, sizeof(expected)/sizeof(expected[0]), "ibm-1363", 0, FALSE, U_ZERO_ERROR ))
+                expected, sizeof(expected)/sizeof(expected[0]), "ibm-1363", 0, FALSE, U_AMBIGUOUS_ALIAS_WARNING ))
             log_err("DBCS (ibm-1363)->Unicode  with flush = false did not match.\n");
     }
     log_verbose("Testing error conditions for SBCS\n");
@@ -1572,10 +1572,6 @@ static void TestResetBehaviour(void){
 
     }
 
-    /* BEGIN android-removed */
-    /* To save space, Android does not build full ISO2022 CJK tables.
-       We skip the tests for ISO-2022. */
-    /*
     log_verbose("Testing Reset for ISO-2022-jp\n");
     {
         static const UChar    sampleText[] =   { 0x4e00, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
@@ -1607,6 +1603,10 @@ static void TestResetBehaviour(void){
 
     }
 
+    /* BEGIN android-removed */
+    /* To save space, Android does not build full ISO-2022-CN tables.
+       We skip the tests for ISO-2022-CN. */
+    /*
     log_verbose("Testing Reset for ISO-2022-cn\n");
     {
         static const UChar    sampleText[] =   { 0x4e00, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
@@ -1650,6 +1650,8 @@ static void TestResetBehaviour(void){
                 offsets1, TRUE))
            log_err("iso-2022-cn -> did not match.\n");
     }
+    */
+    /* END android-removed */
 
         log_verbose("Testing Reset for ISO-2022-kr\n");
     {
@@ -1698,8 +1700,6 @@ static void TestResetBehaviour(void){
                 offsets1, TRUE))
            log_err("iso-2022-kr -> did not match.\n");
     }
-    */
-    /* END android-removed */
 
 
         log_verbose("Testing Reset for HZ\n");

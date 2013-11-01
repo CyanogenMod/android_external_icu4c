@@ -74,11 +74,13 @@ DecimalFormatSymbols::DecimalFormatSymbols(const Locale& loc, UErrorCode& status
     initialize(locale, status);
 }
 
-// BEGIN android-added: we need a default constructor for performance.
+// BEGIN android-added: we need a default constructor for performance (http://bugs.icu-project.org/trac/ticket/7392).
 // -------------------------------------
 
 DecimalFormatSymbols::DecimalFormatSymbols()
 {
+    *validLocale = *actualLocale = 0;
+    currPattern = NULL;
     initialize();
 }
 // END android-added
@@ -417,10 +419,6 @@ DecimalFormatSymbols::initialize() {
     fSymbols[kNaNSymbol] = (UChar)0xfffd;               // SUB NaN
     fSymbols[kSignificantDigitSymbol] = (UChar)0x0040;  // '@' significant digit
     fSymbols[kMonetaryGroupingSeparatorSymbol].remove(); // 
-
-    // BEGIN android-added
-    *validLocale = *actualLocale = 0;
-    // END android-added
 }
 
 Locale

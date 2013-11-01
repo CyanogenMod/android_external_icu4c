@@ -49,6 +49,7 @@ src_files := \
 	unorm_it.c         uresbund.cpp       \
 	ures_cnv.c         uresdata.c         \
 	usc_impl.c         uscript.c          \
+	uscript_props.cpp  \
 	ushape.cpp         ustrcase.cpp       \
 	ustr_cnv.c         ustrfmt.c          \
 	ustring.cpp        ustrtrns.cpp       \
@@ -129,7 +130,8 @@ local_cflags += -DU_HAVE_NL_LANGINFO_CODESET=0
 # bionic has timezone instead of __timezone.
 local_cflags += -DU_TIMEZONE=timezone
 
-local_cflags += -D_REENTRANT -DU_COMMON_IMPLEMENTATION
+local_cflags += -D_REENTRANT
+local_cflags += -DU_COMMON_IMPLEMENTATION
 
 local_cflags += -O3 -fvisibility=hidden
 local_ldlibs := -ldl -lm -lpthread
@@ -140,15 +142,17 @@ local_ldlibs := -ldl -lm -lpthread
 #
 
 include $(CLEAR_VARS)
-LOCAL_SRC_FILES := $(src_files)
-LOCAL_C_INCLUDES := $(c_includes) \
-                    abi/cpp/include
-LOCAL_CFLAGS := $(local_cflags) -DPIC -fPIC
-LOCAL_RTTI_FLAG := -frtti
-LOCAL_SHARED_LIBRARIES += libgabi++ libdl
+LOCAL_SRC_FILES += $(src_files)
+LOCAL_C_INCLUDES += $(c_includes)
+LOCAL_CFLAGS += $(local_cflags) -DPIC -fPIC
+LOCAL_SHARED_LIBRARIES += libdl
 LOCAL_LDLIBS += $(local_ldlibs)
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := libicuuc
+LOCAL_ADDITIONAL_DEPENDENCIES += $(LOCAL_PATH)/Android.mk
+LOCAL_REQUIRED_MODULES += icu-data
+include abi/cpp/use_rtti.mk
+include external/stlport/libstlport.mk
 include $(BUILD_SHARED_LIBRARY)
 
 
@@ -158,13 +162,13 @@ include $(BUILD_SHARED_LIBRARY)
 
 ifeq ($(WITH_HOST_DALVIK),true)
     include $(CLEAR_VARS)
-    include $(LOCAL_PATH)/../stubdata/root.mk
-    LOCAL_SRC_FILES := $(src_files)
-    LOCAL_C_INCLUDES := $(c_includes)
-    LOCAL_CFLAGS := $(local_cflags)
+    LOCAL_SRC_FILES += $(src_files)
+    LOCAL_C_INCLUDES += $(c_includes)
+    LOCAL_CFLAGS += $(local_cflags)
     LOCAL_LDLIBS += $(local_ldlibs)
-    LOCAL_ADDITIONAL_DEPENDENCIES += $(HOST_OUT)/usr/icu/$(root).dat
     LOCAL_MODULE_TAGS := optional
-    LOCAL_MODULE := libicuuc
+    LOCAL_MODULE := libicuuc-host
+    LOCAL_ADDITIONAL_DEPENDENCIES += $(LOCAL_PATH)/Android.mk
+    LOCAL_REQUIRED_MODULES += icu-data-host
     include $(BUILD_HOST_SHARED_LIBRARY)
 endif

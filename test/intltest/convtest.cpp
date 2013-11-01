@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003-2010, International Business Machines
+*   Copyright (C) 2003-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -118,10 +118,10 @@ ConversionTest::TestToUnicode() {
                 cc.charset=charset;
 
                 // BEGIN android-added
-                // To save space, Android does not build full ISO-2022 tables.
+                // To save space, Android does not build full ISO-2022-CN tables.
                 // We skip the TestGetKeywordValuesForLocale for counting available collations.
                 if (strlen(charset) >= 8 &&
-                    strncmp(charset+4, "2022", 4) == 0) {
+                    strncmp(charset+4, "2022-CN", 4) == 0) {
                     continue;
                 }
                 // END android-added
@@ -240,10 +240,10 @@ ConversionTest::TestFromUnicode() {
                 cc.charset=charset;
 
                 // BEGIN android-added
-                // To save space, Android does not build full ISO-2022 tables.
+                // To save space, Android does not build full ISO-2022-CN tables.
                 // We skip the TestGetKeywordValuesForLocale for counting available collations.
                 if (strlen(charset) >= 8 &&
-                    strncmp(charset+4, "2022", 4) == 0) {
+                    strncmp(charset+4, "2022-CN", 4) == 0) {
                     continue;
                 }
                 // END android-added
@@ -402,10 +402,10 @@ ConversionTest::TestGetUnicodeSet() {
                 s.extract(0, 0x7fffffff, charset, sizeof(charset), "");
 
                 // BEGIN android-added
-                // To save space, Android does not build full ISO-2022 tables.
+                // To save space, Android does not build full ISO-2022-CN tables.
                 // We skip the TestGetKeywordValuesForLocale for counting available collations.
                 if (strlen(charset) >= 8 &&
-                    strncmp(charset+4, "2022", 4) == 0) {
+                    strncmp(charset+4, "2022-CN", 4) == 0) {
                     continue;
                 }
                 // END android-added
@@ -679,11 +679,13 @@ ConversionTest::TestGetUnicodeSet2() {
 
 UConverter *
 ConversionTest::cnv_open(const char *name, UErrorCode &errorCode) {
+    if(name!=NULL && *name=='+') {
+        // Converter names that start with '+' are ignored in ICU4J tests.
+        ++name;
+    }
     if(name!=NULL && *name=='*') {
         /* loadTestData(): set the data directory */
         return ucnv_openPackage(loadTestData(errorCode), name+1, &errorCode);
-    } else if(name!=NULL && *name=='+') {
-        return ucnv_open((name+1), &errorCode);
     } else {
         return ucnv_open(name, &errorCode);
     }

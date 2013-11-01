@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2012, International Business Machines Corporation and
+ * Copyright (c) 1997-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
@@ -430,7 +430,7 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
             log_err("u-> ibm-943 with skip did not match.\n");
 
         if(!testConvertFromUnicode(euc_jp_inputText, sizeof(euc_jp_inputText)/sizeof(euc_jp_inputText[0]),
-                to_euc_jp, sizeof(to_euc_jp), "euc-jp",
+                to_euc_jp, sizeof(to_euc_jp), "IBM-eucJP",
                 UCNV_FROM_U_CALLBACK_SKIP, fromEUC_JPOffs, NULL, 0 ))
             log_err("u-> euc-jp with skip did not match.\n");
 
@@ -753,12 +753,7 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
 
          /* euc-jp*/
         static const uint8_t sampleTxt_euc_jp[]={ 0x61, 0xa1, 0xb8, 0x8f, 0xf4, 0xae,
-            /* BEGIN android-changed */
-            /* Android uses a different EUC-JP table. We change this byte sequence,
-             * choosing one that is unassigned in both tables. */
-            0x8f, 0xa1, 0xa1,  /*unassigned*/
-            /* 0x8f, 0xda, 0xa1, */ /*unassigned*/
-            /* END android-changed */
+            0x8f, 0xda, 0xa1,  /*unassigned*/
            0x8e, 0xe0,
         };
         static const UChar euc_jptoUnicode[]={ 0x0061, 0x4edd, 0x5bec, 0x00a2};
@@ -866,7 +861,7 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
         log_err("EBCIDIC_STATEFUL->u with skip did not match.\n");
 
         if(!testConvertToUnicode(sampleTxt_euc_jp, sizeof(sampleTxt_euc_jp),
-                 euc_jptoUnicode, sizeof(euc_jptoUnicode)/sizeof(euc_jptoUnicode[0]),"euc-jp",
+                 euc_jptoUnicode, sizeof(euc_jptoUnicode)/sizeof(euc_jptoUnicode[0]),"IBM-eucJP",
                 UCNV_TO_U_CALLBACK_SKIP, from_euc_jpOffs , NULL, 0))
             log_err("euc-jp->u with skip did not match.\n");
 
@@ -1204,7 +1199,7 @@ static void TestStop(int32_t inputsize, int32_t outputsize)
             log_err("u-> ibm-943 with stop did not match.\n");
 
         if(!testConvertFromUnicode(euc_jp_inputText, sizeof(euc_jp_inputText)/sizeof(euc_jp_inputText[0]),
-                to_euc_jp, sizeof(to_euc_jp), "euc-jp",
+                to_euc_jp, sizeof(to_euc_jp), "IBM-eucJP",
                 UCNV_FROM_U_CALLBACK_STOP, fromEUC_JPOffs, NULL, 0 ))
             log_err("u-> euc-jp with stop did not match.\n");
 
@@ -1294,12 +1289,7 @@ static void TestStop(int32_t inputsize, int32_t outputsize)
 
          /*EUC-JP*/
         static const uint8_t sampleTxt_euc_jp[]={ 0x61, 0xa1, 0xb8, 0x8f, 0xf4, 0xae,
-            /* BEGIN android-changed */
-            /* Android uses a different EUC-JP table. We change this byte sequence,
-             * choosing one that is unassigned in both tables. */
-            0x8f, 0xa1, 0xa1,  /*unassigned*/
-            /* 0x8f, 0xda, 0xa1, */ /*unassigned*/
-            /* END android-changed */
+            0x8f, 0xda, 0xa1,  /*unassigned*/
            0x8e, 0xe0,
         };
         static const UChar euc_jptoUnicode[]={ 0x0061, 0x4edd, 0x5bec};
@@ -1321,7 +1311,7 @@ static void TestStop(int32_t inputsize, int32_t outputsize)
         log_err("EBCIDIC_STATEFUL->u with stop did not match.\n");
 
         if(!testConvertToUnicode(sampleTxt_euc_jp, sizeof(sampleTxt_euc_jp),
-             euc_jptoUnicode, sizeof(euc_jptoUnicode)/sizeof(euc_jptoUnicode[0]),"euc-jp",
+             euc_jptoUnicode, sizeof(euc_jptoUnicode)/sizeof(euc_jptoUnicode[0]),"IBM-eucJP",
             UCNV_TO_U_CALLBACK_STOP, from_euc_jpOffs , NULL, 0))
         log_err("euc-jp->u with stop did not match.\n");
 
@@ -1434,7 +1424,7 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
             log_err("u-> ibm-943 with substitute did not match.\n");
 
         if(!testConvertFromUnicode(euc_jp_inputText, sizeof(euc_jp_inputText)/sizeof(euc_jp_inputText[0]),
-                to_euc_jp, sizeof(to_euc_jp), "euc-jp",
+                to_euc_jp, sizeof(to_euc_jp), "IBM-eucJP",
                 UCNV_FROM_U_CALLBACK_SUBSTITUTE, fromEUC_JPOffs, NULL, 0 ))
             log_err("u-> euc-jp with substitute did not match.\n");
 
@@ -1581,12 +1571,7 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
 
         /* EUC_JP*/
         const uint8_t sampleTxt_euc_jp[]={ 0x61, 0xa1, 0xb8, 0x8f, 0xf4, 0xae,
-            /* BEGIN android-changed */
-            /* Android uses a different EUC-JP table. We change this byte sequence,
-             * choosing one that is unassigned in both tables. */
-            0x8f, 0xa1, 0xa1,  /*unassigned*/
-            /* 0x8f, 0xda, 0xa1, */ /*unassigned*/
-            /* END android-changed */
+            0x8f, 0xda, 0xa1,  /*unassigned*/
            0x8e, 0xe0, 0x8a
         };
         UChar euc_jptoUnicode[]={ 0x0061, 0x4edd, 0x5bec, 0xfffd, 0x00a2, 0x008a };
@@ -1609,7 +1594,7 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
 
 
         if(!testConvertToUnicode(sampleTxt_euc_jp, sizeof(sampleTxt_euc_jp),
-           euc_jptoUnicode, sizeof(euc_jptoUnicode)/sizeof(euc_jptoUnicode[0]),"euc-jp",
+           euc_jptoUnicode, sizeof(euc_jptoUnicode)/sizeof(euc_jptoUnicode[0]),"IBM-eucJP",
           UCNV_TO_U_CALLBACK_SUBSTITUTE, from_euc_jpOffs, NULL, 0 ))
             log_err("euc-jp->u with substitute did not match.\n");
 
@@ -1621,7 +1606,7 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
 
         
         if(!testConvertToUnicodeWithContext(sampleTxt_euc_jp, sizeof(sampleTxt_euc_jp),
-           euc_jptoUnicode, sizeof(euc_jptoUnicode)/sizeof(euc_jptoUnicode[0]),"euc-jp",
+           euc_jptoUnicode, sizeof(euc_jptoUnicode)/sizeof(euc_jptoUnicode[0]),"IBM-eucJP",
           UCNV_TO_U_CALLBACK_SUBSTITUTE, from_euc_jpOffs, NULL, 0 ,"i", U_ILLEGAL_CHAR_FOUND))
             log_err("euc-jp->u with substitute did not match.\n");
     }
@@ -2070,7 +2055,7 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
             log_err("u-> ibm-943 with subst with value did not match.\n");
 
         if(!testConvertFromUnicode(euc_jp_inputText, sizeof(euc_jp_inputText)/sizeof(euc_jp_inputText[0]),
-                to_euc_jp, sizeof(to_euc_jp), "euc-jp",
+                to_euc_jp, sizeof(to_euc_jp), "IBM-eucJP",
                 UCNV_FROM_U_CALLBACK_ESCAPE, fromEUC_JPOffs, NULL, 0 ))
             log_err("u-> euc-jp with subst with value did not match.\n");
 
@@ -2306,21 +2291,11 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
 
         /* EUC_JP*/
         static const uint8_t sampleTxt_EUC_JP[]={ 0x61, 0xa1, 0xb8, 0x8f, 0xf4, 0xae,
-            /* BEGIN android-changed */
-            /* Android uses a different EUC-JP table. We change this byte sequence,
-             * choosing one that is unassigned in both tables. */
-            0x8f, 0xa1, 0xa1,  /*unassigned*/
-            /* 0x8f, 0xda, 0xa1, */ /*unassigned*/
-            /* END android-changed */
+            0x8f, 0xda, 0xa1,  /*unassigned*/
            0x8e, 0xe0,
         };
         static const UChar EUC_JPtoUnicode[]={ 0x0061, 0x4edd, 0x5bec,
-            /* BEGIN android-changed */
-            /* Android uses a different EUC-JP table. We change the expected output,
-             * matching the byte sequence modified above. */
-            0x25, 0x58, 0x38, 0x46, 0x25, 0x58, 0x41, 0x31, 0x25, 0x58, 0x41, 0x31,
-            /* 0x25, 0x58, 0x38, 0x46, 0x25, 0x58, 0x44, 0x41, 0x25, 0x58, 0x41, 0x31, */
-            /* END android-changed */
+            0x25, 0x58, 0x38, 0x46, 0x25, 0x58, 0x44, 0x41, 0x25, 0x58, 0x41, 0x31,
             0x00a2 };
         static const int32_t fromEUC_JPOffs [] ={ 0, 1, 3, 
             6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
@@ -2464,7 +2439,7 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
             log_err("ibm-943->u with substitute with value did not match.\n");
 
         if(!testConvertToUnicode(sampleTxt_EUC_JP, sizeof(sampleTxt_EUC_JP),
-                 EUC_JPtoUnicode, sizeof(EUC_JPtoUnicode)/sizeof(EUC_JPtoUnicode[0]),"euc-jp",
+                 EUC_JPtoUnicode, sizeof(EUC_JPtoUnicode)/sizeof(EUC_JPtoUnicode[0]),"IBM-eucJP",
                 UCNV_TO_U_CALLBACK_ESCAPE, fromEUC_JPOffs, NULL, 0))
             log_err("euc-jp->u with substitute with value did not match.\n");
 
@@ -2753,14 +2728,11 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const uint8_t 
         UChar errChars[50]; /* should be sufficient */
         int8_t errLen = 50;
         UErrorCode err = U_ZERO_ERROR;
-        const UChar* limit= NULL;
         const UChar* start= NULL;
         ucnv_getInvalidUChars(conv,errChars, &errLen, &err);
         if(U_FAILURE(err)){
             log_err("ucnv_getInvalidUChars failed with error : %s\n",u_errorName(err));
         }
-        /* src points to limit of invalid chars */
-        limit = src;
         /* length of in invalid chars should be equal to returned length*/
         start = src - errLen;
         if(u_strncmp(errChars,start,errLen)!=0){
@@ -2951,14 +2923,11 @@ UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const UChar *e
         char errChars[50]; /* should be sufficient */
         int8_t errLen = 50;
         UErrorCode err = U_ZERO_ERROR;
-        const char* limit= NULL;
         const char* start= NULL;
         ucnv_getInvalidChars(conv,errChars, &errLen, &err);
         if(U_FAILURE(err)){
             log_err("ucnv_getInvalidChars failed with error : %s\n",u_errorName(err));
         }
-        /* src points to limit of invalid chars */
-        limit = src;
         /* length of in invalid chars should be equal to returned length*/
         start = src - errLen;
         if(uprv_strncmp(errChars,start,errLen)!=0){

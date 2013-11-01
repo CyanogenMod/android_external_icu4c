@@ -33,16 +33,19 @@ src_files += \
 	anytrans.cpp    astro.cpp    buddhcal.cpp \
 	basictz.cpp     calendar.cpp casetrn.cpp  \
 	choicfmt.cpp    coleitr.cpp  coll.cpp     \
+	compactdecimalformat.cpp \
 	cpdtrans.cpp    csdetect.cpp csmatch.cpp  \
 	csr2022.cpp     csrecog.cpp  csrmbcs.cpp  \
 	csrsbcs.cpp     csrucode.cpp csrutf8.cpp  \
 	curramt.cpp     currfmt.cpp  currunit.cpp \
+	dangical.cpp \
 	datefmt.cpp     dcfmtsym.cpp decimfmt.cpp \
 	digitlst.cpp    dtfmtsym.cpp esctrn.cpp   \
 	fmtable_cnv.cpp fmtable.cpp  format.cpp   \
 	funcrepl.cpp    gender.cpp \
 	gregocal.cpp gregoimp.cpp \
-	hebrwcal.cpp    inputext.cpp islamcal.cpp \
+	hebrwcal.cpp 	identifier_info.cpp \
+	inputext.cpp islamcal.cpp \
 	japancal.cpp    measfmt.cpp  measure.cpp  \
 	msgfmt.cpp      name2uni.cpp nfrs.cpp     \
 	nfrule.cpp      nfsubs.cpp   nortrans.cpp \
@@ -50,8 +53,9 @@ src_files += \
 	quant.cpp       rbnf.cpp     rbt.cpp      \
 	rbt_data.cpp    rbt_pars.cpp rbt_rule.cpp \
 	rbt_set.cpp     regexcmp.cpp regexst.cpp  \
-	regeximp.cpp \
+	regeximp.cpp 	region.cpp \
 	rematch.cpp     remtrans.cpp repattrn.cpp \
+	scriptset.cpp \
 	search.cpp      simpletz.cpp smpdtfmt.cpp \
 	sortkey.cpp     strmatch.cpp strrepl.cpp  \
 	stsearch.cpp    tblcoll.cpp  timezone.cpp \
@@ -70,7 +74,6 @@ src_files += \
 	brktrans.cpp    wintzimpl.cpp plurrule.cpp \
 	plurfmt.cpp     dtitvfmt.cpp dtitvinf.cpp \
 	tmunit.cpp      tmutamt.cpp  tmutfmt.cpp  \
-	colldata.cpp    bmsearch.cpp bms.cpp      \
         currpinf.cpp    uspoof.cpp   uspoof_impl.cpp \
         uspoof_build.cpp     \
         regextxt.cpp    selfmt.cpp   uspoof_conf.cpp \
@@ -87,7 +90,10 @@ c_includes = \
 	$(LOCAL_PATH) \
 	$(LOCAL_PATH)/../common
 
-local_cflags := -D_REENTRANT -DU_I18N_IMPLEMENTATION -O3 -fvisibility=hidden
+local_cflags := -D_REENTRANT
+local_cflags += -DU_I18N_IMPLEMENTATION
+local_cflags += -O3 -fvisibility=hidden
+
 local_ldlibs := -lpthread -lm
 
 
@@ -96,18 +102,16 @@ local_ldlibs := -lpthread -lm
 #
 
 include $(CLEAR_VARS)
-LOCAL_SRC_FILES := $(src_files)
-LOCAL_C_INCLUDES += $(c_includes) \
-                    abi/cpp/include \
-                    bionic \
-                    bionic/libstdc++/include \
-                    external/stlport/stlport
+LOCAL_SRC_FILES += $(src_files)
+LOCAL_C_INCLUDES += $(c_includes)
 LOCAL_CFLAGS += $(local_cflags) -DPIC -fPIC
-LOCAL_RTTI_FLAG := -frtti
-LOCAL_SHARED_LIBRARIES += libicuuc libgabi++ libstlport
+LOCAL_SHARED_LIBRARIES += libicuuc
 LOCAL_LDLIBS += $(local_ldlibs)
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := libicui18n
+LOCAL_ADDITIONAL_DEPENDENCIES += $(LOCAL_PATH)/Android.mk
+include abi/cpp/use_rtti.mk
+include external/stlport/libstlport.mk
 include $(BUILD_SHARED_LIBRARY)
 
 
@@ -117,12 +121,13 @@ include $(BUILD_SHARED_LIBRARY)
 
 ifeq ($(WITH_HOST_DALVIK),true)
     include $(CLEAR_VARS)
-    LOCAL_SRC_FILES := $(src_files)
-    LOCAL_C_INCLUDES := $(c_includes)
+    LOCAL_SRC_FILES += $(src_files)
+    LOCAL_C_INCLUDES += $(c_includes)
     LOCAL_CFLAGS += $(local_cflags)
-    LOCAL_SHARED_LIBRARIES += libicuuc
+    LOCAL_SHARED_LIBRARIES += libicuuc-host
     LOCAL_LDLIBS += $(local_ldlibs)
     LOCAL_MODULE_TAGS := optional
-    LOCAL_MODULE := libicui18n
+    LOCAL_MODULE := libicui18n-host
+    LOCAL_ADDITIONAL_DEPENDENCIES += $(LOCAL_PATH)/Android.mk
     include $(BUILD_HOST_SHARED_LIBRARY)
 endif
