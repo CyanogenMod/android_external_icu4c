@@ -102,7 +102,7 @@ COLLATION_EMPTY_SOURCE = af_NA.txt af_ZA.txt ar_001.txt ar_AE.txt\
  to_TO.txt tr_CY.txt tr_TR.txt uk_UA.txt ur_IN.txt\
  ur_PK.txt vi_VN.txt yo_NG.txt zh_Hans.txt zh_Hans_CN.txt\
  zh_Hans_SG.txt zh_Hant_HK.txt zh_Hant_MO.txt zh_Hant_TW.txt zu.txt\
- zu_ZA.txt
+ zu_ZA.txt es_XA.txt
 
 
 # Ordinary resources
