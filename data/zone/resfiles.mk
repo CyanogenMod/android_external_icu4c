@@ -103,5 +103,5 @@ ZONE_SOURCE = af.txt agq.txt ak.txt am.txt\
  vai.txt vai_Latn.txt vai_Vaii.txt vi.txt vun.txt\
  xog.txt yav.txt yo.txt zh.txt zh_Hans.txt\
  zh_Hans_HK.txt zh_Hans_MO.txt zh_Hans_SG.txt zh_Hant.txt zh_Hant_HK.txt\
- zu.txt
+ zu.txt es_XA.txt
 
