@@ -13,6 +13,7 @@ brkitr/title.brk
 brkitr/word.brk
 brkitr/word_POSIX.brk
 
+coll/es_XA.res
 coll/invuca.icu
 coll/res_index.res
 coll/root.res
@@ -20,15 +21,18 @@ coll/ucadata.icu
 # coll/ps.res is needed for fa_AF.
 coll/ps.res
 
+curr/es_XA.res
 curr/pool.res
 curr/res_index.res
 curr/root.res
 curr/supplementalData.res
 
+lang/es_XA.res
 lang/pool.res
 lang/res_index.res
 lang/root.res
 
+region/es_XA.res
 region/pool.res
 region/res_index.res
 region/root.res
@@ -37,6 +41,7 @@ translit/el.res
 translit/en.res
 translit/root.res
 
+zone/es_XA.res
 zone/pool.res
 zone/res_index.res
 zone/root.res
@@ -99,6 +104,7 @@ jisx-208.cnv
 
 cnvalias.icu
 dayPeriods.res
+es_XA.res
 genderList.res
 icustd.res
 icuver.res
