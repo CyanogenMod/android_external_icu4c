@@ -224,6 +224,7 @@
 		<include locales="es_US"/>
 		<include locales="es_UY"/>
 		<include locales="es_VE"/>
+		<include locales="es_XA"/>
 		<include locales="et"/>
 		<include locales="et_EE"/>
 		<include locales="eu"/>
