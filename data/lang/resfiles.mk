@@ -60,7 +60,7 @@ LANG_SOURCE = af.txt agq.txt ak.txt am.txt\
  da.txt dav.txt de.txt de_CH.txt dje.txt\
  dua.txt dyo.txt dz.txt ebu.txt ee.txt\
  el.txt en.txt en_GB.txt eo.txt es.txt\
- es_419.txt es_CL.txt et.txt eu.txt ewo.txt\
+ es_419.txt es_CL.txt es_XA.txt et.txt eu.txt ewo.txt\
  fa.txt fa_AF.txt ff.txt fi.txt fil.txt\
  fo.txt fr.txt fr_CA.txt ga.txt gl.txt\
  gsw.txt gu.txt guz.txt gv.txt ha.txt\

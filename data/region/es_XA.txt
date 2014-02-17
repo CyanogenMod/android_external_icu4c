@@ -1,0 +1,307 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/es.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/es.xml
+ */
+es_XA{
+    Countries{
+        001{"Mundu"}
+        002{"África"}
+        003{"América del Norte"}
+        005{"Suramérica"}
+        009{"Oceanía"}
+        011{"África occidental"}
+        013{"Centroamérica"}
+        014{"África oriental"}
+        015{"África septentrional"}
+        017{"África central"}
+        018{"África meridional"}
+        019{"Amériques"}
+        021{"Norteamérica"}
+        029{"Caribe"}
+        030{"Asia oriental"}
+        034{"Asia meridional"}
+        035{"Sudeste asiáticu"}
+        039{"Europa meridional"}
+        053{"Australasia"}
+        054{"Melanesia"}
+        057{"Rexón de Micronesia"}
+        061{"Polinesia"}
+        142{"Asia"}
+        143{"Asia central"}
+        145{"Asia occidental"}
+        150{"Europa"}
+        151{"Europa oriental"}
+        154{"Europa septentrional"}
+        155{"Europa occidental"}
+        419{"Llatinoamérica"}
+        AC{"Islla de la Ascensión"}
+        AD{"Andorra"}
+        AE{"Emiratos Árabes Xuníos"}
+        AF{"Afganistán"}
+        AG{"Antigua y Barbuda"}
+        AI{"Anguila"}
+        AL{"Albania"}
+        AM{"Armenia"}
+        AN{"Antilles Neerlandeses"}
+        AO{"Angola"}
+        AQ{"Antártida"}
+        AR{"Arxentina"}
+        AS{"Samoa Americana"}
+        AT{"Austria"}
+        AU{"Australia"}
+        AW{"Aruba"}
+        AX{"Islles Åland"}
+        AZ{"Azerbaixán"}
+        BA{"Bosnia-Herzegovina"}
+        BB{"Barbados"}
+        BD{"Bangladesh"}
+        BE{"Bélgica"}
+        BF{"Burkina Fasu"}
+        BG{"Bulgaria"}
+        BH{"Bahréin"}
+        BI{"Burundi"}
+        BJ{"Benín"}
+        BL{"San Bartolomé"}
+        BM{"Bermudes"}
+        BN{"Brunéi"}
+        BO{"Bolivia"}
+        BQ{"Caribe neerlandés"}
+        BR{"Brasil"}
+        BS{"Bahames"}
+        BT{"Bután"}
+        BV{"Islla Bouvet"}
+        BW{"Botsuana"}
+        BY{"Bielorrusia"}
+        BZ{"Belice"}
+        CA{"Canadá"}
+        CC{"Islles Cocos"}
+        CD{"República Democrática del Congu"}
+        CF{"República Centruafricana"}
+        CG{"Congu - Brazzaville"}
+        CH{"Suiza"}
+        CI{"Costa de Marfil"}
+        CK{"Islles Cook"}
+        CL{"Chile"}
+        CM{"Camerún"}
+        CN{"China"}
+        CO{"Colombia"}
+        CP{"Isla Clipperton"}
+        CR{"Costa Rica"}
+        CU{"Cuba"}
+        CV{"Cabu Verde"}
+        CW{"Curazao"}
+        CX{"Islla Christmas"}
+        CY{"Chipre"}
+        CZ{"República Checa"}
+        DE{"Alemaña"}
+        DG{"Diego García"}
+        DJ{"Xibuti"}
+        DK{"Dinamarca"}
+        DM{"Dominica"}
+        DO{"República Dominicana"}
+        DZ{"Arxelia"}
+        EA{"Ceuta y Melilla"}
+        EC{"Ecuador"}
+        EE{"Estonia"}
+        EG{"Exiptu"}
+        EH{"Sáhara Occidental"}
+        ER{"Eritrea"}
+        ES{"España"}
+        ET{"Etiopía"}
+        EU{"Unión Europea"}
+        FI{"Finlandia"}
+        FJ{"Fixi"}
+        FK{"Islles Malvines"}
+        FM{"Micronesia"}
+        FO{"Islles Feroe"}
+        FR{"Francia"}
+        GA{"Gabón"}
+        GB{"Reinu Xuníu"}
+        GD{"Granada"}
+        GE{"Xeorxa"}
+        GF{"Guayana Francesa"}
+        GG{"Guernsey"}
+        GH{"Ghana"}
+        GI{"Xibraltar"}
+        GL{"Groenlandia"}
+        GM{"Gambia"}
+        GN{"Guinea"}
+        GP{"Guadalupe"}
+        GQ{"Guinea Ecuatorial"}
+        GR{"Grecia"}
+        GS{"Islles Xeorxa del Sur y Sandwich del Sur"}
+        GT{"Guatemala"}
+        GU{"Guam"}
+        GW{"Guinea-Bissau"}
+        GY{"Guyana"}
+        HK{"Hong Kong"}
+        HM{"Islles Heard y McDonald"}
+        HN{"Hondures"}
+        HR{"Croacia"}
+        HT{"Haití"}
+        HU{"Hungría"}
+        IC{"Islles Canaries"}
+        ID{"Indonesia"}
+        IE{"Irlanda"}
+        IL{"Israel"}
+        IM{"Islla de Man"}
+        IN{"India"}
+        IO{"Territoriu Británicu del Océanu Índicu"}
+        IQ{"Iraq"}
+        IR{"Irán"}
+        IS{"Islandia"}
+        IT{"Italia"}
+        JE{"Xerséi"}
+        JM{"Xamaica"}
+        JO{"Xordania"}
+        JP{"Xapón"}
+        KE{"Kenia"}
+        KG{"Kirguistán"}
+        KH{"Camboya"}
+        KI{"Kiribati"}
+        KM{"Comoras"}
+        KN{"San Cristóbal y Nieves"}
+        KP{"Corea del Norte"}
+        KR{"Corea del Sur"}
+        KW{"Kuwait"}
+        KY{"Islles Caimán"}
+        KZ{"Kazaqstán"}
+        LA{"Laos"}
+        LB{"Líbanu"}
+        LC{"Santa Lucía"}
+        LI{"Liechtenstein"}
+        LK{"Sri Lanka"}
+        LR{"Liberia"}
+        LS{"Lesotu"}
+        LT{"Lituania"}
+        LU{"Luxemburgu"}
+        LV{"Letonia"}
+        LY{"Libia"}
+        MA{"Marruecos"}
+        MC{"Mónacu"}
+        MD{"Moldavia"}
+        ME{"Montenegru"}
+        MF{"San Martín"}
+        MG{"Madagascar"}
+        MH{"Islles Marshall"}
+        MK{"Macedonia"}
+        ML{"Mali"}
+        MM{"Myanmar [Birmania]"}
+        MN{"Mongolia"}
+        MO{"Macao"}
+        MP{"Islles Marianes del Norte"}
+        MQ{"Martinica"}
+        MR{"Mauritania"}
+        MS{"Montserrat"}
+        MT{"Malta"}
+        MU{"Mauriciu"}
+        MV{"Maldives"}
+        MW{"Malaui"}
+        MX{"Méxicu"}
+        MY{"Malasia"}
+        MZ{"Mozambique"}
+        NA{"Namibia"}
+        NC{"Nueva Caledonia"}
+        NE{"Níxer"}
+        NF{"Islla Norfolk"}
+        NG{"Nixeria"}
+        NI{"Nicaragua"}
+        NL{"Países Basos"}
+        NO{"Noruega"}
+        NP{"Nepal"}
+        NR{"Nauru"}
+        NU{"Isla Niue"}
+        NZ{"Nueva Zelanda"}
+        OM{"Omán"}
+        PA{"Panamá"}
+        PE{"Perú"}
+        PF{"Polinesia Francesa"}
+        PG{"Papúa Nueva Guinea"}
+        PH{"Filipines"}
+        PK{"Pakistán"}
+        PL{"Polonia"}
+        PM{"San Pedro y Miquelón"}
+        PN{"Islles Pitcairn"}
+        PR{"Puertu Ricu"}
+        PS{"Palestina"}
+        PT{"Portugal"}
+        PW{"Palau"}
+        PY{"Paraguái"}
+        QA{"Qatar"}
+        QO{"Territorios allonxaos de Oceanía"}
+        RE{"Reunión"}
+        RO{"Rumanía"}
+        RS{"Serbia"}
+        RU{"Rusia"}
+        RW{"Ruanda"}
+        SA{"Arabia Saudí"}
+        SB{"Islles Salomón"}
+        SC{"Seixelles"}
+        SD{"Sudán"}
+        SE{"Suecia"}
+        SG{"Singapur"}
+        SH{"Santa Elena"}
+        SI{"Eslovenia"}
+        SJ{"Svalbard y Jan Mayen"}
+        SK{"Eslovaquia"}
+        SL{"Sierra Leona"}
+        SM{"San Marín"}
+        SN{"Senegal"}
+        SO{"Somalia"}
+        SR{"Surinam"}
+        SS{"Sudán del Sur"}
+        ST{"Santu Tomé y Príncipe"}
+        SV{"El Salvador"}
+        SX{"Sint Maarten"}
+        SY{"Siria"}
+        SZ{"Suazilandia"}
+        TA{"Tristán da Cunha"}
+        TC{"Islles Turcas y Caicos"}
+        TD{"Chad"}
+        TF{"Territorios Australes Franceses"}
+        TG{"Togo"}
+        TH{"Tailandia"}
+        TJ{"Taxiquistán"}
+        TK{"Tokelau"}
+        TL{"Timor Oriental"}
+        TM{"Turkmenistán"}
+        TN{"Túnez"}
+        TO{"Tonga"}
+        TR{"Turquía"}
+        TT{"Trinidá y Tobagu"}
+        TV{"Tuvalu"}
+        TW{"Taiwán"}
+        TZ{"Tanzania"}
+        UA{"Ucraína"}
+        UG{"Uganda"}
+        UM{"Islles menores allonxaes de los Estaos Xuníos"}
+        US{"Estaos Xuníos"}
+        UY{"Uruguái"}
+        UZ{"Uzbekistán"}
+        VA{"Ciudá del Vaticanu"}
+        VC{"San Vicente y las Granadines"}
+        VE{"Venezuela"}
+        VG{"Islles Vírxenes Britániques"}
+        VI{"Islles Vírxenes de los Estaos Xuníos"}
+        VN{"Vietnam"}
+        VU{"Vanuatu"}
+        WF{"Wallis y Futuna"}
+        WS{"Samoa"}
+        XA{"Asturies"}
+        XK{"Kosovu"}
+        YE{"Yemen"}
+        YT{"Mayotte"}
+        ZA{"Sudáfrica"}
+        ZM{"Zambia"}
+        ZW{"Zimbabue"}
+        ZZ{"Rexón desconocida"}
+    }
+    Version{"2.0.82.47"}
+}

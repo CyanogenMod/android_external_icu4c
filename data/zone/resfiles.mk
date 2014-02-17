@@ -70,7 +70,7 @@ ZONE_SOURCE = af.txt agq.txt ak.txt am.txt\
  en_TC.txt en_TO.txt en_TT.txt en_TZ.txt en_UG.txt\
  en_VC.txt en_VG.txt en_VU.txt en_WS.txt en_ZA.txt\
  en_ZM.txt en_ZW.txt eo.txt es.txt es_419.txt\
- es_AR.txt et.txt eu.txt ewo.txt fa.txt\
+ es_AR.txt es_XA.txt et.txt eu.txt ewo.txt fa.txt\
  ff.txt fi.txt fil.txt fo.txt fr.txt\
  fr_CA.txt ga.txt gl.txt gsw.txt gu.txt\
  guz.txt gv.txt ha.txt ha_Latn.txt haw.txt\
