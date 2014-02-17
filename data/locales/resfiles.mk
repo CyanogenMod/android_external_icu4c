@@ -86,7 +86,7 @@ GENRB_SOURCE = af.txt af_NA.txt af_ZA.txt agq.txt\
  es_EA.txt es_EC.txt es_ES.txt es_GQ.txt es_GT.txt\
  es_HN.txt es_IC.txt es_MX.txt es_NI.txt es_PA.txt\
  es_PE.txt es_PH.txt es_PR.txt es_PY.txt es_SV.txt\
- es_US.txt es_UY.txt es_VE.txt et.txt et_EE.txt\
+ es_US.txt es_UY.txt es_VE.txt es_XA.txt et.txt et_EE.txt\
  eu.txt eu_ES.txt ewo.txt ewo_CM.txt fa.txt\
  fa_AF.txt fa_IR.txt ff.txt ff_SN.txt fi.txt\
  fi_FI.txt fil.txt fil_PH.txt fo.txt fo_FO.txt\

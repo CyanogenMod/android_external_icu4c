@@ -68,7 +68,7 @@ COLLATION_EMPTY_SOURCE = af_NA.txt af_ZA.txt ar_001.txt ar_AE.txt\
  es_ES.txt es_GQ.txt es_GT.txt es_HN.txt es_IC.txt\
  es_MX.txt es_NI.txt es_PA.txt es_PE.txt es_PH.txt\
  es_PR.txt es_PY.txt es_SV.txt es_US.txt es_UY.txt\
- es_VE.txt et_EE.txt fa_IR.txt fi_FI.txt fil_PH.txt\
+ es_VE.txt es_XA.txt et_EE.txt fa_IR.txt fi_FI.txt fil_PH.txt\
  fo_FO.txt fr_BE.txt fr_BF.txt fr_BI.txt fr_BJ.txt\
  fr_BL.txt fr_CD.txt fr_CF.txt fr_CG.txt fr_CH.txt\
  fr_CI.txt fr_CM.txt fr_DJ.txt fr_DZ.txt fr_FR.txt\

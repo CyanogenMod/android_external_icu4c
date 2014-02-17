@@ -76,7 +76,7 @@ CURR_SOURCE = af.txt af_NA.txt agq.txt ak.txt\
  es_BO.txt es_CL.txt es_CO.txt es_CR.txt es_CU.txt\
  es_DO.txt es_EC.txt es_GT.txt es_HN.txt es_MX.txt\
  es_NI.txt es_PA.txt es_PE.txt es_PH.txt es_PR.txt\
- es_PY.txt es_US.txt es_UY.txt es_VE.txt et.txt\
+ es_PY.txt es_US.txt es_UY.txt es_VE.txt es_XA.txt et.txt\
  eu.txt ewo.txt fa.txt fa_AF.txt ff.txt\
  fi.txt fil.txt fo.txt fr.txt fr_BI.txt\
  fr_CA.txt fr_CD.txt fr_CH.txt fr_DJ.txt fr_DZ.txt\
