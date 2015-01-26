@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/lb.xml
@@ -157,14 +157,8 @@ lb{
         en{"Englesch"}
         en_AU{"Australescht Englesch"}
         en_CA{"Kanadescht Englesch"}
-        en_GB{
-            "Britescht Englesch",
-            "Englesch (UK)",
-        }
-        en_US{
-            "Amerikanescht Englesch",
-            "Englesch (US)",
-        }
+        en_GB{"Britescht Englesch"}
+        en_US{"Amerikanescht Englesch"}
         enm{"Mëttelenglesch"}
         eo{"Esperanto"}
         es{"Spuenesch"}
@@ -629,6 +623,10 @@ lb{
         zxx{"Keng Sproochinhalter"}
         zza{"Zaza"}
     }
+    LanguagesShort{
+        en_GB{"Englesch (UK)"}
+        en_US{"Englesch (US)"}
+    }
     Scripts{
         Arab{"Arabesch"}
         Armi{"Armi"}
@@ -668,14 +666,8 @@ lb{
         Hang{"Hangul"}
         Hani{"Chineesesch"}
         Hano{"Hanunoo"}
-        Hans{
-            "Vereinfacht",
-            "Vereinfacht Chineesesch",
-        }
-        Hant{
-            "Traditionell",
-            "Traditionellt Chineesesch",
-        }
+        Hans{"Vereinfacht"}
+        Hant{"Traditionell"}
         Hebr{"Hebräesch"}
         Hira{"Hiragana"}
         Hmng{"Pahawh Hmong"}
@@ -758,6 +750,10 @@ lb{
         Zxxx{"Ouni Schrëft"}
         Zyyy{"Onbestëmmt"}
         Zzzz{"Oncodéiert Schrëft"}
+    }
+    Scripts%stand-alone{
+        Hans{"Vereinfacht Chineesesch"}
+        Hant{"Traditionellt Chineesesch"}
     }
     Types{
         calendar{

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/lb.xml
@@ -61,7 +61,6 @@ lb{
             "Argentinesche Peso (1983–1985)",
         }
         ARS{
-            "$",
             "ARS",
             "Argentinesche Peso",
         }
@@ -70,7 +69,6 @@ lb{
             "Éisträichesche Schilling",
         }
         AUD{
-            "$",
             "AU$",
             "Australeschen Dollar",
         }
@@ -95,12 +93,10 @@ lb{
             "Bosnien an Herzegowina Konvertéierbar Mark",
         }
         BBD{
-            "$",
             "BBD",
             "Barbados-Dollar",
         }
         BDT{
-            "৳",
             "BDT",
             "Bangladesch-Taka",
         }
@@ -133,12 +129,10 @@ lb{
             "Burundi-Frang",
         }
         BMD{
-            "$",
             "BMD",
             "Bermuda-Dollar",
         }
         BND{
-            "$",
             "BND",
             "Brunei-Dollar",
         }
@@ -168,7 +162,6 @@ lb{
         }
         BRL{
             "R$",
-            "R$",
             "Brasilianesche Real",
         }
         BRN{
@@ -184,7 +177,6 @@ lb{
             "Brasilianesche Cruzeiro (1942–1967)",
         }
         BSD{
-            "$",
             "BSD",
             "Bahama-Dollar",
         }
@@ -205,17 +197,14 @@ lb{
             "Wäissrussesche Rubel (1994–1999)",
         }
         BYR{
-            "р.",
             "BYR",
             "Wäissrussesche Rubel",
         }
         BZD{
-            "$",
             "BZD",
             "Belize-Dollar",
         }
         CAD{
-            "$",
             "CA$",
             "Kanadeschen Dollar",
         }
@@ -240,22 +229,18 @@ lb{
             "Chileneschen Unidad de Fomento",
         }
         CLP{
-            "$",
             "CLP",
             "Chilenesche Peso",
         }
         CNY{
-            "¥",
             "CN¥",
             "Renminbi Yuan",
         }
         COP{
-            "$",
             "COP",
             "Kolumbianesche Peso",
         }
         CRC{
-            "₡",
             "CRC",
             "Costa-Rica-Colón",
         }
@@ -272,7 +257,6 @@ lb{
             "Kubanesche Peso (konvertibel)",
         }
         CUP{
-            "$",
             "CUP",
             "Kubanesche Peso",
         }
@@ -305,7 +289,6 @@ lb{
             "Dänesch Kroun",
         }
         DOP{
-            "$",
             "DOP",
             "Dominikanesche Peso",
         }
@@ -342,7 +325,6 @@ lb{
             "Spuenesch Peseta (konvertibel)",
         }
         ESP{
-            "₧",
             "ESP",
             "Spuenesch Peseta",
         }
@@ -352,7 +334,6 @@ lb{
         }
         EUR{
             "€",
-            "€",
             "Euro",
         }
         FIM{
@@ -360,7 +341,6 @@ lb{
             "Finnesch Mark",
         }
         FJD{
-            "$",
             "FJD",
             "Fidschi-Dollar",
         }
@@ -373,7 +353,6 @@ lb{
             "Franséische Frang",
         }
         GBP{
-            "£",
             "£",
             "Britescht Pond Sterling",
         }
@@ -390,12 +369,10 @@ lb{
             "Ghanaeschen Cedi (1979–2007)",
         }
         GHS{
-            "₵",
             "GHS",
             "Ghanaeschen Cedi",
         }
         GIP{
-            "£",
             "GIP",
             "Gibraltar-Pond",
         }
@@ -432,12 +409,10 @@ lb{
             "Guinea-Bissau Peso",
         }
         GYD{
-            "$",
             "GYD",
             "Guyana-Dollar",
         }
         HKD{
-            "$",
             "HK$",
             "Hong-Kong-Dollar",
         }
@@ -475,11 +450,9 @@ lb{
         }
         ILS{
             "₪",
-            "₪",
             "Israeleschen Neie Schekel",
         }
         INR{
-            "₹",
             "₹",
             "Indesch Rupie",
         }
@@ -500,7 +473,6 @@ lb{
             "Italienesch Lira",
         }
         JMD{
-            "$",
             "JMD",
             "Jamaika-Dollar",
         }
@@ -509,7 +481,6 @@ lb{
             "Jordaneschen Dinar",
         }
         JPY{
-            "¥",
             "¥",
             "Japanesche Yen",
         }
@@ -522,7 +493,6 @@ lb{
             "Kirgisesche Som",
         }
         KHR{
-            "៛",
             "KHR",
             "Kambodschanesche Riel",
         }
@@ -536,7 +506,6 @@ lb{
         }
         KRW{
             "₩",
-            "₩",
             "Südkoreanesche Won",
         }
         KWD{
@@ -544,17 +513,14 @@ lb{
             "Kuwait-Dinar",
         }
         KYD{
-            "$",
             "KYD",
             "Kaiman-Dollar",
         }
         KZT{
-            "₸",
             "KZT",
             "Kasacheschen Tenge",
         }
         LAK{
-            "₭",
             "LAK",
             "Laoteschen Kip",
         }
@@ -567,7 +533,6 @@ lb{
             "Sri-Lanka-Rupie",
         }
         LRD{
-            "$",
             "LRD",
             "Liberianeschen Dollar",
         }
@@ -640,7 +605,6 @@ lb{
             "Myanmaresche Kyat",
         }
         MNT{
-            "₮",
             "MNT",
             "Mongoleschen Tögrög",
         }
@@ -673,7 +637,6 @@ lb{
             "Malawi-Kwacha",
         }
         MXN{
-            "$",
             "MX$",
             "Mexikanesche Peso",
         }
@@ -702,12 +665,10 @@ lb{
             "Mosambikanesche Metical",
         }
         NAD{
-            "$",
             "NAD",
             "Namibia-Dollar",
         }
         NGN{
-            "₦",
             "NGN",
             "Nigerianeschen Naira",
         }
@@ -732,7 +693,6 @@ lb{
             "Nepaleesesch Rupie",
         }
         NZD{
-            "$",
             "NZ$",
             "Neiséiland-Dollar",
         }
@@ -761,7 +721,6 @@ lb{
             "Papua-Neiguinéiesche Kina",
         }
         PHP{
-            "₱",
             "PHP",
             "Philippinnesche Peso",
         }
@@ -782,7 +741,6 @@ lb{
             "Portugiseschen Escudo",
         }
         PYG{
-            "₲",
             "PYG",
             "Paraguayeschen Guaraní",
         }
@@ -811,7 +769,6 @@ lb{
             "Russesche Rubel",
         }
         RUR{
-            "р.",
             "RUR",
             "Russesche Rubel (1991–1998)",
         }
@@ -824,7 +781,6 @@ lb{
             "Saudi-Rial",
         }
         SBD{
-            "$",
             "SBD",
             "Salomonen-Dollar",
         }
@@ -849,7 +805,6 @@ lb{
             "Schwedesch Kroun",
         }
         SGD{
-            "$",
             "SGD",
             "Singapur-Dollar",
         }
@@ -874,7 +829,6 @@ lb{
             "Somalia-Schilling",
         }
         SRD{
-            "$",
             "SRD",
             "Surinameschen Dollar",
         }
@@ -883,7 +837,6 @@ lb{
             "Surinamesche Gulden",
         }
         SSP{
-            "£",
             "SSP",
             "Südsudaneesescht Pond",
         }
@@ -908,7 +861,6 @@ lb{
             "Swasilännesche Lilangeni",
         }
         THB{
-            "฿",
             "฿",
             "Thailännesche Baht",
         }
@@ -945,18 +897,14 @@ lb{
             "Tierkesch Lira (1922–2005)",
         }
         TRY{
-            "TL",
-            "₺",
             "TRY",
             "Tierkesch Lira",
         }
         TTD{
-            "$",
             "TTD",
             "Trinidad-an-Tobago-Dollar",
         }
         TWD{
-            "NT$",
             "NT$",
             "Neien Taiwan-Dollar",
         }
@@ -965,7 +913,6 @@ lb{
             "Tansania-Schilling",
         }
         UAH{
-            "₴",
             "UAH",
             "Ukraineschen Hrywnja",
         }
@@ -983,7 +930,6 @@ lb{
         }
         USD{
             "$",
-            "$",
             "US-Dollar",
         }
         USN{
@@ -999,7 +945,6 @@ lb{
             "Uruguayesche Peso (1975–1993)",
         }
         UYU{
-            "$",
             "UYU",
             "Uruguayesche Peso",
         }
@@ -1016,7 +961,6 @@ lb{
             "Venezolanesche Bolívar",
         }
         VND{
-            "₫",
             "₫",
             "Vietnameeseschen Dong",
         }

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/lb.xml
@@ -955,10 +955,8 @@ lb{
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
-        regionFormat{
-            "{0} Zäit",
-            "{0} Summerzäit",
-            "{0} Normalzäit",
-        }
+        regionFormat{"{0} Zäit"}
+        regionFormatDaylight{"{0} Summerzäit"}
+        regionFormatStandard{"{0} Normalzäit"}
     }
 }

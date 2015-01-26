@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2014 International Business Machines
+// * Copyright (C) 2015 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/lb.xml
@@ -78,20 +78,11 @@ lb{
         BZ{"Belize"}
         CA{"Kanada"}
         CC{"Kokosinselen"}
-        CD{
-            "Kongo-Kinshasa",
-            "Kongo (Demokratesch Republik)",
-        }
+        CD{"Kongo-Kinshasa"}
         CF{"Zentralafrikanesch Republik"}
-        CG{
-            "Kongo-Brazzaville",
-            "Kongo (Republik)",
-        }
+        CG{"Kongo-Brazzaville"}
         CH{"Schwäiz"}
-        CI{
-            "Elfebeeküst",
-            "Côte d’Ivoire",
-        }
+        CI{"Elfebeeküst"}
         CK{"Cookinselen"}
         CL{"Chile"}
         CM{"Kamerun"}
@@ -123,18 +114,12 @@ lb{
         EU{"Europäesch Unioun"}
         FI{"Finnland"}
         FJ{"Fidschi"}
-        FK{
-            "Falklandinselen",
-            "Falklandinselen",
-        }
+        FK{"Falklandinselen"}
         FM{"Mikronesien"}
         FO{"Färöer"}
         FR{"Frankräich"}
         GA{"Gabun"}
-        GB{
-            "Groussbritannien",
-            "GB",
-        }
+        GB{"Groussbritannien"}
         GD{"Grenada"}
         GE{"Georgien"}
         GF{"Guayane"}
@@ -152,10 +137,7 @@ lb{
         GU{"Guam"}
         GW{"Guinea-Bissau"}
         GY{"Guyana"}
-        HK{
-            "Spezialverwaltungszon Hong Kong",
-            "Hong Kong",
-        }
+        HK{"Spezialverwaltungszon Hong Kong"}
         HM{"Heard- a McDonald-Inselen"}
         HN{"Honduras"}
         HR{"Kroatien"}
@@ -205,17 +187,11 @@ lb{
         MF{"St. Martin"}
         MG{"Madagaskar"}
         MH{"Marshallinselen"}
-        MK{
-            "Mazedonien",
-            "Mazedonien (EJR)",
-        }
+        MK{"Mazedonien"}
         ML{"Mali"}
         MM{"Myanmar"}
         MN{"Mongolei"}
-        MO{
-            "Spezialverwaltungszon Macau",
-            "Macau",
-        }
+        MO{"Spezialverwaltungszon Macau"}
         MP{"Nërdlech Marianen"}
         MQ{"Martinique"}
         MR{"Mauretanien"}
@@ -250,10 +226,7 @@ lb{
         PM{"St. Pierre a Miquelon"}
         PN{"Pitcairninselen"}
         PR{"Puerto Rico"}
-        PS{
-            "Palestinensesch Autonomiegebidder",
-            "Palestina",
-        }
+        PS{"Palestinensesch Autonomiegebidder"}
         PT{"Portugal"}
         PW{"Palau"}
         PY{"Paraguay"}
@@ -293,10 +266,7 @@ lb{
         TH{"Thailand"}
         TJ{"Tadschikistan"}
         TK{"Tokelau"}
-        TL{
-            "Osttimor",
-            "Osttimor",
-        }
+        TL{"Osttimor"}
         TM{"Turkmenistan"}
         TN{"Tunesien"}
         TO{"Tonga"}
@@ -308,10 +278,7 @@ lb{
         UA{"Ukrain"}
         UG{"Uganda"}
         UM{"Amerikanesch-Ozeanien"}
-        US{
-            "Vereenegt Staate vun Amerika",
-            "US",
-        }
+        US{"Vereenegt Staate vun Amerika"}
         UY{"Uruguay"}
         UZ{"Usbekistan"}
         VA{"Vatikanstad"}
